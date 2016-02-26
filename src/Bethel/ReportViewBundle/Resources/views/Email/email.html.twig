@@ -1,0 +1,196 @@
+<h3>General Information</h3>
+
+<p>Session report for the {% if session.name is defined %}{{ session.name }}{% endif %} {{ session.date|date('F jS, Y') }} ({{ session.schedStartTime|date("g:ia") }} - {{ session.schedEndTime|date("g:ia") }}) session:</p>
+<ul>
+    {% if session.opener %}
+        <li>Opened by: {{ session.opener.firstName }} {{ session.opener.lastName }} ({{ session.opener.username }})</li>
+    {% endif %}
+    <li>Actual Session Time: {{ session.startTime|date("g:ia") }} - {{ session.endTime|date("g:ia") }}</li>
+</ul>
+
+<h3>General Comments</h3>
+
+<p>{{ session.comments|nl2br }}</p>
+
+<h3>Tutor Attendance</h3>
+
+<h4>Scheduled Tutors</h4>
+
+<table style="border-collapse:collapse;min-width:300px">
+    <tr>
+        <th style="padding:2px 10px">Name</th>
+        <th style="padding:2px 10px">Time</th>
+    </tr>
+    {% for tutorSession in tutorAttendance.scheduled %}
+        <tr>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ tutorSession.timeIn ? tutorSession.timeIn|date("g:ia") : '???' }} - {{ tutorSession.timeOut ? tutorSession.timeOut|date("g:ia") : '???' }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% if tutorAttendance.unscheduled|length > 0 %}
+
+    <h4>Unscheduled Tutors</h4>
+
+    <table style="border-collapse:collapse;min-width:300px">
+        <tr>
+            <th style="padding:2px 10px">Name</th>
+            <th style="padding:2px 10px">Time</th>
+        </tr>
+        {% for tutorSession in tutorAttendance.unscheduled %}
+            <tr>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ tutorSession.timeIn ? tutorSession.timeIn|date("g:ia") : '???' }} - {{ tutorSession.timeOut ? tutorSession.timeOut|date("g:ia") : '???' }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}
+
+{% if tutorAttendance.absent|length > 0 %}
+
+    <h4>Absent Tutors</h4>
+
+    <table style="border-collapse:collapse;min-width:300px">
+        <tr>
+            <th style="padding:2px 10px">Name</th>
+        </tr>
+        {% for tutorSession in tutorAttendance.absent %}
+            <tr>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}
+
+<h3>Student Attendance (by name)</h3>
+
+<table style="border-collapse:collapse;min-width:300px">
+    <tr>
+        <th style="padding:2px 10px">Name</th>
+        <th style="padding:2px 10px">Time In</th>
+        <th style="padding:2px 10px">Time Out</th>
+        <th style="padding:2px 10px">Time in Lab</th>
+        <th style="padding:2px 10px">Course(s)</th>
+    </tr>
+    {% for instance in studentSessions %}
+        <tr>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.student.firstName }} {{ instance.student.lastName }}</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.timeIn|date("g:ia") }}</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                {% if instance.timeOut %}
+                    {{ instance.timeOut|date("g:ia") }}
+                {% else %}
+                    ???
+                {% endif %}
+            </td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ instance.minutes }} min</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                {% for course in instance.courses %}
+                    {% if course in profCourses or is_admin %}
+                        {{ course }}<br />
+                    {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    {% for instance in otherSessions %}
+        <tr>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.student.firstName }} {{ instance.student.lastName }}</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.timeIn|date("g:ia") }}</td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                {% if instance.timeOut %}
+                    {{ instance.timeOut|date("g:ia") }}
+                {% else %}
+                    ???
+                {% endif %}
+            </td>
+            <td></td> {# empty column #}
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                {% if instance.otherCourseName %}
+                    {% if instance.otherCourseName in profCourses or is_admin %}
+                        {{ instance.otherCourseName }}
+                    {% endif %}
+                {% else %}
+                    ???
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h3>Student Attendance (by course)</h3>
+<table style="border-collapse:collapse">
+{% set courseCount = 0 %}
+{% for key, course in courseAttendance %}
+
+    {% if courseCount is divisibleby(2) or courseCount == 0 %}
+        <tr>
+    {% endif %}
+    {% set courseCount = courseCount + 1 %}
+
+    <td style="border-bottom:3px double black;vertical-align:top;padding:20px 10px">
+        <table style="border-collapse:collapse;width:100%">
+            <tr>
+                <th style="padding:2px 10px" colspan="2">{{ key }}</th>
+            </tr>
+            <tr>
+                <th style="padding:2px 10px">Name</th>
+            </tr>
+            {% for attendance in course %}
+                <tr>
+                    <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ attendance.student.firstName }} {{ attendance.student.lastName }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </td>
+
+    {% if courseCount is divisibleby(2) or courseCount == courseAttendance|length %}
+        </tr><!-- //.row -->
+    {% endif %}
+{% endfor %}
+</table>
+
+<h3>Course Attendance</h3>
+<table style="border-collapse:collapse;min-width:300px">
+    <tr>
+        <th style="padding:2px 10px">Course</th>
+        <th style="padding:2px 10px">Professor</th>
+        <th style="padding:2px 10px">Attendance</th>
+    </tr>
+    {% for title, course in courseAttendanceTotal %}
+    <tr>
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px"><a href="{{ url('report_single_course', { 'id': course.id }) }}">{{ title }}</a></td>
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:left">
+            {% if course.professors|length > 0 %}
+                {% for professor in course.professors or is_admin %}
+                    {{ professor }}<br />
+                {% endfor %}
+            {% endif %}
+        </td>
+
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ course.total }}</td>
+    </tr>
+
+    {% endfor %}
+    <tr>
+        <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Course Total*</b></td>
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ courseTotal }}</td>
+    </tr>
+    {% if profCourses is not defined or is_admin%}
+        <tr>
+            <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Other Students Total</b></td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ otherTotal }}</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Student Total</b></td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ attendees }}</td>
+        </tr>
+    {% endif %}
+</table>
+<br />
+<span>*Students that sign in for multiple classes will be double counted in the class totals, but appear once in the student totals</span>
+<br />
+<span>View more detailed <a href="{{ url('report') }}">{{ config_title }}</a> reports</span>

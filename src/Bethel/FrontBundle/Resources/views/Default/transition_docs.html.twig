@@ -1,0 +1,36 @@
+{% extends 'BethelFrontBundle:Default:adminbase.html.twig' %}
+
+{% block maincontent %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>{{ docTitle }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        {% if documentation[app.request.get('_route')] is defined %}
+            {% set mainClasses = 'large-8 medium-8 columns' %}
+            {% set docsExist = 1 %}
+        {% else %}
+            {% set mainClasses = 'large-16 medium-16 columns' %}
+            {% set docsExist = 0 %}
+        {% endif %}
+
+        {% if docsExist %}
+            <div id="doc-block" class="sidebar large-16 medium-16 columns">
+                <div class="panel">
+                    {% block sidebar %}
+                        {% for blurb in documentation[app.request.get('_route')] %}
+                            {{ blurb|raw }}
+                        {% endfor %}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endif %}
+
+
+    </div>
+{% endblock %}

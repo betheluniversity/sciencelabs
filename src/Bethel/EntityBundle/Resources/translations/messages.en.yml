@@ -1,0 +1,8 @@
+"ROLE_ADMIN": "Administrator|Administrators"
+"ROLE_STUDENT": "Student|Students"
+"ROLE_LEAD_TUTOR": "Lead Tutor|Lead Tutors"
+"ROLE_TUTOR": "Tutor|Tutors"
+"ROLE_PROFESSOR": "Professor|Professors"
+"ROLE_VIEWER": "Viewer|Viewers"
+recipients:
+  label: "Recipient Label"

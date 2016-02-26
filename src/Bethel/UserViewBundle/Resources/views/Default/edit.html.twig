@@ -1,0 +1,65 @@
+{% extends 'BethelUserViewBundle:Default:base.html.twig' %}
+
+{% block subnav %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ parent() }}
+    {% else %}
+        <br />
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Edit your profile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_label(form.firstName) }}
+                    {{ form_errors(form.firstName) }}
+                    {{ form_widget(form.firstName) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.lastName) }}
+                    {{ form_errors(form.lastName) }}
+                    {{ form_widget(form.lastName) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                    {{ form_widget(form.username) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.email) }}
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email) }}
+                </div>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_PROFESSOR') %}
+                <div class="large-6 columns">
+                    {{ form_label(form.sendEmail) }}
+                    {{ form_errors(form.sendEmail) }}
+                    {{ form_widget(form.sendEmail) }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {{ form_widget(form.save) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

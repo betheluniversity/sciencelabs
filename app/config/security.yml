@@ -1,0 +1,93 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    role_hierarchy:
+        ROLE_BASIC:       [ ROLE_STUDENT ]
+        ROLE_TUTOR:       [ ROLE_BASIC, ROLE_TUTOR ]
+        ROLE_LEAD_TUTOR:  [ ROLE_TUTOR, ROLE_LEAD_TUTOR ]
+        ROLE_ADMIN:       [ ROLE_LEAD_TUTOR, ROLE_ADMIN ]
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+
+    providers:
+        main:
+            entity:
+                class: Bethel\EntityBundle\Entity\User
+#        in_memory:
+#            memory:
+#                users:
+#                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+#                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        # allow anonymous users to access open sessions
+        open_session_firewall:
+            pattern: ^/session/(open|checkout)/
+            anonymous: ~
+        debug_firewall:
+                    pattern: ^/(debug|login_failure)
+                    anonymous: ~
+        api_firewall:
+            pattern: ^/api/*
+            stateless: false
+            simple_preauth:
+                authenticator: bethel.apikey_authenticator
+        # this is the firewall created for the BeSimpleSsoAuthBundle
+        cas_firewall:
+            pattern: ^/
+            security: true
+            trusted_sso:
+                manager: admin_sso
+                login_action: false # BeSimpleSsoAuthBundle:TrustedSso:login
+                logout_action: false # BeSimpleSsoAuthBundle:TrustedSso:logout
+                login_path: /login
+                check_path: /
+                create_users: true
+                created_users_roles: [ROLE_STUDENT]
+                failure_path: /login_failure
+            logout:
+                path: /logout
+                target: /path
+
+    access_control:
+        - { path: ^/user/edit, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/user/.*, roles: ROLE_ADMIN }
+        # user edit requires more granular access control
+        # this is handled in the user view controller
+        # the user list should only be visible to admins
+        - { path: ^/.*/edit, roles: ROLE_LEAD_TUTOR }
+        - { path: ^/.*/delete, roles: ROLE_ADMIN }
+        - { path: ^/.*/stop, roles: ROLE_LEAD_TUTOR }
+        - { path: ^/.*/start, roles: ROLE_LEAD_TUTOR }
+        - { path: ^/.*/attendance, roles: ROLE_LEAD_TUTOR }
+        - { path: ^/session$, roles: ROLE_LEAD_TUTOR }
+        - { path: ^/session/$, roles: ROLE_LEAD_TUTOR }
+        # CIDR for Bethel owned IPs: http://whois.arin.net/rest/net/NET-140-88-0-0-1.html
+        - { path: ^/session/open/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 140.88.0.0/16 }
+        - { path: ^/session/checkout/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/*, roles: ROLE_API_USER }
+        # tutor routes
+        # - { path: ^/tutor, roles: ROLE_TUTOR }
+        - { path: ^/tutor/$, roles: ROLE_TUTOR }
+        - { path: ^/tutor/.*, roles: ROLE_TUTOR }
+        - { path: ^/tutors/schedule, roles: ROLE_ADMIN }
+        # administration
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin/$, roles: ROLE_ADMIN }
+        - { path: ^/admin/.*, roles: ROLE_ADMIN }
+        - { path: ^/email/.*, roles: ROLE_ADMIN }
+        # entity management
+        - { path: ^/report/student/*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/student/.*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/session/+, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/course, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/viewsemester, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        # - { path: ^/report/session/*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/export/*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/course/*, roles: [ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/report/*, roles: [ROLE_ADMIN, ROLE_VIEWER] }
+        - { path: ^/schedule/*, roles: ROLE_ADMIN }

@@ -1,0 +1,24 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Delete {{ entity }}?</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form_start(deleteForm) }}
+            {{ form_errors(deleteForm) }}
+            <div class="text-center">
+                <a href="{{ path('homepage') }}" class="button radius large">Cancel</a>
+                {{ form_widget(deleteForm.save) }}
+            </div>
+            {{ form_rest(deleteForm) }}
+            {{ form_end(deleteForm) }}
+        </div>
+    </div>
+{% endblock %}

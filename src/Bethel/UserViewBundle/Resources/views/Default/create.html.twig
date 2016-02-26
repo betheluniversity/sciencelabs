@@ -1,0 +1,31 @@
+{% extends 'BethelUserViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>
+                    {% if fname and lname %}
+                        {{ fname ~ ' ' ~ lname }}: Select Role(s)
+                    {% else %}
+                        Add a User: Select Role(s)
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% if existingUser is defined %}
+        <div class="large-12 columns">
+
+                <h4 class="text-center">{{ existingUser.firstName }} {{ existingUser.lastName }} already exists</h4>
+
+        </div>
+        {% else %}
+            <div class="large-12 columns">
+                {{ form(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

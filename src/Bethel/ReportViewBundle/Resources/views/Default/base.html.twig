@@ -1,0 +1,45 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav_links %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_VIEWER') %}
+        <dd class="{{ app.request.get('_route') in ['report_student', 'report_single_student'] ? 'active' }}"><a href="{{ path('report_student') }}">Student</a></dd>
+        <dd class="{{ app.request.get('_route') == 'report_semester' ? 'active' }}"><a href="{{ path('report_semester') }}">Term</a></dd>
+        <dd class="{{ app.request.get('_route') == 'report_month' ? 'active' }}"><a href="{{ path('report_month') }}">Monthly</a></dd>
+        <dd class="{{ app.request.get('_route') == 'report_annual' ? 'active' }}"><a href="{{ path('report_annual') }}">Cumulative</a></dd>
+        <dd class="{{ app.request.get('_route') in ['report_session', 'report_single_session'] ? 'active' }}"><a href="{{ path('report_session') }}">Session</a></dd>
+        <dd class="{{ app.request.get('_route') in ['report_course', 'report_single_course'] ? 'active' }}"><a href="{{ path('report_course') }}">Course</a></dd>
+    {% endif %}
+    {% if is_granted('ROLE_PROFESSOR') %}
+        <dd class="{{ app.request.get('_route') in ['report_student', 'report_single_student'] ? 'active' }}"><a href="{{ path('report_student') }}">Student</a></dd>
+        <dd class="{{ app.request.get('_route') in ['report_course', 'report_single_course'] ? 'active' }}"><a href="{{ path('report_course') }}">Course</a></dd>
+    {% endif %}
+    {# Overall #}
+    {# Change Semester #}
+    {# Viewing reports for: SP2013 #}
+{% endblock %}
+
+{% block main %}
+    {% block semester_switch %}
+    <div class="row">
+        {{ render(
+            controller(
+                'BethelReportViewBundle:Default:viewSemesterSwitch',
+                {'currentRoute': app.request.get('_route'), 'routeParameters': app.request.get('_route_params')|json_encode() }
+            )
+        ) }}
+    </div>
+    {% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelReportViewBundle/Resources/public/js/reports.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

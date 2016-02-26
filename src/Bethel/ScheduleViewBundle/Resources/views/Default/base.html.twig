@@ -1,0 +1,25 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    '@BethelFrontBundle/Resources/public/lib/pikaday/css/pikaday.css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+    {% endstylesheets %}
+    <style type="text/css">
+        /* override the foundation padding for table elements */
+        .pika-table th, .pika-table td {
+            padding:0px;
+        }
+    </style>
+{% endblock %}
+
+{% block subnav_links %}
+    <dd class="{{ app.request.get('_route') == 'schedule' ? 'active' }}"><a href="{{ path('schedule') }}">Schedules</a></dd>
+    <dd class="{{ app.request.get('_route') == 'schedule_create' ? 'active' }}"><a href="{{ path('schedule_create') }}">Create New Schedule</a></dd>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

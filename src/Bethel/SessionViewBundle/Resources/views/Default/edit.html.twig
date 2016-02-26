@@ -1,0 +1,320 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets
+        '@BethelFrontBundle/Resources/public/lib/chosen/chosen.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+        {% endstylesheets %}
+        <style type="text/css">
+            .chosen-container-multi .chosen-choices,
+            .chosen-container-multi .chosen-choices input,
+            .chosen-container-multi .chosen-container {
+                min-height:33px !important;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice {
+                height:29px;
+                line-height:20px;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+                top:8px;
+            }
+            .chosen-container-single .chosen-search input[type="text"],
+            .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+
+            }
+        </style>
+    {% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>{{ message }}</p>
+
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="row">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="large-6 columns">
+                {{ form_label(form.name) }}
+                {{ form_errors(form.name) }}
+                {{ form_widget(form.name) }}
+            </div>
+            <div class="large-3 columns">
+                {{ form_label(form.room) }}
+                {{ form_errors(form.room) }}
+                {{ form_widget(form.room) }}
+            </div>
+            <div class="large-3 columns">
+                {{ form_label(form.semester) }}
+                {{ form_errors(form.semester) }}
+                {{ form_widget(form.semester) }}
+                <script>
+                    // this is a terrible terrible way to quickly reverse the select input.
+                    // Todo: clean this up.
+                    var keepValues = [];
+                    var keepText = [];
+                    var select = document.getElementById("bethel_entitybundle_session_semester");
+                    var length = select.length;
+
+                    for( i = 1; i<length;i++) {
+                        keepValues.push(select.options[i].value);
+                        keepText.push(select.options[i].text);
+                    }
+
+                    for( i = length; i>=0;i--) {
+                        select.options[i] = null;
+                    }
+
+                    keepValues.reverse();
+                    keepText.reverse();
+                    for( i = 0; i<length;i++) {
+                        var option = document.createElement("option");
+                        option.value = keepValues[i];
+                        option.text = keepText[i];
+                        select.add(option);
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-4 columns">
+                {{ form_label(form.date) }}
+                {{ form_errors(form.date) }}
+                {{ form_widget(form.date) }}
+            </div>
+            <div class="large-4 columns">
+                {{ form_label(form.schedStartTime) }}
+                {{ form_errors(form.schedStartTime) }}
+                {{ form_widget(form.schedStartTime) }}
+            </div>
+            <div class="large-4 columns">
+                {{ form_label(form.schedEndTime) }}
+                {{ form_errors(form.schedEndTime) }}
+                {{ form_widget(form.schedEndTime) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_label(form.leadTutors) }}
+                {{ form_errors(form.leadTutors) }}
+                {{ form_widget(form.leadTutors) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_label(form.tutors) }}
+                {{ form_errors(form.tutors) }}
+                {{ form_widget(form.tutors) }}
+            </div>
+        </div>
+        {% if form.startTime is defined %}
+        <div class="row">
+            <div class="large-6 columns">
+                {{ form_label(form.startTime) }}
+                {{ form_errors(form.startTime) }}
+                {{ form_widget(form.startTime) }}
+            </div>
+            <div class="large-6 columns">
+                {{ form_label(form.endTime) }}
+                {{ form_errors(form.endTime) }}
+                {{ form_widget(form.endTime) }}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="large-12 columns">
+                <a href="javascript:void(0)" id="select_coursecodes" class="button small success">Select All Courses</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_label(form.coursecodes) }}
+                {{ form_errors(form.coursecodes) }}
+                {{ form_widget(form.coursecodes) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_label(form.comments) }}
+                {{ form_errors(form.comments) }}
+                {{ form_widget(form.comments) }}
+            </div>
+        </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    Anonymous Students
+                    {{ form_errors(form.anonStudents) }}
+                    {{ form_widget(form.anonStudents) }}
+                </div>
+            </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_end(form) }}
+                {{ form_widget(form.save) }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if not newSession %}
+            <div class="row">
+                <div class="large-12 columns">
+
+                    <div class="callout panel">
+                        <p>Edit Student Attendance</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if studentSessions %}
+                <table style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Courses</th>
+                        <th></th>
+                    </tr>
+                    {% for studentSession in studentSessions %}
+                        <tr>
+                            <td>{{ studentSession.student.firstName }} {{ studentSession.student.lastName }}</td>
+                            <td>{{ studentSession.timeIn ? studentSession.timeIn|date('g:ia') : '???' }}</td>
+                            <td>{{ studentSession.timeOut ? studentSession.timeOut|date('g:ia') : '???' }}</td>
+                            <td>
+                                <ul>
+                                    {% for course in studentSession.courses %}
+                                        <li>{{ course.dept }}{{ course.courseNum }}</li>
+                                    {% endfor %}
+                                    {% if studentSession.otherCourse or studentSession.otherCourseName %}
+                                        <li>{{ studentSession.otherCourseName ~ ' '}}<span class="label radius">Other</span></li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                            <td class="text-center">
+                                <ul class="button-group radius" style="display:inline-block">
+                                    {% if is_granted('ROLE_LEAD_TUTOR') %}
+                                        <li><a href="{{ path('session_edit_attendance', {'id': studentSession.id}) }}" class="tiny button">Edit</a></li>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li><a href="{{ path('attendance_delete', {'id': studentSession.id}) }}" class="tiny button alert">Delete</a></li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4">Anonymous Students</th>
+                        <td class="right">{{ session.anonStudents }}</td>
+                    </tr>
+                </table>
+
+            {% else %}
+                <div class="row">
+                    <div class="large-12 columns">
+                        <h3>No student attendance yet.</h3>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <ul class="button-group radius right">
+                        <li><a href="{{ path('session_add_student', { 'id': session.id }) }}" class="button">Add a Student</a></li>
+                        <li><a href="{{ path('session_add_anon', { 'id': session.id }) }}" class="button success">Add Anonymous Students</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+
+                    <div class="callout panel">
+                        <p>Edit Tutor Attendance</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if tutorSessions %}
+                <table style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Lead</th>
+                        <th></th>
+                    </tr>
+                    {% for tutorSession in tutorSessions %}
+                        <tr>
+                            <td>{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
+                            <td>{{ tutorSession.timeIn ? tutorSession.timeIn|date('g:ia') : '???' }}</td>
+                            <td>{{ tutorSession.timeOut ? tutorSession.timeOut|date('g:ia') : '???' }}</td>
+                            <td>{{ tutorSession.lead ? 'Yes' : 'No' }}</td>
+                            <td class="text-center">
+                                <ul class="button-group radius" style="display:inline-block">
+                                    {% if is_granted('ROLE_LEAD_TUTOR') %}
+                                        <li><a href="{{ path('session_edit_tutor_attendance', {'id': tutorSession.id}) }}" class="tiny button">Edit</a></li>
+                                    {% endif %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li><a href="{{ path('delete_tutor_attendance', {'id': tutorSession.id}) }}" class="tiny button alert">Delete</a></li>
+                                    {% endif %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            {% else %}
+                <div class="row">
+                    <div class="large-12 columns">
+                        <h3>No tutor attendance yet.</h3>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="{{ path('session_create_tutor_attendance', { 'id': session.id }) }}"  class="button radius right">Add a Tutor</a>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
+    '@BethelFrontBundle/Resources/public/lib/pikaday/pikaday.js'
+    '@BethelSessionViewBundle/Resources/public/js/session.js'
+    '@BethelFrontBundle/Resources/public/lib/chosen/chosen.jquery.js'
+    '@BethelSessionViewBundle/Resources/public/js/session_set_active_semester.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function() {
+            $(".chosen-select").chosen();
+
+            $("#select_coursecodes").click(function() {
+                if ($(this).text() == "Select All Courses") {
+                    jQuery("#bethel_entitybundle_session_coursecodes input:checkbox").prop("checked", true);
+                    $(this).text("Select No Courses");
+                } else {
+                    jQuery("#bethel_entitybundle_session_coursecodes input:checkbox").prop("checked", false);
+                    $(this).text("Select All Courses");
+                }
+
+            });
+        });
+    </script>
+{% endblock %}

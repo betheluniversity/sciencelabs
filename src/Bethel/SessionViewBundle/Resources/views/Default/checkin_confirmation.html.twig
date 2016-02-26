@@ -1,0 +1,40 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav %}
+    <br />
+{% endblock %}
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }} class="clearfix">
+            {% for child in form %}
+                <div class="checkbox-container">
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Advisory</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="large-12 columns">
+        <p class="text-center">
+            <a class="button large radius" href="{{ cas_logout }}?gateway=true&service={{ url('session_open', {'hash': session.hash})|e('url') }}">Return to the Session</a>
+        </p>
+    </div>
+
+{% endblock %}

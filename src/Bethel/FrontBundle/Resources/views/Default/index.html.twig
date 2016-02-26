@@ -1,0 +1,35 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav_links %}
+
+{% endblock %}
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Welcome to the Bethel University {{ config_title }}</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h3 class="text-center">Welcome to the AESC Attendance Application for the {{ config_title }}</h3>
+                <p>
+                    Reminders:
+                    <ol>
+                    <li>Use Chrome when running the help session sign in application</li>
+                    <li>When sessions are open, do not have other Chrome browsers open that require CAS authentication (such as BLink or Gmail) while running the help session sign in</li>
+                    </ol>
+                </p>
+            </div>
+        </div>
+    {% endblock %}

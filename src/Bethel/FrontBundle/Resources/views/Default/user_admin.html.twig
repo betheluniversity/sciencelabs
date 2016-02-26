@@ -1,0 +1,59 @@
+{% extends 'BethelUserViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Edit {{ editUser.firstName }} {{ editUser.lastName }} ({{ editUser.username }})</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.firstName) }}
+                    {{ form_errors(form.firstName) }}
+                    {{ form_widget(form.firstName) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_label(form.lastName) }}
+                    {{ form_errors(form.lastName) }}
+                    {{ form_widget(form.lastName) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.email) }}
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                    {{ form_widget(form.username) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.roles) }}
+                    {{ form_errors(form.roles) }}
+                    {{ form_widget(form.roles) }}
+                </div>
+            </div>
+
+            <div>
+                <a href="{{ path('admin_user_deactivate', { 'id': editUser.id }) }}" class="button radius alert">Deactivate</a>
+                {{ form_widget(form.save) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

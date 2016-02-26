@@ -1,0 +1,78 @@
+<?php
+namespace Bethel\EntityBundle\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
+use Bethel\EntityBundle\Entity\User;
+
+class LoadUserData implements FixtureInterface, ContainerAwareInterface {
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    private $em;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+        $this->em = $this->container->get('doctrine.orm.entity_manager');
+    }
+/**
+* {@inheritDoc}
+*/
+public function load(ObjectManager $manager) {
+
+    $apiRole = $this->em->getRepository('BethelEntityBundle:Role')->findOneBy(array(
+        'role' => 'ROLE_API_USER'
+    ));
+
+//  $adminRole = $this->em->getRepository('BethelEntityBundle:Role')->findOneBy(array(
+//      'role' => 'ROLE_ADMIN'
+//  ));
+
+//  $leadTutorRole = $this->em->getRepository('BethelEntityBundle:Role')->findOneBy(array(
+//      'role' => 'ROLE_LEAD_TUTOR'
+//  ));
+
+//  $tutorRole = $this->em->getRepository('BethelEntityBundle:Role')->findOneBy(array(
+//      'role' => 'ROLE_TUTOR'
+//  ));
+
+//  $studentRole = $this->em->getRepository('BethelEntityBundle:Role')->findOneBy(array(
+//      'role' => 'ROLE_STUDENT'
+//  ));
+
+    $users = array(
+        array(
+            'firstName' => '',
+            'lastName' => '',
+            'username' => 'apiuser',
+            'role' => $apiRole
+        )
+    );
+
+        foreach($users as $userArr) {
+            $user = new User();
+            $user->setFirstName($userArr['firstName']);
+            $user->setLastName($userArr['lastName']);
+            $user->setUsername($userArr['username']);
+            $user->setEmail($userArr['username'] . '@bethel.edu');
+
+            $user->addRole($userArr['role']);
+
+            $manager->persist($user);
+        }
+
+        $manager->flush();
+    }
+}
+
+?>

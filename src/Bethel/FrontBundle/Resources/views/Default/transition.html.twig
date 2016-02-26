@@ -1,0 +1,85 @@
+{% extends 'BethelFrontBundle:Default:adminbase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    '@BethelFrontBundle/Resources/public/lib/pikaday/css/pikaday.css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+    {% endstylesheets %}
+    <style type="text/css">
+        /* override the foundation padding for table elements */
+        .pika-table th, .pika-table td {
+            padding:0px;
+        }
+    </style>
+{% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    Step 1: Set Term
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="large-12 columns">
+                <h3 class="text-center">Current Term: {{ currentSemester }}</h3>
+                <p class="text-center">{{ currentSemester.startDate|date('m/d/Y') }} - {{ currentSemester.endDate|date('m/d/Y') }}</p>
+                    {{ form_start(semesterForm) }}
+                    {{ form_errors(semesterForm) }}
+
+                    <div class="row">
+                        <div class="large-6 columns">
+                            {{ form_label(semesterForm.term) }}
+                            {{ form_errors(semesterForm.term) }}
+                            {{ form_widget(semesterForm.term) }}
+                        </div>
+                        <div class="large-6 columns">
+                            {{ form_label(semesterForm.year) }}
+                            {{ form_errors(semesterForm.year) }}
+                            {{ form_widget(semesterForm.year) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-6 columns">
+                            {{ form_label(semesterForm.startDate) }}
+                            {{ form_errors(semesterForm.startDate) }}
+                            {{ form_widget(semesterForm.startDate) }}
+                        </div>
+                        <div class="large-6 columns">
+                            {{ form_label(semesterForm.endDate) }}
+                            {{ form_errors(semesterForm.endDate) }}
+                            {{ form_widget(semesterForm.endDate) }}
+                        </div>
+                    </div>
+
+                    <div>
+                        {{ form_widget(semesterForm.save) }}
+                    </div>
+
+                    {{ form_end(semesterForm) }}
+            </div>
+
+        </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
+    '@BethelFrontBundle/Resources/public/lib/pikaday/pikaday.js'
+    '@BethelFrontBundle/Resources/public/js/transition.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+
+        {% block semester_switch %}
+        {% endblock %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    <span>Attendance for {{ config_title }} <a href="{{ path('export_annual') }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Export</a></span>
+                    {% if config_title == 'Math Lab' %}
+                        <ul>
+                            <li>New Math Lab Application data from Fall 2014 on. </li>
+                            <li>Old Math Lab Application data from Feb. 2004 - Fall 2014.</li>
+                            <li>No session data prior to Feb. 2004.</li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="large-12">
+                <tr>
+                    <th>Year</th>
+                    <th>Aug</th>
+                    <th>Sep</th>
+                    <th>Oct</th>
+                    <th>Nov</th>
+                    <th>Dec</th>
+                    <th style="border-left:2px solid #000; border-right:2px solid #000">Fall</th>
+                    <th style="border-right:2px solid #000; border-right:2px solid #000">Jan</th>
+                    <th>Feb</th>
+                    <th>Mar</th>
+                    <th>Apr</th>
+                    <th>May</th>
+                    <th style="border-left:2px solid #000; border-right:2px solid #000">Spring</th>
+                    <th>Jun</th>
+                    <th>Jul</th>
+                    <th style="border-left:2px solid #000">Summer</th>
+                    <th style="border-left:2px solid #000; border-right:2px solid #000">Total</th>
+                </tr>
+                {% for key, year in yearData %}
+                <tr>
+                    <td>{{ year.academicYear }}</td>
+                    {# Hard coded nastiness. Remove links from old months #}
+                    {% if config_title == 'Math Lab' and key <= 2004 %}
+                        <td>{{ year.monthly[8] }}</td>
+                        <td>{{ year.monthly[9] }}</td>
+                        <td>{{ year.monthly[10] }}</td>
+                        <td>{{ year.monthly[11] }}</td>
+                        <td>{{ year.monthly[12] }}</td>
+                        <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.fallTotal }}</strong></td>
+                        <td style="border-right:2px solid #000; border-right:2px solid #000"><strong>{{ year.monthly[1] }}</strong></td>
+
+                        {% if key == '2004' and config_title == 'Math Lab' %}
+                            <td><a href="{{ path('report_month', { "year": key, "month": 2 }) }}">{{ year.monthly[2] }}</a></td>
+                            <td><a href="{{ path('report_month', { "year": key, "month": 3 }) }}">{{ year.monthly[3] }}</a></td>
+                            <td><a href="{{ path('report_month', { "year": key, "month": 4 }) }}">{{ year.monthly[4] }}</a></td>
+                            <td><a href="{{ path('report_month', { "year": key, "month": 5 }) }}">{{ year.monthly[5] }}</a></td>
+                            <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.springTotal }}</strong></td>
+                            <td><a href="{{ path('report_month', { "year": key, "month": 6 }) }}">{{ year.monthly[6] }}</a></td>
+                            <td><a href="{{ path('report_month', { "year": key, "month": 7 }) }}">{{ year.monthly[7] }}</a></td>
+                            <td style="border-left:2px solid #000"><strong>{{ year.summerTotal }}</strong></td>
+                            <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.yearTotal }}</strong></td>
+                        {% else %} <td>{{ year.monthly[2] }}</td>
+                            <td>{{ year.monthly[3] }}</td>
+                            <td>{{ year.monthly[4] }}</td>
+                            <td>{{ year.monthly[5] }}</td>
+                            <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.springTotal }}</strong></td>
+                            <td>{{ year.monthly[6] }}</td>
+                            <td>{{ year.monthly[7] }}</td>
+                            <td style="border-left:2px solid #000"><strong>{{ year.summerTotal }}</strong></td>
+                            <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.yearTotal }}</strong></td>
+                        {% endif %}
+                    {% else %}
+                        <td><a href="{{ path('report_month', { "year": key - 1, "month": 8 }) }}">{{ year.monthly[8] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key - 1, "month": 9 }) }}">{{ year.monthly[9] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key - 1, "month": 10 }) }}">{{ year.monthly[10] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key - 1, "month": 11 }) }}">{{ year.monthly[11] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key - 1, "month": 12 }) }}">{{ year.monthly[12] }}</a></td>
+                        <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.fallTotal }}</strong></td>
+                        <td style="border-right:2px solid #000; border-right:2px solid #000"><strong><a href="{{ path('report_month', { "year": key, "month": 1 }) }}">{{ year.monthly[1] }}</a></strong></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 2 }) }}">{{ year.monthly[2] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 3 }) }}">{{ year.monthly[3] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 4 }) }}">{{ year.monthly[4] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 5 }) }}">{{ year.monthly[5] }}</a></td>
+                        <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.springTotal }}</strong></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 6 }) }}">{{ year.monthly[6] }}</a></td>
+                        <td><a href="{{ path('report_month', { "year": key, "month": 7 }) }}">{{ year.monthly[7] }}</a></td>
+                        <td style="border-left:2px solid #000"><strong>{{ year.summerTotal }}</strong></td>
+                        <td style="border-left:2px solid #000; border-right:2px solid #000"><strong>{{ year.yearTotal }}</strong></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    {% endblock %}

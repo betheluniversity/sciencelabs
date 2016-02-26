@@ -1,0 +1,84 @@
+{% extends 'BethelCourseViewBundle:Default:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets
+    '@BethelFrontBundle/Resources/public/lib/tagsinput/jquery.tagsinput.css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% form_theme courseForm with ['BethelFrontBundle:Form:field_errors.html.twig'] %}
+
+    {% block main %}
+        <div class="row">
+            <h3>{{ config_title }} Courses for {{ activeSemester.term }} {{ activeSemester.year }}</h3>
+            <div class="large-12 columns">
+                <table style="width:100%;">
+                    <tr>
+                        <th>Course</th>
+                        <th>Sec</th>
+                        <th>Course Code</th>
+                        <th>Professor</th>
+                        <th>Enr</th>
+                    </tr>
+                    {% for course in activeCourses %}
+                        <tr>
+                            <td><a href="{{ path('course_single', {'id': course.id }) }}">{{ course.title }}</a></td>
+                            <td>{{ course.section }}</td>
+                            <td>{{ course.dept ~ course.courseNum }}</td>
+                            <td>
+                            {% if course.professors|length > 0 %}
+
+                                {% for professor in course.professors %}
+                                    {{ professor.firstName }} {{ professor.lastName }}<br />
+                                {% endfor %}
+                            {% endif %}
+                            </td>
+                            <td>{{ course.numAttendees }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <h3>{{ config_title }} Courses Across all Terms</h3>
+                {{ form_start(courseForm) }}
+                {{ form_errors(courseForm) }}
+                {{ form_label(courseForm.coursecode) }}
+                {{ form_errors(courseForm.coursecode) }}
+                {{ form_widget(courseForm.coursecode) }}
+                {{ form_end(courseForm) }}
+                {{ form_widget(courseForm.save) }}
+            </div>
+        </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/tagsinput/jquery.tagsinput.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(document).ready(function() {
+            $('#bethel_entitybundle_coursecode_coursecode').tagsInput({
+                'height':'150px',
+                'width':'100%',
+                'interactive':true,
+                'defaultText':'add a course',
+                'removeWithBackspace' : true,
+                'minChars' : 6,
+                'maxChars' : 0, //if not provided there is no limit,
+                'placeholderColor' : '#666666'
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>{{ student.firstName }} {{ student.lastName }} Attendance for {{ sessionSemester }}</p>
+                </div>
+            </div>
+        </div>
+
+        {% if display %}
+            <div class="row">
+                <div class="large-12 columns">
+
+                    <div class="large-6 columns">
+                        <ul class="no-bullet">
+                            <li><b>{{ student.firstName }} {{ student.lastName }}</b>
+                                <ul>
+                                    <li>Username: {{ student.username }}</li>
+                                    <li>Email: <a href="mailto:{{ student.email }}">{{ student.email }}</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <table>
+                            <tr>
+                                <th>Sessions Attended</th>
+                                <td>{{ semesterAttendanceTotal }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    {% if is_granted('ROLE_PROFESSOR') and not is_granted('ROLE_ADMIN') %}
+                                        Sessions Held for courses<br />
+                                        taught by {{ user }}
+                                    {% else %}
+                                        Sessions Held for courses<br />
+                                        user was enrolled in
+                                    {% endif %}
+                                </th>
+                                <td>{{ sessionsWithCourses }}</td>
+                            </tr>
+                            <tr>
+                                <th>Percentage Attended</th>
+                                <td>{{ percentageAttended }}%</td>
+                            </tr>
+                            <tr>
+                                <th>Average Time per Session</th>
+                                <td>{{ averageTimeSpent }} minutes</td>
+                            </tr>
+                            <tr>
+                                <th>Total Time this Term</th>
+                                <td>{{ totalTimeSpent }} hours</td>
+                            </tr>
+                        </table>
+
+
+                    </div>
+
+                    <div class="large-6 columns">
+                        <ul class="no-bullet">
+                            <li><b>{{ config_title }} Course(s) Enrolled in for {{ sessionSemester }} as of {{ "now"|date('m/d/Y') }}</b>
+                                <ul>
+                                    {% if courses|length > 0 %}
+                                        {% for course in courses %}
+                                            <li><a href="{{ path('report_single_course', { 'id': course.id }) }}" class="success label radius">{{ course }}</a></li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>No courses are on record for this student for {{config_title}} during {{ sessionSemester }}.</li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="no-bullet">
+                            <li><b>{{ config_title }} Course(s) Attended during {{ sessionSemester }}</b>
+                                <ul>
+                                    {% for course in coursesAndAttendance %}
+                                        <li>
+                                        {% if profView %}
+                                            {{ course.course }} ({{ course.course.dept }}{{ course.course.courseNum }})
+                                        {% else %}
+                                            <a href="{{ path('course_single', { 'id': course.course.id }) }}">{{ course.course }}</a> ({{ course.course.dept }}{{ course.course.courseNum }})
+                                        {% endif %}
+                                        </li>
+                                        <ul>
+                                            <li>{{ course.attendance }} session{% if course.attendance != 1 %}s{% endif %} attended</li>
+                                        </ul>
+                                    {% endfor %}
+
+                                    {% for studentSession in studentOtherSessions %}
+                                        {% if not profView %}
+                                            <li>{{ studentSession.otherCourseName ~ ' '}}<span class="secondary label radius">Other</span></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <table class="large-12" id="userTable">
+                    <thead>
+                    <tr>
+                        <th>Session</th>
+                        <th>Courses</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Minutes</th>
+                    </tr>
+                    </thead>
+                    {% for attendance in semesterAttendance %}
+                        <tr>
+                            <td>
+                                {% if profView %}
+                                    {{ attendance.session }}
+                                {% else %}
+                                    <a href="{{ path('report_single_session', { 'id': attendance.session.id }) }}">{{ attendance.session }}</a>
+                                {% endif %}
+                                
+                            </td>
+                            <td>
+                                <ul class="no-bullet">
+                                    <li>
+                                        {% for course in attendance.courses %}
+                                            <a href="{{ path('report_single_course', { 'id': course.id }) }}" class="success label radius">{{ course }}</a>&nbsp;
+                                        {% endfor %}
+                                        {% if attendance.otherCourse %}
+                                            <span class="secondary label radius">{{ attendance.otherCourseName }}</span>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                {% if attendance.timeIn %}
+                                    {{ attendance.timeIn|date("g:ia") }}
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            <td>
+                                {% if attendance.timeOut %}
+                                    {{ attendance.timeOut|date("g:ia") }}
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if attendance.minutes > 0 %}
+                                    {{ attendance.minutes }} min
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <p>We are sorry, but this student has not attended Math Lab this semester for any of your courses.</p>
+        {% endif %}
+
+    {% endblock %}          
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/studentsort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

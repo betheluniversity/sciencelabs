@@ -1,0 +1,27 @@
+{% extends 'BethelTutorBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="panel callout">
+                <strong>{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</strong>
+                <br />
+                {{ tutorSession.session }}
+                <br />
+                {% if tutorSession.schedTimeIn %}
+                {{ tutorSession.schedTimeIn|date('g:ia') }} - {{ tutorSession.schedTimeOut|date('g:ia') }}
+                {% else %}
+                    Unscheduled
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form(form) }}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('tutor_session_delete', { id: tutorSession.id }) }}" class="button alert radius left">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

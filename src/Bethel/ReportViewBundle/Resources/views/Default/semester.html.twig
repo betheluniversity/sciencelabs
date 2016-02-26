@@ -1,0 +1,148 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    <p>Report for {{ semester }} <a href="{{ path('export_semester') }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Export</a></p>
+                </div>
+            </div>
+        </div>
+
+        {% if sessions %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3>Term Statistics</h3>
+                    <div class="large-6 columns">
+                        <ul class="no-bullet">
+                            <li><b>Sessions held: </b>{{ sessions|length }}</li>
+                            <li><b>Total attendance: </b>{{ totalAttendance }}</li>
+                            <li><b>Unique student attendance: </b>{{ uniqueAttendance }}</li>
+                        </ul>
+                    </div>
+                    <div class="large-6 columns">
+                        <ul class="no-bullet">
+                            <li><b>Average total time spent per student: </b>
+                                <ul>
+                                    <li>{{ averageTime }} hours</li>
+                                </ul>
+                            </li>
+                            <li><b>Average student attendance per session: </b>
+                                <ul>
+                                    <li>{{ averageAttendance }}</li>
+                                </ul>
+                            </li>
+                            <li><b>Average number of visits per student: </b>
+                                <ul>
+                                    <li>{{ avgVisitsPerStudent }}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <h3>Schedule Statistics for Closed Sessions</h3>
+                <table class="large-12" id="semesterTable">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Schedule Name</th>
+                        <th>DOW</th>
+                        <th>Start Time</th>
+                        <th>Stop Time</th>
+                        <th>Number of Sessions</th>
+                        <th>Attendance</th>
+                        <th>Percentage</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for scheduleResult in scheduleResults %}
+                        {% set schedule = scheduleResult.schedule %}
+                        <tr>
+                            <td>{{ schedule.dayOfWeek }}</td>
+                            <td>{{ schedule.name }}</td>
+                            <td>{{ weekDays[schedule.dayOfWeek] }}</td>
+                            <td>{{ schedule.startTime|date("g:ia") }}</td>
+                            <td>{{ schedule.endTime|date("g:ia") }}</td>
+                            <td>{{ scheduleResult.sessions|length }}</td>
+                            <td>{{ scheduleResult.attendance }}</td>
+                            <td>{{ scheduleResult.percentage }}%</td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th  colspan='4' class="text-right">Total</th>
+                            <td>{{ sessionTotals }}</td>
+                            <td>{{ totalAttendance - unscheduledTotal }}</td>
+                            <td>100%</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {% if unscheduledSessions %}
+            <div class="row">
+                <h3>Unscheduled Sessions</h3>
+                <table class="large-6">
+                    <tr>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>Stop Time</th>
+                        <th>Attendance</th>
+                    </tr>
+                    {% for session in unscheduledSessions %}
+                    <tr>
+                        <td>{{ session.date|date("m/d/y") }}</td>
+                        <td>{{ session.startTime|date("g:ia") }}</td>
+                        <td>{{ session.endTime|date("g:ia") }}</td>
+                        <td>{{ session.studentSessions|length + session.anonStudents }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    <tfoot>
+                        <tr>
+                            <th  colspan='3' class="text-right">Total</th>
+                            <td>{{unscheduledTotal}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+                {% endif %}
+
+            {#
+
+                Tutor Information:
+                Total tutor attendance this semester: 0
+                Total tutor hours this semester: 0 hours
+
+                Session Information:
+
+                Sunday	7:45 pm	9:45 pm	2	3	100%
+            #}
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3 class="text-center">No sessions have been held yet.</h3>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/semestersort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

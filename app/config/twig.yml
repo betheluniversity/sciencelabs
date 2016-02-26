@@ -1,0 +1,165 @@
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        cas_logout: "%cas.logout%"
+        cas_login: "%cas.login%"
+        config_title: "%app.title%"
+        pre_url: "%app.pre_url%"
+        session_semester: ""
+        # Documentation is fetched based on the route of the page
+        documentation:
+            course_admin:
+              - <p>This page has two sections, the "%app.title% Courses Across All Terms" and the "%app.title% Courses for Current Term". Administrators should populate the bottom "%app.title% Courses Across All Terms" section with all courses that this lab serves across all terms.</p>
+              - <p>To <b>add</b> courses to the "%app.title% Courses Across All Terms" section, click on the "add a course" text in the box, type a course number (ex. MAT124M, use appropriate capitalization and no spaces) and press enter. When you have added all applicable courses, press <span class="label success radius">Submit Courses</span>.</p>
+              - <p>Each new course number will now be checked against Banner; if the course number is valid, the course name will be added to the course number in the list and all sections of the course will populate the "%app.title% Courses for Current Term" list at the top of the page. If the course number is not valid, an error message will appear at the top of the screen.</p>
+              - <p><b>%app.title% Courses Across All Terms</b> determines which courses will be available to be offered at help sessions.  If you no longer want a course to be offered at future help sessions, you should delete it from the "%app.title% Courses Across All Terms" section. In the bottom %app.title% Course list, press the "x" next to the course name and number. When you have removed all applicable courses, press Submit Courses. This will NOT remove the course from the current term course listing found at the top of this page. </p>
+              - <p><b>%app.title% Courses for Current Term</b> determines which courses will be available for reports. If you no longer want a course to be available for reports, you should delete it from the "%app.title% Courses for Current Term" section. To delete a course in this section, click on the course title, and then press <span class="label radius alert">Delete</span> in the following window to delete the course. Make sure this is done for all sections of the course, if desired. Please note that courses from past terms will still be available for reporting. However, all courses that are not offered in the current term will NOT appear in the course list.</p>
+              - <p>Further <b>course information</b> is available for each course by clicking on the course name. Information including the instructor, room, day and time of the course along with the number enrolled, is pulled from Banner and displayed.</p>
+            course_admin_old:
+              - <p>"Help Session Courses" lists all possible courses for this help session. To edit the course list, click on the "add a course" text and type a course number (ex. MAT124M) and press enter. When you have added all applicable courses, press <span class="label success radius">Set</span>.</p>
+              - <p>Each new course number will now be checked against Banner; if the course number is valid, the course name will be added to the course number in the list. If the course number is not valid, an error message will appear at the top of the screen.</p>
+              - <p>%app.title% Courses for Current Term are listed at the bottom of this page.</p>
+              - <p>To delete a course, press the "x" next to the course name and number in the Help Session Course list. When you have removed all applicable courses, press <span class="label success radius">Set</span>. This will also remove the course from the current term course listing found at the bottom of this page.</p>
+              - <p>This section contains all possible courses for this help session. Each term will contain a subset of these courses that is automatically drawn from Banner.</p>
+            admin_transition:
+              - "<p><b>Warning:</b> once a term has been set, no sessions from the previous term can be created or held. Records of previously held sessions will be maintained in the reporting section, but all student users will be deactivated for future sessions. Make sure the previous term is completed before initiating the term startup process.</p>"
+              - "<p>To begin the term startup process, enter the term, year, and start and end dates for the term. When all fields are complete, press the <span class=\"label radius success\">Set Term</span> button to transition the entire system to the new term.</p>"
+              - "<p>Once the new term has been set, go on to the next step by pressing the <span class=\"label radius secondary\">Step 2: Edit Users</span> tab located at the top of the page.</p>"
+            admin_transition_user_docs:
+              - "<p><b>Adding and Removing Tutors and Setting their Role(s)</b></p>"
+              - "<p>All tutors for the current term must be in the system with a \"Lead Tutor\" and/or \"Tutor\" role. The following process will help to set these roles. To check these roles/users, it will be necessary to navigate to another area of the application (the <span class=\"label radius success\">Users</span> tab), so it may be helpful to either have this documentation page open in another browser window, or print out this documentation for instruction.</p>"
+              - "<p>Using the tutor schedule created by the director of the help session for the new term, do the following:"
+              - "<ol>"
+              - "<li>Click the <span class=\"label radius success\">Users</span> tab in the main navigation.</li>"
+              - "<li>Start by <b>deleting</b> any lead tutors or tutors who are no longer working in the help session by checking the box next to a user’s name and pressing the <span class=\"label radius alert\">Deactivate</span> button when you have selected all users you wish to delete. (Note: this action will completely deactivate the user(s), even if they have multiple roles)</li>"
+              - "<li>Next, <b>check the users and their roles</b> for all tutors and lead tutors for the new term. Make any necessary changes by:</li>"
+              - "<ol type=\"a\">"
+              - "<li><b>Adding</b> a tutor to the list of users by clicking the \"Add User\" tab or</li>"
+              - "<li><b>Changing roles</b> by:</li>"
+              - "<ol>"
+              - "<li>Clicking on the <span class=\"label radius\">Edit</span> button next to the user's username</li>"
+              - "<li>Editing the roles of the user on the following page, and pressing <span class=\"label radius success\">Save</span><br /><b>Note:</b> For a tutor who is also a lead tutor, they may appear twice in the list of users - once as a tutor, and once as a lead tutor. If a tutor is no longer a lead tutor, or if they are now a lead tutor, you may edit their roles through the process above. If a user is listed as a lead, it is assumed that they can act as a tutor and a lead tutor, so the dual role listing for a lead is not necessary.</li>"
+              - "</ol>"
+              - "</ol>"
+              - "<li>Once all tutors are set up correctly, go on to the next step by pressing the <span class=\"label radius secondary\">Step 3: Review Courses</span> tab located at the top of the page.</p>"
+            admin_transition_course_docs:
+              - "<p>Check to make sure that the courses currently served by the lab are correctly listed under the <span class=\"label radius success\">Courses</span> tab, in the <b>Current Term</b> section of the Courses page. If any edits to the courses need to be made, please edit the list on the Courses page.</p>"
+              - "<p>After this check has been completed, go on to the next step by pressing the <span class=\"label radius secondary\">Step 4: Review Schedules</span> tab located at the top of the page.</p>"
+            admin_transition_schedule_docs:
+              - "<p>The following process will make sure that the schedule for the term is set up and complete. It will be necessary to navigate to another area of the application (the <span class=\"label radius success\">Schedule</span> tab), so it may be helpful to either have this documentation page open in another browser window, or print out this documentation for instruction.</p>"
+              - "<p>Using the tutor schedule created by the director of the help session for the new term, do the following:</p>"
+              - "<ol>"
+              - "<li>Click the <span class=\"label radius success\">Schedule</span> tab in the main navigation.</li>"
+              - "<li><b>Check schedule days, rooms and times.</b> The last schedules related to the currently selected term type (for example, a fall schedule or interim schedule) will be displayed on the <span class=\"label radius success\">Schedule</span> page. Check all information for each schedule listed and edit if necessary by either using the <span class=\"label radius\">Edit</span> and <span class=\"label radius alert\">Delete</span> buttons on the <span class=\"label radius secondary\">Schedules</span> tab or by using the <span class=\"label radius secondary\">Create New Schedule</span> tab to add an entirely new schedule. More documentation and details are found on the <span class=\"label radius secondary\">Create New Schedule</span> page.</li>"
+              - "<li><b>Add tutors and lead tutors to each schedule.</b> All tutor information from previous terms will not appear in these new schedules. Tutors must be added to each schedule by clicking on the <span class=\"label radius\">Edit</span> button for each schedule. Follow directions on the resulting page to check all schedule information and add lead tutors and tutors for the schedule. Press <span class=\"label radius\">Save</span> for the current schedule and then go on to add tutors to all listed schedules.</li>"
+              - "</ol>"
+              - "<p>This completes the term start-up process. Any portion of the needed elements for a new term may be reviewed by clicking on the <span class=\"label success radius\">Users</span> <span class=\"label success radius\">Courses</span> or <span class=\"label success radius\">Schedule</span> tabs. A final check can be done by going to the <span class=\"label success radius\">Session</span> tab and making sure that appropriate sessions are ready to go under the <b>Available Sessions</b> portion of the page for the current term. If any edits are needed, you may return to the <span class=\"label success radius\">Users</span> <span class=\"label success radius\">Courses</span> or <span class=\"label success radius\">Schedule</span> tabs and make the appropriate changes.</p>"
+            admin_transition_schedule:
+              - <p>You can leave all schedules as is, or make changes. Changes are made individually, so make sure you hit the <i>individual</i> <span class="label radius success">Save</span> button for the schedule you're changing before you move on.</p>
+              - <p>Press <span class="label radius">Previous</span> if you need to make additional changes to the term you're working on.</p>
+              - <p>Once all the schedule information is correct, press <span class="label radius">Next</span> to get an overview of your changes.</p>
+            admin_user_edit:
+              - <p>To edit the user, make changes and press the <span class="label radius success">Save</span> button. To remove the user, press the <span class="label alert radius">Deactivate</span> button.</p>
+              - <p>Deactivating a user will remove them from the current user list. However, this user's past activity will be maintained in all historical data reports.</p>
+            #schedule_edit:
+            #  - <p>Scheduling new sessions allows you to create multiple sessions at once.</p>
+            #  - <p>Using this method, you can schedule a new session starting from the beginning of the semester, or from today if the semester has already started, until the end of the semester.</p>
+            user:
+              - <p>All help session users are listed on this page. To search for a user, type any portion of the user's first or last name, role, or email in the search box. To add a user, click the <span class="label radius secondary">Add</span> tab at the top of this section. To edit a user, click the <span class="label radius">Edit</span> button next to their name. To sort users according to role, type desired role in search box. To deactivate users, check the box next to a user’s name and press the <span class="label radius alert">Deactivate</span> button when you have selected all users you wish to delete.</p>
+              - <p><span class="label radius">Student</span> only has ability to edit profile and attend a session in the lab<br /><span class="label radius">Professor</span> has the ability to view reports from their current and past courses, and edit their profile<br /><span class="label radius">Tutor</span> has the ability to edit their tutor calendar, or edit their profile<br /><span class="label radius">Lead Tutor</span> has the ability to start a session, edit student attendance during session, as well as all tutor abilities<br /><span class="label radius">Administrator</span> has complete access to all features of the application, with the exception of editing their own roles<br /><span class="label radius">Viewer</span> has complete access to all reports in the reports section of the application, and can edit their profile</p>
+              - <p>* <b>Professors</b> are automatically added to the user list when their courses are pulled from Banner when the current term is selected, and need not be added manually.</p>
+            user_search:
+              - <p>Search for a user to add by entering first name and last name (enter name or first few characters). Once you have entered a first and last name, press enter or the <span class="label radius success">Search</span> button. When the user appears, press <span class="label radius success">Add User</span>. If the user does not appear, check the spelling of the user name as the system is pulling user data from Banner.</p>
+              - <p>* <b>Professors</b> are automatically added to the user list when their courses are pulled from Banner when the current term is selected, and need not be added manually.</p>
+            user_create:
+              - <p>You may select one or more roles for this user.<br /><span class="label radius">Student</span> only has ability to edit profile and attend a session in the lab<br /><span class="label radius">Professor</span> has the ability to view reports from their current and past courses, and edit their profile<br /><span class="label radius">Tutor</span> has the ability to edit their tutor calendar, or edit their profile<br /><span class="label radius">Lead Tutor</span> has the ability to start a session, edit student attendance during session, as well as all tutor abilities<br /><span class="label radius">Administrator</span> has complete access to all features of the application, with the exception of editing their own roles<br /><span class="label radius">Viewer</span> has complete access to all reports in the reports section of the application, and can edit their profile</p>
+              - <p>* <b>Professors</b> are automatically added to the user list when their courses are pulled from Banner when the current term is selected, and need not be added manually.</p>
+            user_edit:
+              ROLE_ADMIN:
+                - "<p>There are two pieces that you may edit on this page: your name and the option to receive an email when a session is closed. The gray boxes contain information that is pulled from Banner and cannot be edited (username and email).</p>"
+              other:
+                - <p>This page contains your personal information. The gray boxes contain information that is pulled from Banner and cannot be edited (username and email). You may, however, change your first or last name by editing the given information and then pressing <span class="label radius">Save</span>.
+            session_edit_attendance:
+              - <p>Attendance may be edited by altering information in the given fields. To designate an unknown time in or out, leave these fields blank, or use the backspace key to clear all fields. This unknown time will be listed as "???" in all reports, and will result in zero time recorded for the user.</p>
+              - <p>When all fields are correct, press the <span class="label success radius">Save</span> button to complete the user edits.</p>
+            session_edit_tutor_attendance:
+              - <p>Attendance may be edited by altering information in the given fields. To designate an unknown time in or out, leave these fields blank, or use the backspace key to clear all fields. This unknown time will be listed as "???" in all reports, and will result in zero time recorded for the user.</p>
+              - <p>When all fields are correct, press the <span class="label success radius">Save</span> button to complete the user edits.</p>
+            session_tutor_open:
+              - <p><b>Running the Help Session:</b></p>
+              - <p><b>Tutor Sign In:</b> Each tutor must personally sign in using the <span class="label scream-button radius">Sign in as a Tutor</span> button</p>
+              - <p><b>Student Sign In:</b> Make sure that each student signs in when they visit the help session by pressing the <span class="label scream-button radius">Please Sign In Here</span> button on the student sign in page. The student will be prompted to select the courses for which they are visiting the lab or the reason for their attendance before they sign in.</p>
+              - <p><b>Emails to Professors:</b> If you need to email a professor during a help session, see the list of professor names and emails for each class listed on this page. Make sure to open a new web browser (such as Internet Explorer or Firefox, but not Chrome) to send this email due to CAS authentication overlap issues.</p>
+              - <p><b>Editing Attendance:</b> To edit a student's attendance, the lead tutor must log in to the system using the <span class="label success radius">Login</span> button in the upper right hand corner of the screen. Go to the <span class="label success radius">Sessions</span> tab and choose the <span class="label success radius">Edit Attendance</span> button next to the open session. You may then proceed to edit individual student or tutor attendance. When editing is complete, return to available sessions listing and press <span class="label radius">Enter Session</span>.</p>
+              - <p><b>Closing a Session:</b> To close a session, the lead tutor must press the <span class="label success radius">Lead Tutor Close Session</span> button at the bottom of the screen. This will prompt the lead tutor to log in to authenticate. Once the lead tutor is logged in, they may click the <span class="label success radius">Session</span> tab and close the session by clicking the <span class="label alert radius">Close Session</span> button next to the current open session. The final two steps will be to enter final comments from the session, and then press the <span class="label alert radius">Close</label> button.</p>
+              - <p><b>Reminders:</b></p>
+              - <ol><li>Use Chrome when running the help session sign in application</li>
+              - <li>Do not have other Chrome browsers open that require CAS authentication (such as BLink or Gmail) while running the help session sign in</li>
+              - <li>Make sure that students check out when leaving the lab, and that all students remaining in the lab are checked out when the session ends</li></ol>
+            schedule:
+              - <p>To view specific schedule information including courses and tutors, click the <span class="label success radius">Show</span> buttons.</p>
+              - <p>To edit schedule information, click the <span class="label radius">Edit</span> button.</p>
+              - <p>To delete all future instances of a schedule, click the <span class="label alert radius">Delete</span> button (past occurrences of the schedule will remain in the reports section).</p>
+            schedule_edit:
+              - <p>Edit schedule information in the given fields to reflect changes in the current schedule. For more information regarding schedules and sessions, see the documentation on the <span class="label secondary radius">Create New Schedule</span> tab.</p>
+            schedule_create:
+              - <p>To create a new schedule for the listed term, enter the schedule information in the given fields.</p>
+              - <p>A schedule will be used to create recurring sessions that will occur on the chosen day of week and time, throughout the given term.</p>
+              - <p>A session is a single instance of a schedule, and may be edited individually on the <span class="label success radius">Session</span> tab.</p>
+              - <p>Multiple sessions may occur on any day of the week. Therefore, the name of the session should reflect the the existence of multiple rooms or varying times of day. For example, 'Monday Second Room Chapel Time' and 'Monday Main Room Evening' could distinguish two separate Monday schedules.</p>
+              - <p>Click <span class="label success radius">Save</span> when you are done creating the new schedule.</p>
+            session_create:
+              - <p>This section can be used to create a past or a future session that is separate from those created using the Schedule tab.</p>
+              - <p>For future sessions, actual start and end times will be left blank.</p>
+              - <p>For historical sessions, both scheduled and actual start and end times may be set.</p>
+            session_add_student:
+              - <p>To add a student select their name from the "Registered Students" drop down menu. If a student is not found in the registered students list, you must add the student to the list by using the <span class="label secondary radius">Add</span> option on the <span class="label success radius">Users</span> tab.</p>
+              - <p>Once the student name appears in the "Registered Student" field, press the <span class="label success radius">Submit</span> button to pull the student's courses from Banner.</p>
+            session_add_attendance:
+              - <p>Select a course and/or enter another course by checking the "Other" option and filling in the "Course Name or Reason" field.</p>
+              - <p>Also fill in the "Time In" and "Time Out" fields, or leave blank if unknown.</p>
+              - <p>To designate an unknown time in or out, leave these fields blank, or use the backspace key to clear all fields. This unknown time will be listed as "???" in all reports, and will result in zero time recorded for the user.</p>
+              - <p>When all fields are correct, press the <span class="label success radius">Save</span> button to add the student to the session.</p>
+            session_create_tutor_attendance:
+              - <p>To add a tutor select their name from the "Registered Tutors" drop down menu. If a tutor is not found in the registered tutors list, you must add the tutor to the list by using the <span class="label secondary radius">Add</span> option on the <span class="label success radius">Users</span> tab.</p>
+              - <p>Also fill in the "Time In" and "Time Out" fields, or leave blank if unknown.</p>
+              - <p>To designate an unknown time in or out, leave these fields blank, or use the backspace key to clear all fields. This unknown time will be listed as "???" in all reports, and will result in zero time recorded for the user.</p>
+              - <p>Finally, if necessary, designate the tutor as a lead tutor by checking the final box.</p>
+              - <p>When all fields are correct, press the <span class="label success radius">Save</span> button to add the tutor to the session.</p>
+            report_student:
+              - <p>All students who have attended a %app.title% session for the term given at the top of the page are listed along with their total attendance for all classes.</p>
+              - <p>To <b>search</b> for a user, type any portion of the user's first or last name, or email in the search box.</p>
+              - <p>Student data is also <b>sortable</b>; click on the arrow next to any column header to sort by the column field. </p>
+              - <p>For <b>further information</b> concerning a student's attendance, click on the <span class="label radius">View</span> button next to their name.</p>
+              - <p>To view student data from a different <b>term</b>, choose an option from the term menu in the upper right hand corner of the page and press the <span class="label success radius">Set</span> button.</p>
+              - <p><strong>Set Term Warning:</strong><br />Within each section of reports (except cumulative reports), the term can be changed. When logging in to the application, the default term will be the current term. If the term is changed in one reporting section, the newly set term will be maintained across all sections of reports until set to a new term again.</p>
+            report_course:
+              - <p>All %app.title% course reports for the term given at the top of the page are listed along with their total attendance. Total attendance gives the total number of visits for the course. Unique attendance gives the number of unique students who have attended the help session. Percentage gives the percentage of a specific course attendance out of all attendance for all %app.title% courses.</p>
+              - <p>To <b>search</b> for a course report, type any portion of the course number, course name, professor, or attendance in the search box.</p>
+              - <p>Course reports are also <b>sortable</b>; click on the arrow next to any column header to sort by the column field.</p>
+              - <p>For <b>further information</b> concerning a course report, click on the <span class="label radius">View</span> button next to the course name.</p>
+              - <p>To view course report data from a different <b>term</b>, choose an option from the term menu in the upper right hand corner of the page and press the <span class="label success radius">Set</span> button.</p>
+              - <p><strong>Set Term Warning:</strong><br />Within each section of reports (except cumulative reports), the term can be changed. When logging in to the application, the default term will be the current term. If the term is changed in one reporting section, the newly set term will be maintained across all sections of reports until set to a new term again.</p>
+            report_session:
+              - <p>All %app.title% session reports for the term given at the top of the page are listed along with their total attendance. This reporting section gives an archive of all session reports. If you would like to edit a report for the current term, go to the closed sessions section of the session tab.</p>
+              - <p>For further information concerning a session report, click on the <span class="label radius">View</span> button next to the session date corresponding to a given session.</p>
+              - <p>To view session report data from a different <b>term</b>, choose an option from the term menu in the upper right hand corner of the page and press the <span class="label success radius">Set</span> button.</p>
+              - <p><strong>Set Term Warning:</strong><br />Within each section of reports (except cumulative reports), the term can be changed. When logging in to the application, the default term will be the current term. If the term is changed in one reporting section, the newly set term will be maintained across all sections of reports until set to a new term again.</p>
+            report_semester:
+              - <p>This page contains term and schedule statistics for the term listed at the top of the page.</p>
+              - <p>Schedule statistic data is <b>sortable</b>; click on the arrow next to any column header to sort by the column field.</p>
+              - <p>To view term data from a different <b>term</b>, choose an option from the term menu in the upper right hand corner of the page and press the <span class="label success radius">Set</span> button.</p>
+              - <p><strong>Set Term Warning:</strong><br />Within each section of reports (except cumulative reports), the term can be changed. When logging in to the application, the default term will be the current term. If the term is changed in one reporting section, the newly set term will be maintained across all sections of reports until set to a new term again.
+            report_month:
+              - <p>This page contains schedule and session statistics for the term and month listed at the top of the page.</p>
+              - <p>Monthly schedule and session data is <b>sortable</b>; click on the arrow next to any column header to sort by the column field.</p>
+              - <p>To view term data from a different <b>term</b>, choose an option from the term menu in the upper right hand corner of the page and press the <span class="label success radius">Set</span> button.</p>
+              - <p><strong>Set Term Warning:</strong><br />Within each section of reports (except cumulative reports), the term can be changed. When logging in to the application, the default term will be the current term. If the term is changed in one reporting section, the newly set term will be maintained across all sections of reports until set to a new term again.</p>
+            session_stop:
+              - <p><strong>Emails to Professors:</strong><br />If you need to email a professor during a help session, see the list of professor names and emails for each class listed on this page. Make sure to open a new web browser (such as Internet Explorer or Firefox, but not Chrome) to send this email due to CAS authentication overlap issues.</p>
+            email_create:
+              - <p>This section gives you the option to email %app.title% users. These emails are only sent to users who are set to active in the system. See the <span class="label success radius">Users</span> tab for more information on the users currently in the system. When the email is sent, all users will be BCC’d, so that Bethel username information will not appear in the email.</p>
+            tutor_schedule:
+              - <p>Tutor calendar may be further developed in the future to allow tutors to request and make subs for future sessions. Currently, it gives the listing of tutors scheduled for a particular day, both in the past and future.</p>

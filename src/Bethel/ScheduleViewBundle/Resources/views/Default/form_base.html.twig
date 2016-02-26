@@ -1,0 +1,56 @@
+{% extends 'BethelScheduleViewBundle:Default:base.html.twig' %}
+
+    {% form_theme form _self %}
+
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets
+        '@BethelFrontBundle/Resources/public/lib/chosen/chosen.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+        {% endstylesheets %}
+        <style type="text/css">
+            .chosen-container-multi .chosen-choices,
+            .chosen-container-multi .chosen-choices input,
+            .chosen-container-multi .chosen-container {
+                min-height:33px !important;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice {
+                height:29px;
+                line-height:20px;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+                top:8px;
+            }
+            .chosen-container-single .chosen-search input[type="text"],
+            .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+
+            }
+        </style>
+    {% endblock %}
+
+    {% block time_widget %}
+        {% set timeColumns = "large-6 left" %}
+        {% spaceless %}
+            {% if widget == 'single_text' %}
+                {{ block('form_widget_simple') }}
+            {% else %}
+                {% set vars = widget == 'text' ? { 'attr': { 'size': 1 }} : {} %}
+                <div class="{{ timeColumns }}">{{ form_widget(form.hour, vars) }}</div>
+                {% if with_minutes %}<div class="{{ timeColumns }}">{{ form_widget(form.minute, vars) }}</div>{% endif %}
+            {% endif %}
+        {% endspaceless %}
+    {% endblock time_widget %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/chosen/chosen.jquery.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(document).ready(function() {
+            $(".chosen-select").chosen();
+        });
+    </script>
+{% endblock %}

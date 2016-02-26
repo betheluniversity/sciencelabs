@@ -1,0 +1,89 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Edit session attendance.</p>
+                </div>
+            </div>
+        </div>
+
+
+
+        {% set formCount = 0 %}
+        {% if formViews %}
+        {% for form in formViews %}
+            {% form_theme form with ['BethelFrontBundle:Form:field_errors.html.twig', 'BethelFrontBundle:Form:choice_widget_expanded.html.twig'] %}
+
+            {% if formCount is divisibleby(2) or formCount == 0 %}
+            <div class="row">
+            {% endif %}
+            {% set formCount = formCount + 1 %}
+                <div class="large-6 columns">
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <h3 class="text-center">{{ form.vars.value.student }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-6 columns">
+                            {{ form_label(form.timeIn) }}
+                            {{ form_errors(form.timeIn) }}
+                            {{ form_widget(form.timeIn) }}
+                        </div>
+                        <div class="large-6 columns">
+                            {{ form_label(form.timeOut) }}
+                            {{ form_errors(form.timeOut) }}
+                            {{ form_widget(form.timeOut) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            {{ form_label(form.courses) }}
+                            {{ form_errors(form.courses) }}
+                            {{ form_widget(form.courses) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <ul class="button-group radius right">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('attendance_delete', {'id': form.vars.value.id }) }}" class="button alert">Delete</a></li>
+                                {% endif %}
+                                <li>{{ form_widget(form.save) }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            {% if formCount is divisibleby(2) or formCount == formViews|length %}
+                <hr />
+            </div><!-- //.row -->
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3>No student attendance yet.</h3>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="large-12 columns">
+                <h3><a href="{{ path('session_add_student', { 'id': session.id }) }}">Add a Student</a></h3>
+                <h3><a href="{{ path('session_add_anon', { 'id': session.id }) }}">Add Anonymous Students</a></h3>
+            </div>
+        </div>
+    {% endblock %}

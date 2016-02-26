@@ -1,0 +1,21 @@
+<h2>Session for {{ session.date|date('l, F jS') }}: {{ session.startTime|date('h:i A') }} - {{ session.endTime|date('h:i A') }}</h2>
+
+{% if session.studentSessions is not empty %}
+    <h4>Students</h4>
+    <ul>
+        {% for session in session.studentSessions %}
+            <li>{{ session.date }}: {{ session.startTime }} - {{ session.endTime }}</li>
+        {% endfor %}
+    </ul>
+{%  endif %}
+<ul>
+    <li>{{ session.leadTutor }}</li>
+    {% if session.open %}
+        <li>Open</li>
+    {% else %}
+        <li>Closed</li>
+    {% endif %}
+</ul>
+{#
+    schedule: "Schedule",
+#}

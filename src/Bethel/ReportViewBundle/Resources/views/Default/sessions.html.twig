@@ -1,0 +1,95 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    <p>View session reports <a href="{{ path('export_session') }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Export</a></p>
+                </div>
+            </div>
+        </div>
+
+        {% if sessionResults %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <ul class="inline-list">
+                    {% for month in sessionResults|keys %}
+                        <li><a href="#{{ month }}">{{ month }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <hr />
+            {% for month, results in sessionResults %}
+                <h2 id="{{ month }}">{{ month }}</h2>
+            <div class="row">
+                <table class="large-12 sessionTable">
+                    <thead>
+                    <tr>
+                        <th class="text-left">Date</th>
+                        <th class="text-left">Name</th>
+                        <th class="text-left">DOW</th>
+                        <th class="text-left">Time</th>
+                        <th class="text-left">Attendance</th>
+                        <th class="text-left">Tutors</th>
+                        <th class="text-left">Report</th>
+                    </tr>
+                    </thead>
+                    {% for result in results %}
+                        {% set session = result.session %}
+                        <tr>
+                            <td>{{ session.date|date("m/d/Y") }}</td>
+                            <td>{{ session.name }}</td>
+                            <td>{{ session.date|date("D") }}</td>
+                            <td>{{ session.startTime|date("g:ia") }} - {{ session.endTime|date("g:ia") }}</td>
+                            <td>{{ result.total }}</td>
+                            <td class="text-center">
+                                <button class="tiny button radius success show-tutors">Show</button>
+                                <div style="display:none;margin-top:10px" class="text-left">
+                                    {% for tutorSession in session.tutorSessions %}
+                                        {{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}
+                                        {% if tutorSession.lead %}
+                                            <span class="label radius">Lead</span>
+                                        {% endif %}
+                                        <br />
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <a class="tiny button radius" href="{{ path('report_single_session', { 'id': result.session.id }) }}">View</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <th colspan="4">Total</th>
+                            <td>{{ monthTotals[month] }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div><!-- //.row -->
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3 class="text-center">No sessions have been held yet.</h3>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@BethelSessionViewBundle/Resources/public/js/showhidetutors.js'
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/sessionsort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

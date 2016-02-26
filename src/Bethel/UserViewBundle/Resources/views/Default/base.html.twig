@@ -1,0 +1,18 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav_links %}
+    {% if app.request.get('_route') != 'user_edit' %}
+    <dd class="{{ app.request.get('_route') == 'user' ? 'active' }}"><a href="{{ path('user') }}">Users</a></dd>
+    <dd class="{{ app.request.get('_route') == 'user_search' ? 'active' }}"><a href="{{ path('user_search') }}">Add</a></dd>
+    {% else %}
+    <dd class="{{ app.request.get('_route') == 'user_edit' ? 'active' }}"><a href="{{ path('user_edit') }}">My Profile</a></dd>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

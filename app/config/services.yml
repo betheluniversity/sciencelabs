@@ -1,0 +1,97 @@
+services:
+    kernel.listener.open_session_listener:
+        class: Bethel\SessionViewBundle\EventListener\OpenSessionListener
+        arguments: ["%session.name%", "%cas.logout%"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    bethel.entity_listener_resolver:
+        class: Bethel\EntityBundle\EventListener\ListenerResolver
+        arguments: [ "@service_container" ]
+    bethel.entity_listener.user:
+        class: Bethel\EntityBundle\EventListener\UserListener
+        arguments: [ "@wsapi" ]
+        tags:
+            -  { name: doctrine.entity_listener }
+    bethel.user_metadata:
+        class: Doctrine\ORM\Mapping\ClassMetadata
+        arguments:
+            name: "Bethel\EntityBundle\Entity\User"
+    bethel.sso_user_provider:
+        class: Bethel\EntityBundle\Entity\UserRepository
+        arguments: ["@doctrine.orm.entity_manager","@bethel.user_metadata","%bethel.apikey%"]
+    bethel.apikey_authenticator:
+        class: Bethel\FrontBundle\Security\ApiKeyAuthenticator
+        arguments: ["@bethel.sso_user_provider"]
+    bethel.session_email:
+        class: Bethel\ReportViewBundle\Services\SessionEmail
+        arguments: ["@doctrine.orm.entity_manager","@swiftmailer.mailer.default","@twig","%app.title%"]
+    bethel.create_email:
+        class: Bethel\EmailBundle\Form\Handler\EmailCreateFormHandler
+        arguments: [ "@doctrine.orm.entity_manager", "@swiftmailer.mailer.default", "%app.title%", "@request_stack" ]
+    bethel.session_close:
+        class: Bethel\SessionViewBundle\Services\SessionClose
+        arguments: ["@doctrine.orm.entity_manager","@bethel.session_email"]
+    bethel.populate_semester:
+        class: Bethel\EntityBundle\Services\PopulateSemesterService
+        arguments: [ @doctrine.orm.entity_manager ]
+    bethel.validate_course_code:
+        class: Bethel\CourseViewBundle\Services\ValidateCourseCode
+        arguments: [ @doctrine.orm.entity_manager, @wsapi ]
+    bethel.create_or_update_course_code:
+        class: Bethel\CourseViewBundle\Services\CreateOrUpdateCourseCode
+        arguments: [ @doctrine.orm.entity_manager ]
+    bethel.populate_course_codes:
+        class: Bethel\CourseViewBundle\Services\PopulateCourseCodesService
+        arguments: [  @doctrine.orm.entity_manager, @session, @wsapi, @bethel.populate_course, @bethel.populate_semester, @bethel.populate_professor  ]
+    bethel.populate_course:
+        class: Bethel\CourseViewBundle\Services\PopulateCourseService
+        arguments: [ @doctrine.orm.entity_manager ]
+    bethel.populate_professor:
+        class: Bethel\EntityBundle\Services\PopulateProfessorService
+        arguments: ["@doctrine.orm.entity_manager","@session","@wsapi"]
+    bethel.populate_courses:
+        class: Bethel\CourseViewBundle\Services\PopulateCoursesService
+        arguments: [ @doctrine.orm.entity_manager, @bethel.populate_semester, @bethel.populate_professor, @bethel.populate_course ]
+    session_semester:
+        class: Bethel\FrontBundle\Services\SessionSemester
+        arguments: ["@doctrine.orm.entity_manager"]
+    term_validator:
+        class: Bethel\EntityBundle\Validator\TermValidator
+        tags:
+            - { name: validator.constraint_validator, alias: term_validator }
+        arguments: ["%app.terms%"]
+    user_search_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\UserSearchFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@wsapi"]
+    user_create_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\UserCreateFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@wsapi"]
+    session_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\SessionFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack"]
+    session_comment_form_handler:
+            class: Bethel\EntityBundle\Form\Handler\SessionCommentFormHandler
+            arguments: ["@doctrine.orm.entity_manager","@request_stack"]
+    tutor_session_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\TutorSessionFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@session"]
+    course_code_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\CourseCodeFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@session","@bethel.populate_course_codes"]
+    schedule_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\ScheduleFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@session_form_handler"]
+    semester_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\SemesterFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack","@session","@validator","@bethel.populate_course_codes"]
+    bethel_entity.session_listener:
+        class: Bethel\EntityBundle\EventListener\SessionListener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]

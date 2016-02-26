@@ -1,0 +1,8 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block subnav_links %}
+    <dd class="{{ app.request.get('_route') == 'admin_transition' ? 'active' }}"><a href="{{ path('admin_transition') }}">Step 1: Set Term</a></dd>
+    <dd class="{{ app.request.get('_route') == 'admin_transition_user_docs' ? 'active' }}"><a href="{{ path('admin_transition_user_docs') }}">Step 2: Edit Users</a></dd>
+    <dd class="{{ app.request.get('_route') == 'admin_transition_course_docs' ? 'active' }}"><a href="{{ path('admin_transition_course_docs') }}">Step 3: Review Courses</a></dd>
+    <dd class="{{ app.request.get('_route') == 'admin_transition_schedule_docs' ? 'active' }}"><a href="{{ path('admin_transition_schedule_docs') }}">Step 4: Review Schedules</a></dd>
+{% endblock %}

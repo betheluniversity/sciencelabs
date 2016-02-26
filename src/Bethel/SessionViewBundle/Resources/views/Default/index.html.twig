@@ -1,0 +1,129 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block main %}
+
+    {% if openSessions %}
+
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Open Sessions</p>
+                </div>
+            </div>
+        </div>
+
+        {% for session in openSessions %}
+            <div class="row">
+                <div class="large-12 columns">
+
+                    <h3 class="left">{{ session }}</h3>
+                    <h4 class="right">{{ session.date|date("m/d/Y") }}</h4>
+                    <div class="clearfix"></div>
+                    <ul class="button-group radius right">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('session_view', {'id': session.id}) }}" class="small button secondary">View Session</a></li>
+                        {% endif %}
+                        {% if is_granted('ROLE_LEAD_TUTOR') %}
+                            <li><a href="{{ path('session_edit', {'id': session.id}) }}" class="small button">Edit Session</a></li>
+                        {% endif %}
+                        {% if session.open %}
+                            <li><a href="{{ path('session_stop', {'id': session.id}) }}" class="small button alert">Close Session</a></li>
+                            <li><a href="{{ cas_logout }}?gateway=true&service={{ url('session_open', {'hash': session.hash})|e('url') }}" class="small scream-button button">Enter Session</a></li>
+                        {% else %}
+                            <li><a href="{{ path('session_start', {'id': session.id}) }}" class="small button success">Start</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <hr />
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Remaining Scheduled Sessions for {{ activeSemester }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% set sessionCount = 0 %}
+    {% if scheduledSessions %}
+        <div class="row">
+        <div class="large-12 columns">
+            <table style="width:100%">
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Date</th>
+                    <th class="text-left">Time</th>
+                    <th class="text-left">Room</th>
+                    <th class="text-left">Tutors</th>
+                    <th class="text-left"></th>
+                </tr>
+        {% for session in scheduledSessions %}
+                    <tr>
+                        {% if session.name %}
+                            <td>{{ session.name }}</td>
+                        {% else %}
+                            <td>{{ session }}</td>
+                        {% endif %}
+                        <td>{{ session.date|date("m/d/Y") }}</td>
+                        <td>{{ session.schedStartTime|date("g:ia") }} - {{ session.schedEndTime|date("g:ia") }}</td>
+                        <td>{{ session.room }}</td>
+                        <td>
+                            <button class="tiny button success show-tutors">Show</button>
+                            <div style="display:none;margin-top:10px" class="text-left">
+                            {% if session.tutorSessions|length > 0 %}
+                                {% for tutorSession in session.tutorSessions %}
+                                    {{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}
+                                    {% if tutorSession.lead %}
+                                        <span class="label success radius">Lead</span>
+                                    {% endif %}
+                                    <br />
+                                {% endfor %}
+                            {% endif %}
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <ul class="button-group radius" style="display:inline-block">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li><a href="{{ path('session_edit', {'id': session.id}) }}" class="tiny button">Edit</a></li>
+                                    <li><a href="{{ path('session_delete', {'id': session.id}) }}" class="tiny button alert">Delete</a></li>
+                                {% endif %}
+                                {% if session.open %}
+                                    <li><a href="{{ cas_logout }}?gateway=true&service={{ url('session_open', {'hash': session.hash})|e('url') }}" class="tiny button secondary">View</a></li>
+                                {% else %}
+                                    <li><a href="{{ path('session_start', {'id': session.id}) }}" class="tiny button success">Start</a></li>
+                                {% endif %}
+                            </ul>
+                        </td>
+        {% endfor %}
+                </tr>
+        </table>
+        </div>
+        </div><!-- //.row -->
+    {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3 class="text-center">There are no sessions scheduled.</h3>
+                    <hr />
+                </div>
+            </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@BethelSessionViewBundle/Resources/public/js/showhidetutors.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,16 @@
+
+    {{ form_start(sessionForm) }}
+    {{ form_errors(sessionForm) }}
+    <div class="large-1 columns right">
+        {{ form_widget(sessionForm.save) }}
+    </div>
+    <div class="large-3 columns right">
+        {{ form_label(sessionForm.semester) }}
+        {{ form_errors(sessionForm.semester) }}
+        {{ form_widget(sessionForm.semester) }}
+    </div>
+    {{ form_rest(sessionForm) }}
+    {{ form_end(sessionForm) }}
+    <div class="large-2 columns right">
+        <h5 class="text-center" id="reportActiveSemester"></h5>
+    </div>

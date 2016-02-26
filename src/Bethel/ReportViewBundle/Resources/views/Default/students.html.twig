@@ -1,0 +1,60 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Student Attendance <a href="{{ path('export_students') }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Export</a></p>
+                </div>
+            </div>
+        </div>
+
+        {% if students %}
+            <div class="row">
+                <table class="large-12" id="userTable">
+                    <thead>
+                    <tr>
+                        <th>Last</th>
+                        <th>First</th>
+                        <th>Email</th>
+                        <th>Attendance</th>
+                        <th>Report</th>
+                    </tr>
+                    </thead>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.user.lastName }}</td>
+                            <td>{{ student.user.firstName }}</td>
+                            <td>{{ student.user.email }}</td>
+                            <td>{{ student.attendance }}</td>
+                            <td><a class="button tiny" href="{{ path('report_single_student', {'id': student.user.id}) }}">View</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3 class="text-center">There are no users.</h3>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/studentsort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

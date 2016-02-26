@@ -1,0 +1,63 @@
+{% extends 'BethelSessionViewBundle:Default:form_base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    {% if tutor is defined %}
+                    <p>Editing Attendance for <b>{{ tutor }}</b></p>
+                    {% else %}
+                    <p>Add Tutor Attendance</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="large-12 columns">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {% if tutor is not defined %}
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.tutor) }}
+                    {{ form_errors(form.tutor) }}
+                    {{ form_widget(form.tutor) }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.timeIn) }}
+                    {{ form_errors(form.timeIn) }}
+                    {{ form_widget(form.timeIn) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_label(form.timeOut) }}
+                    {{ form_errors(form.timeOut) }}
+                    {{ form_widget(form.timeOut) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.lead) }}
+                    {{ form_errors(form.lead) }}
+                    {{ form_widget(form.lead) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+    {% endblock %}

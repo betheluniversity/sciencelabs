@@ -1,0 +1,87 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Student Attendance</p>
+                </div>
+            </div>
+        </div>
+
+        {% if studentSessions %}
+            <table style="width:100%">
+                <tr>
+                    <th>Name</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Courses</th>
+                </tr>
+                {% for studentSession in studentSessions %}
+                    <tr>
+                        <td>{{ studentSession.student.firstName }} {{ studentSession.student.lastName }}</td>
+                        <td>{{ studentSession.timeIn|date('g:ia') }}</td>
+                        <td>{{ studentSession.timeOut|date('g:ia') }}</td>
+                        <td>
+                            <ul>
+                                {% for course in studentSession.courses %}
+                                    <li>{{ course.dept }}{{ course.courseNum }}</li>
+                                {% endfor %}
+                                {% if studentSession.otherCourse or studentSession.otherCourseName %}
+                                    <li>{{ studentSession.otherCourseName ~ ' '}}<span class="label radius">Other</span></li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3>No student attendance yet.</h3>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Tutor Attendance</p>
+                </div>
+            </div>
+        </div>
+
+        {% if tutorSessions %}
+            <table style="width:100%">
+                <tr>
+                    <th>Name</th>
+                    <th>Time In</th>
+                    <th>Time Out</th>
+                    <th>Lead</th>
+                </tr>
+                {% for tutorSession in tutorSessions %}
+                    <tr>
+                        <td>{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
+                        <td>{{ tutorSession.timeIn ? tutorSession.timeIn|date('g:ia') : '???' }}</td>
+                        <td>{{ tutorSession.timeOut ? tutorSession.timeOut|date('g:ia') : '???' }}</td>
+                        <td>{{ tutorSession.lead ? 'Yes' : 'No' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3>No tutor attendance yet.</h3>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}

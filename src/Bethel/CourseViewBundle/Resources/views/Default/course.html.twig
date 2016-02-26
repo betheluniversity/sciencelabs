@@ -1,0 +1,81 @@
+{% extends 'BethelCourseViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+
+    {#Name	        Course Code	        Professor	    Semester#}
+    {#Sample Course	SMC101	            FName LName     SP2013	    Edit	Delete	View Report#}
+
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>{{ course.dept }}{{ course.courseNum }} - {{ course }}</h3>
+            <table style="width:100%;">
+
+                <tr>
+                    <th>Professor</th>
+                    {% if course.professors|length > 0 %}
+                        <td>
+                            {% for professor in course.professors %}
+                                {{ professor.firstName }} {{ professor.lastName }}<br />
+                            {% endfor %}
+                        </td>
+                    {% endif %}
+                </tr>
+
+                <tr>
+                    <th>Semester</th>
+                    <td>{{ course.semester }}</td>
+                </tr>
+
+                <tr>
+                    <th>Meeting Day</th>
+                    <td>{{ course.meetingDay }}</td>
+                </tr>
+
+                <tr>
+                    <th>Time</th>
+                    <td>
+                        {% if course.beginTime is not null %}
+                            {{ course.beginTime|date('g:ia') }} - {{ course.endTime|date('g:ia') }}
+                        {% else %}
+                            ???
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Room</th>
+                    <td>
+                        {% if course.room is not null %}
+                            {{ course.room }}
+                        {% else %}
+                            ???
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Enrolled</th>
+                    <td>
+                        {% if course.numAttendees is not null %}
+                            {{ course.numAttendees }}
+                        {% else %}
+                            ???
+                        {% endif %}
+                    </td>
+                </tr>
+
+            </table>
+
+            <ul class="button-group radius right">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a class="button alert" href="{{ url('course_delete', { id: course.id }) }}">Delete</a></li>
+                {% endif %}
+                <li><a class="button" href="{{ path('report_single_course', { 'id': course.id }) }}">View Report</a></li>
+            </ul>
+
+
+        </div>
+    </div>
+
+{% endblock %}

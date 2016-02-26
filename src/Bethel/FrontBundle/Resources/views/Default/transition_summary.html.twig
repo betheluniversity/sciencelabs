@@ -1,0 +1,65 @@
+{% extends 'BethelFrontBundle:Default:adminbase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    Term Transition, Summary
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="large-6 columns">
+                <h4>Term Information</h4>
+                <p>{{ currentSemester.term }} {{ currentSemester.year }}<br />
+                <strong>Start</strong>: {{ currentSemester.startDate|date('l M. jS, Y') }}<br />
+                <strong>End</strong>: {{ currentSemester.endDate|date('l M. jS, Y') }}</p>
+            </div>
+            <div class="large-6 columns">
+                <h4>Schedules</h4>
+                {% for schedule in currentSchedules %}
+                    <p><strong>{{ schedule.name }}</strong><br />
+                    {% if schedule.dayOfWeek == 1 %}
+                        Monday,
+                    {% elseif schedule.dayOfWeek == 2 %}
+                        Tuesday,
+                    {% elseif schedule.dayOfWeek == 3 %}
+                        Wednesday,
+                    {% elseif schedule.dayOfWeek == 4 %}
+                        Thursday,
+                    {% elseif schedule.dayOfWeek == 5 %}
+                        Friday,
+                    {% elseif schedule.dayOfWeek == 6 %}
+                        Saturday,
+                    {% elseif schedule.dayOfWeek == 7 %}
+                        Sunday,
+                    {% endif %}
+                        {{ schedule.startTime|date('g:i a') }} -
+                        {{ schedule.endTime|date('g:i a') }}
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+            <a href="{{ path('admin_transition_schedule') }}" class="button radius left">Prev</a>
+            </div>
+        </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

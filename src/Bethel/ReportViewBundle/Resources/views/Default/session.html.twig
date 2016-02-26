@@ -1,0 +1,199 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        {% block semester_switch %}
+        {% endblock %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    <p>{{ session }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h3>General Information</h3>
+                <div class="large-6 columns">
+                    <ul class="no-bullet">
+                        <li><b>Date: </b></li>
+                        <li>
+                            <ul>
+                                <li>{{ session.date|date('F jS, Y') }}</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <ul class="no-bullet">
+                        <li><b>Scheduled Time: </b></li>
+                        <li>
+                            <ul>
+                                <li>{{ session.schedStartTime|date("g:ia") }} - {{ session.schedEndTime|date("g:ia") }}</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    {% if session.startTime %}
+                        <ul class="no-bullet">
+                            <li><b>Actual Time: </b></li>
+                            <li>
+                                <ul>
+                                    <li>{{ session.startTime|date("g:ia") }} - {% if session.endTime %}{{ session.endTime|date("g:ia") }}{% else %}Now{% endif %}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endif %}
+                    {% if session.opener %}
+                        <ul class="no-bullet">
+                            <li><b>Opened By: </b></li>
+                            <li>
+                                <ul>
+                                    <li>{{ session.opener.firstName }} {{ session.opener.lastName }}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endif %}
+                    {% if session.courseCodes %}
+                        <ul class="no-bullet">
+                            <li><b>Courses Offered: </b></li>
+                            <li>
+                                <ul>
+                                    <li>{% for courseCode in session.courseCodes %}<span class="success label radius">{{ courseCode }}</span>&nbsp;{% endfor %}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <div class="large-6 columns">
+                {% for tutorSession in session.tutorSessions %}
+                    {% if tutorSession.lead %}
+                    <ul class="no-bullet">
+                        <li><b>Scheduled Lead Tutor: </b></li>
+                        <li>
+                        <ul>
+                            <li>
+                                {{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}
+                            </li>
+                        </ul>
+                        </li>
+                    </ul>
+                    {% endif %}
+                {% endfor %}
+
+                {% if tutorAttendance %}
+                <ul class="no-bullet">
+                    <li><b>Tutor Attendance: </b></li>
+                    <li>
+                    <ul>
+                        {% for key, set in tutorAttendance %}
+                            {% for tutorSession in set %}
+                                <li>
+                                    {{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}
+                                    {% if key == 'absent' %}
+                                        <span class="alert label radius">{{ key|capitalize }}</span>
+                                    {% elseif key == 'scheduled' %}
+                                        <span class="success label radius">{{ key|capitalize }}</span> ({{ tutorSession.minutes > 0 ? tutorSession.minutes ~ ' min' : '???' }})
+                                    {% else %}
+                                        <span class="label radius">{{ key|capitalize }}</span> ({{ tutorSession.minutes > 0 ? tutorSession.minutes ~ ' min' : '???' }})
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    </li>
+                </ul>
+                {% endif %}
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <h3>Tutor Comments</h3>
+                <p>{{ session.comments|nl2br }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <h3>Student Attendance</h3>
+                <table style="width:100%" class="large-12 studentAttendanceTable">
+                    <thead><tr>
+                        <th>Name</th>
+                        <th>Courses</th>
+                        <th>Time In</th>
+                        <th>Time Out</th>
+                        <th>Hours</th>
+                    </tr></thead>
+                    {% for instance in session.studentSessions %}
+                        {% set showStudent = false %}
+                        {% for course in instance.courses %}
+                            {% if course.professor == user %}
+                                {% set showStudent = true %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if not profView or (profView and showStudent) %}
+                            <tr>
+                                <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
+                                <td>
+                                    <ul>
+                                        {% for course in instance.courses %}
+                                            {% if not profView %}
+                                                <li><a href="{{ path('course_single', { 'id': course.id }) }}">{{ course.dept }}{{ course.courseNum }}</a></li>
+                                            {% elseif profView and course.professor == user %}
+                                                <li>{{ course.dept }}{{ course.courseNum }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if not profView %}
+                                            {% if instance.otherCourse %}
+                                                <li>{{ instance.otherCourseName ~ ' '}}<span class="label radius">Other</span></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+                                </td>
+                                <td>{{ instance.timeIn|date("g:ia") }}</td>
+
+                                <td>
+                                    {% if instance.timeOut %}
+                                        {{ instance.timeOut|date("g:ia") }}
+                                    {% else %}
+                                        ???
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if instance.minutes >= 0 %}
+                                        {{ instance.minutes }} min
+                                    {% else %}
+                                        ???
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <th colspan="1">Anonymous Students</th>
+                        </tr>
+                        <tr>
+                            <td>{{ session.anonStudents }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/studentattendancesort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

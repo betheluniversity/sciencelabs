@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+        <title>{{ config_title }} | Welcome</title>
+        {% block stylesheets %}
+            {% stylesheets filter="compass"
+            '@BethelFrontBundle/Resources/public/scss/app.scss' %}
+            <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+            {% endstylesheets %}
+            <style type="text/css">
+                /* Foundation bug */
+                .top-bar-section ul li.active:not(.has-form) > a:hover:not(.button) {
+                    background: #0F2C52;
+                    color: #de8626;
+                }
+                .top-bar-section ul li.active:not(.has-form) > a:not(.button) {
+                    background: #0F2C52;
+                    color: #ffc600;
+                }
+            </style>
+        {% endblock %}
+    </head>
+
+    <body>
+
+        {% if form is defined and form is not null %}
+            {% form_theme form with ['BethelFrontBundle:Form:field_errors.html.twig', 'BethelFrontBundle:Form:choice_widget_expanded.html.twig'] %}
+        {% endif %}
+
+        {% block topnav %}
+
+        <nav class="top-bar" data-topbar="">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="{{ path('homepage') }}">{{ config_title }}</a></h1>
+                </li>
+
+                <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+            </ul>
+
+            <section class="top-bar-section">
+                <!-- Right Nav Section -->
+
+                <ul class="right">
+                    {% if user == 'anon.' %}
+                        <li class="padfix">
+                            <a href="{{ path('homepage') }}">Login</a>
+                        </li>
+                    {% else %}
+                        <li class="has-dropdown padfix">
+                            <a href="#">{{ user.firstName }} {{ user.lastName }}</a>
+
+                            <ul class="dropdown">
+                                <li><a href="{{ path('user_edit') }}">My Profile</a></li>
+                                <li><a href="{{ path('logout') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Left Nav Section -->
+
+                <ul class="left">
+
+                    {#
+                        We need to figure out where we are in the application.
+                        We'll do a check on the route and see what the bit before the first underscore is.
+                        This requires a route naming convention that we include the base route name first.
+                    #}
+                    {% set routearray = app.request.get('_route')|split('_') %}
+                    {% set routebase = routearray[0] %}
+                    {% if is_granted('ROLE_LEAD_TUTOR') %}
+                    <li class="padfix{{ routebase == 'session' ? ' ' ~ 'active' }}"><a href="{{ path('session') }}">Session</a></li>
+                    {% endif %}
+
+                    {# Change this back to tutors #}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li class="padfix{{ routebase == 'tutor' ? ' ' ~ 'active' }}"><a href="{{ path('tutor_schedule') }}">Tutor Calendar</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_PROFESSOR') and not is_granted('ROLE_ADMIN') %}
+                    {# professors navigate directly to course reports #}
+                    <li class="padfix{{ routebase == 'report' ? ' ' ~ 'active' }}"><a href="{{ path('report_course') }}">Course Reports</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_VIEWER') and not is_granted('ROLE_ADMIN') %}
+                    <li class="padfix{{ routebase == 'report' ? ' ' ~ 'active' }}"><a href="{{ path('report') }}">Reports</a></li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li class="padfix{{ routebase == 'report' ? ' ' ~ 'active' }}"><a href="{{ path('report') }}">Reports</a></li>
+                    <li class="padfix{{ routebase == 'user' and app.request.get('_route') != 'user_edit' ? ' ' ~ 'active' }}"><a href="{{ path('user') }}">Users</a></li>
+                    <li class="padfix{{ routebase == 'schedule' ? ' ' ~ 'active' }}"><a href="{{ path('schedule') }}">Schedule</a></li>
+                    <li class="padfix{{ routebase == 'admin' and routearray[1] == 'transition' ? ' ' ~ 'active' }}"><a href="{{ path('admin_transition') }}">Term Startup</a></li>
+                    <li class="padfix{{ routebase == 'course' ? ' ' ~ 'active' }}"><a href="{{ path('course_admin') }}">Courses</a></li>
+                    <li class="padfix{{ routebase == 'email' ? ' ' ~ 'active' }}"><a href="{{ path('email_create') }}">Email</a></li>
+                    {% endif %}
+
+                </ul>
+            </section>
+        </nav>
+        {% endblock %}
+
+        {#
+        <div style="position:absolute; top:50px; right:10px">
+        <a href="#" class="button split">Split Button <span data-dropdown="drop"></span></a><br>
+        <ul id="drop" class="f-dropdown" data-dropdown-content>
+            <li><a href="#">This is a link</a></li>
+            <li><a href="#">This is another</a></li>
+            <li><a href="#">Yet another</a></li>
+        </ul>
+        </div>
+#}
+        {% block subnav %}
+        <div class="row">
+
+            <div class="large-12 columns">
+
+                <dl class="secondary-nav">
+                    {% block subnav_links %}
+                    <!-- <dt>Filter:</dt> -->
+                    <dd class="active"><a href="#">All</a></dd>
+                    <dd><a href="#">Active</a></dd>
+                    <dd><a href="#">Pending</a></dd>
+                    <dd><a href="#">Suspended</a></dd>
+                    {% endblock %}
+                </dl>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block flash %}
+            <div class="row">
+                <div id="alert-container" class="large-12 columns">
+
+                    {% for flashMessage in app.session.flashbag.get('success') %}
+                        <div data-alert class="alert-box success radius">
+                            <strong>Success</strong>: {{ flashMessage }}
+                            <a href="#" class="close">&times;</a>
+                        </div>
+                    {% endfor %}
+
+                    {% for flashMessage in app.session.flashbag.get('info') %}
+                        <div data-alert class="alert-box info radius">
+                            <strong>Notice</strong>: {{ flashMessage }}
+                            <a href="#" class="close">&times;</a>
+                        </div>
+                    {% endfor %}
+
+                    {% for flashMessage in app.session.flashbag.get('warning') %}
+                        <div data-alert class="alert-box warning radius">
+                            <strong>Warning</strong>: {{ flashMessage }}
+                            <a href="#" class="close">&times;</a>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block maincontent %}
+        <style>
+            @media(max-width: 1025px){
+                .custom-one{
+                    display:flex;
+                    flex-direction: column-reverse;
+                }
+            }
+        </style>
+        <div class="row custom-one">
+
+            {% if documentation[app.request.get('_route')] is defined %}
+                {% set docsExist = 1 %}
+                {% if app.request.attributes.get('_route') == 'user' %}
+                    {% set mainClasses = 'large-9 columns' %}
+                {% else %}
+                    {% set mainClasses = 'large-8 columns' %}
+                {% endif %}
+            {% else %}
+                {% set mainClasses = 'large-16 columns' %}
+                {% set docsExist = 0 %}
+            {% endif %}
+
+            <div id="main-block" class="{{ mainClasses }}">
+                {% block main %}
+                {% endblock %}
+            </div>
+
+            {% if docsExist %}
+                {% if app.request.attributes.get('_route') == 'user' %}
+                    <div id="doc-block" class="sidebar large-3 columns">
+                {% else %}
+                    <div id="doc-block" class="sidebar large-4 columns">
+                {% endif %}
+                    <div class="panel">
+                        {% block sidebar %}
+                        {% set routedocs = documentation[app.request.get('_route')] %}
+                            {% if routedocs['ROLE_ADMIN'] is defined and is_granted('ROLE_ADMIN') %}
+                                {% for item in routedocs['ROLE_ADMIN'] %}
+                                    {{ item|raw }}
+                                {% endfor %}
+                            {% elseif routedocs['other'] is defined %}
+                                {% for item in routedocs['other'] %}
+                                    {{ item|raw }}
+                                {% endfor %}
+                            {% else %}
+                                {% for item in routedocs %}
+                                    {{ item|raw }}
+                                {% endfor %}
+                            {% endif %}
+                        {% endblock %}
+                    </div>
+                </div>
+            {% endif %}
+
+
+        </div>
+        {% endblock %}
+
+        <div class="row">
+            <div class="large-16">
+                <div class="panel text-right">
+                    {% block footer %}
+                    <p>&copy; 2004-2014 Bethel University</p>
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+
+        {% block javascripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ asset('js/fos_js_routes.js') }}?callback=fos.Router.setData"></script>
+        {% javascripts
+        '../vendor/zurb/foundation/js/vendor/modernizr.js'
+        '../vendor/zurb/foundation/js/foundation/foundation.js'
+        '../vendor/zurb/foundation/js/foundation/foundation.alert.js'
+        '../vendor/zurb/foundation/js/foundation/foundation.dropdown.js'
+        '../vendor/zurb/foundation/js/foundation/foundation.topbar.js'
+        '@BethelFrontBundle/Resources/public/js/script.js' %}
+        <script src="{{ asset_url }}"></script>
+        <script>
+            // Set the base URL for the FOSJsRoutingBundle router
+            Routing.setBaseUrl('{{ pre_url }}');
+        </script>
+        {% endjavascripts %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,112 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block main %}
+    {% block semester_switch %}
+    {% endblock %}
+{{ parent() }}
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="callout panel">
+                <p>Click on an icon or one of the tabs across the top to view specialized {{ config_title }} reports</p>
+            </div>
+        </div>
+    </div>
+<div class="show-for-medium-up">
+<div class="icon-bar three-up">
+    <a class="item" href="{{ path('report_student') }}">
+        <img src="{{ url('homepage') }}/img/student.svg">
+        <label>Student</label>
+    </a>
+    <a class="item" href="{{ path('report_course') }}">
+        <img src="{{ url('homepage') }}/img/course.svg" >
+        <label>Course</label>
+    </a>
+    <a class="item" href="{{ path('report_session') }}">
+        <img src="{{ url('homepage') }}/img/session.svg" >
+        <label>Session</label>
+    </a>
+</div>
+<div class="icon-bar three-up">
+    <a class="item" href="{{ path('report_semester') }}">
+        <img src="{{ url('homepage') }}/img/semester.svg" >
+        <label>Term</label>
+    </a>
+    <a class="item" href="{{ path('report_month') }}">
+        <img src="{{ url('homepage') }}/img/month.svg" >
+        <label>Monthly</label>
+    </a>
+    <a class="item" href="{{ path('report_annual') }}">
+        <img src="{{ url('homepage') }}/img/cumulative.svg" >
+        <label>Cumulative</label>
+    </a>
+</div>
+</div>
+
+<div class="show-for-small-down icon-bar vertical six-up">
+    <a class="item" href="{{ path('report_student') }}">
+        <img src="{{ url('homepage') }}/img/student.svg">
+        <label>Student</label>
+    </a>
+    <a class="item" href="{{ path('report_course') }}">
+        <img src="{{ url('homepage') }}/img/course.svg" >
+        <label>Course</label>
+    </a>
+    <a class="item" href="{{ path('report_session') }}">
+        <img src="{{ url('homepage') }}/img/session.svg" >
+        <label>Session</label>
+    </a>
+    <a class="item" href="{{ path('report_semester') }}">
+        <img src="{{ url('homepage') }}/img/semester.svg" >
+        <label>Semester</label>
+    </a>
+    <a class="item" href="{{ path('report_month') }}">
+        <img src="{{ url('homepage') }}/img/month.svg" >
+        <label>Month</label>
+    </a>
+    <a class="item" href="{{ path('report_annual') }}">
+        <img src="{{ url('homepage') }}/img/cumulative.svg" >
+        <label>Cumulative</label>
+    </a>
+</div>
+{% endblock %}
+
+{% block footer %}
+
+    <a class="left" href="javascript:void(0)" id="showIconAttribution">Icon Attribution</a>
+
+    <div id="iconAttribution" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+        <h2 id="modalTitle">Icon Attribution</h2>
+        <ul>
+            <li>Teacher designed by <a href="http://www.thenounproject.com/visualiaBCN">visualiaBCN</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+            <li>Calendar designed by <a href="http://www.thenounproject.com/edward">Edward Boatman</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+            <li>Classroom designed by <a href="http://www.thenounproject.com/rafaleao">Rafael Farias Le&#227;o</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+            <li>Student designed by <a href="http://www.thenounproject.com/jerrywang.ntu">Jerry Wang</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+            <li>Report Card designed by <a href="http://thenounproject.com/Iconathon1">Iconathon</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+            <li>Drawer designed by <a href="http://thenounproject.com/rigo/">Rigo Peter</a> from the <a href="http://www.thenounproject.com">Noun Project</a></li>
+        </ul>
+        <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    </div>
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    {% javascripts
+    '../vendor/zurb/foundation/js/foundation/foundation.js'
+    '../vendor/zurb/foundation/js/foundation/foundation.reveal.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#showIconAttribution").click(function() {
+                $("#iconAttribution").foundation('reveal', 'open');
+            });
+        });
+    </script>
+{% endblock %}

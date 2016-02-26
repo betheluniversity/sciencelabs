@@ -1,0 +1,61 @@
+{% extends 'BethelUserViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Add a User</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_label(form.firstName) }}
+                    {{ form_errors(form.firstName) }}
+                    {{ form_widget(form.firstName) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_label(form.lastName) }}
+                    {{ form_errors(form.lastName) }}
+                    {{ form_widget(form.lastName) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_widget(form.search) }}
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <div class="row">
+        {% if searchResults is defined and searchResults %}
+            <div class="large-12 columns user-search-results">
+                {% for result in searchResults %}
+                    {% if result.prefFirstName|length > 0 %}
+                        {% set firstName = result.prefFirstName %}
+                    {% else %}
+                        {% set firstName = result.firstName %}
+                    {% endif %}
+
+                    <div class="large-6 columns left user-search-result">
+                        <a href="{{ path('user_create', {'username': result.username, 'fname': result.firstName, 'lname': result.lastName }) }}" class="button tiny radius right">Add User</a>
+                        <span>
+                            {{ firstName }} {{ result.lastName }}<br /><span class="label radius">{{ result.username }}</span>
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elseif searchResults is iterable %}
+            <div class="large-12 columns user-search-results text-center">
+                <h4>User does not exist in Banner. Try again.</h4>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

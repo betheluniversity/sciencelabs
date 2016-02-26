@@ -1,0 +1,28 @@
+<h2>{{ user.firstName }} {{ user.lastName }}</h2>
+
+{% if user.studentSessions is not empty %}
+    <h4>Student Sessions</h4>
+    <ul>
+        {% for session in user.studentSessions %}
+            <li>{{ session.date }}: {{ session.startTime }} - {{ session.endTime }}</li>
+        {% endfor %}
+    </ul>
+{%  endif %}
+
+{% if user.tutorSessions is not empty %}
+    <h4>Tutor Sessions</h4>
+    <ul>
+        {% for session in user.tutorSessions %}
+            <li>{{ session.date }}: {{ session.startTime }} - {{ session.endTime }}</li>
+        {% endfor %}
+    </ul>
+{%  endif %}
+
+<h4>Student Info</h4>
+<ul>
+    <li>firstName: {{ user.firstName }}</li>
+    <li>lastName: {{ user.lastName }}</li>
+    <li>username: {{ user.username }}</li>
+    <li>email: {{ user.email }}</li>
+    <li>active: {{ user.active }}</li>
+</ul>

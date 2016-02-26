@@ -1,0 +1,91 @@
+{% extends 'BethelUserViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>{{ config_title }} Users</p>
+                </div>
+            </div>
+        </div>
+
+        {#
+            Filter:
+            Administrator
+            Professor
+            Lead Tutor
+            Tutor
+            Observer
+            None
+            Inactive Users
+        #}
+        {% if sortedRoleUsers is defined %}
+            <div class="row">
+                <table class="large-12" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Role Sort</th>
+                            <th>Last</th>
+                            <th>First</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Edit</th>
+                            <th>&check;</th>
+                        </tr>
+                        <tr>
+                            <td colspan="7"><a class="deactivateUsers button tiny alert right">Deactivate</a></td>
+                        </tr>
+                    </thead>
+                {% for roleSort, roleUsers in sortedRoleUsers %}
+                    {% for roleUserArray in roleUsers %}
+                        {% for user in roleUserArray %}
+                            {% if user.email != 'N/A' and user.email != 'apiuser@bethel.edu' %}
+                                {# Name	Username	Email	Teaching	Status	Role #}
+                                <tr class="{{ roleUsers.role }}">
+                                    <td>{{ roleSort }}</td>
+                                    <td>{{ user.lastName }}</td>
+                                    <td>{{ user.firstName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ roleUsers.role }}</td>
+                                    <td><a class="button tiny" href="{{ path('admin_user_edit', {'id': user.id}) }}">Edit</a></td>
+                                    <td><input type="checkbox" value="{{ user.id }}"></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <td colspan="7"><a class="deactivateUsers button tiny alert right">Deactivate</a></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="large-12 columns">
+                    <h3 class="text-center">There are no users.</h3>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelUserViewBundle/Resources/public/js/usersort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+
+

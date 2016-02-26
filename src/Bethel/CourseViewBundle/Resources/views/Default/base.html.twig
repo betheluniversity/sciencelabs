@@ -1,0 +1,9 @@
+{% extends 'BethelFrontBundle:Default:base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav_links %}
+    <dd class="{{ app.request.get('_route') == 'course_admin' ? 'active' }}"><a href="{{ path('course_admin') }}">Administration</a></dd>
+{% endblock %}

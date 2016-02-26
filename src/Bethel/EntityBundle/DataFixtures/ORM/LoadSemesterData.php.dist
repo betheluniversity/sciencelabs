@@ -1,0 +1,48 @@
+<?php
+namespace Bethel\EntityBundle\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Bethel\EntityBundle\Entity\Semester;
+
+class LoadSemesterData extends AbstractFixture implements OrderedFixtureInterface {
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager) {
+
+        $semesterArr = array(
+            array('term' => 'Spring', 'year' => 2014, 'startDate' => '02/03/2014', 'endDate' => '05/24/2014'),
+            array('term' => 'Summer', 'year' => 2014, 'startDate' => '05/27/2014', 'endDate' => '08/24/2014'),
+            array('term' => 'Fall', 'year' => 2014, 'startDate' => '08/27/2014', 'endDate' => '12/19/2014'),
+            array('term' => 'Interim', 'year' => 2014, 'startDate' => '01/01/2014', 'endDate' => '01/30/2014'),
+            array('term' => 'Spring', 'year' => 2015, 'startDate' => '02/03/2015', 'endDate' => '05/24/2015'),
+            array('term' => 'Summer', 'year' => 2015, 'startDate' => '05/27/2015', 'endDate' => '08/24/2015'),
+            array('term' => 'Fall', 'year' => 2015, 'startDate' => '08/27/2015', 'endDate' => '12/19/2015'),
+            array('term' => 'Interim', 'year' => 2015, 'startDate' => '01/01/2015', 'endDate' => '01/30/2015'),
+            array('term' => 'Spring', 'year' => 2016, 'startDate' => '02/03/2016', 'endDate' => '05/24/2016'),
+            array('term' => 'Summer', 'year' => 2016, 'startDate' => '05/27/2016', 'endDate' => '08/24/2016'),
+            array('term' => 'Fall', 'year' => 2016, 'startDate' => '08/27/2016', 'endDate' => '12/19/2016'),
+            array('term' => 'Interim', 'year' => 2016, 'startDate' => '01/01/2016', 'endDate' => '01/30/2016')
+        );
+
+        foreach($semesterArr as $data) {
+            $semester = new Semester();
+            $semester->setTerm($data['term']);
+            $semester->setYear($data['year']);
+            $semester->setStartDate(new \DateTime($data['startDate']));
+            $semester->setEndDate(new \DateTime($data['endDate']));
+
+            $manager->persist($semester);
+        }
+
+        $manager->flush();
+    }
+
+    public function getOrder() {
+        return 3;
+    }
+}
+
+?>

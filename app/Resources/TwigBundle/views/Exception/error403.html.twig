@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>An Error Occurred: {{ status_text }}</title>
+</head>
+<body>
+<h1>You do not have permission to access this page</h1>
+
+{{ exception.message|raw }}
+
+<div>
+    <p>Please review your roles and username below. If you believe you need additional roles, contact a lab administrator.</p>
+    <p>If you like, you may <a href="{{ path('logout') }}">log in</a> as a different user.</p>
+    <p>Roles for {{ app.user.firstname }} {{ app.user.lastname }} ({{ app.user.username }}):
+    <ul>
+    {% for role in app.user.roles %}
+        <li>{{ role }}</li>
+    {% endfor %}
+    </ul>
+    </p>
+</div>
+</body>
+</html>

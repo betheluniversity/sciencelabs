@@ -1,0 +1,60 @@
+bethel_semester_all:
+    pattern:  /semesters.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:all, _format: ~ }
+    requirements:
+        _method: GET
+
+bethel_semester_get:
+    pattern:  semesters/{id}.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"
+
+bethel_semester_year_get:
+    pattern:  semesters/{year}/{term}.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:getByYearAndTerm, _format: ~ }
+    requirements:
+        _method: GET
+        year: "\d+"
+        term: "%app.terms%"
+
+bethel_semester_active_get:
+    pattern:  semesters/active.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:getActive, _format: ~ }
+    requirements:
+        _method: GET
+
+bethel_semester_view_get:
+    pattern:  semesters/view.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:getView, _format: ~ }
+    requirements:
+        _method: GET
+
+bethel_semester_all:
+    pattern:  semesters.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:all, _format: ~ }
+    requirements:
+        _method: GET
+
+# API Routes
+bethel_api_semester_get:
+    pattern:  api/semesters/{id}.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"
+
+bethel_api_semester_year_get:
+    pattern:  api/semesters/{year}/{term}.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:getByYearAndTerm, _format: ~ }
+    requirements:
+        _method: GET
+        year: "\d+"
+        term: "%app.terms%"
+
+bethel_api_semester_active_get:
+    pattern:  api/semesters/active.{_format}
+    defaults: { _controller: BethelSemesterApiBundle:Semester:getActive, _format: ~ }
+    requirements:
+        _method: GET

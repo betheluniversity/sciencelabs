@@ -1,0 +1,107 @@
+{% extends 'BethelFrontBundle:Default:adminbase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    Term Transition, Step 2
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h3 class="text-center">Update Schedules</h3>
+            </div>
+        </div>
+
+        {% for form in formViews %}
+            <h5>{{ form.vars.value.name }}</h5>
+            <div class="row">
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                <div class="large-4 columns">
+                    {{ form_label(form.name) }}
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.room) }}
+                    {{ form_errors(form.room) }}
+                    {{ form_widget(form.room) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.term) }}
+                    {{ form_errors(form.term) }}
+                    {{ form_widget(form.term) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_label(form.startTime) }}
+                    {{ form_errors(form.startTime) }}
+                    {{ form_widget(form.startTime) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.endTime) }}
+                    {{ form_errors(form.endTime) }}
+                    {{ form_widget(form.endTime) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_label(form.dayOfWeek) }}
+                    {{ form_errors(form.dayOfWeek) }}
+                    {{ form_widget(form.dayOfWeek) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.leadTutors) }}
+                    {{ form_errors(form.leadTutors) }}
+                    {{ form_widget(form.leadTutors) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.tutors) }}
+                    {{ form_errors(form.tutors) }}
+                    {{ form_widget(form.tutors) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.coursecodes) }}
+                    {{ form_errors(form.coursecodes) }}
+                    {{ form_widget(form.coursecodes) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                {{ form_end(form) }}
+                {{ form_widget(form.save) }}
+                </div>
+            </div>
+        <hr />
+        {% endfor %}
+
+        <div class="row">
+            <div class="large-12 columns">
+            <a href="{{ path('admin_transition') }}" class="button radius left">Prev</a>
+            <a href="{{ path('admin_transition_summary') }}" class="button radius right">Next</a>
+            </div>
+        </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

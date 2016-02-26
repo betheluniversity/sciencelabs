@@ -1,0 +1,7 @@
+<p>Hello {{ recipient }}!</p>
+
+<p>The following message was sent to you because you are registered as a {{ recipient.role.name }} in the {{ config_title }} application.</p>
+
+<hr />
+
+{{ message|nl2br }}

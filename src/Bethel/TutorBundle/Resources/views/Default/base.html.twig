@@ -1,0 +1,31 @@
+{% extends 'BethelFrontBundle:Default:adminbase.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets 
+    '@BethelTutorBundle/Resources/public/lib/fullcalendar/fullcalendar.css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+    {% endstylesheets %}
+    <style type="text/css">
+        /* override the foundation padding for table elements */
+        .fc-header {
+            border:0;
+        }
+    </style>
+{% endblock %}
+
+{% block subnav %}
+    <br />
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
+    '@BethelTutorBundle/Resources/public/lib/fullcalendar/fullcalendar.js'
+    '@BethelTutorBundle/Resources/public/js/tutorschedule.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

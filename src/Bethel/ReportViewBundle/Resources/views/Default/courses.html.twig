@@ -1,0 +1,95 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block main %}
+    {{ parent() }}
+
+    {#
+    Select a course to view the report.
+
+    Course	        Professor	Percentage	Attendance	Unique
+                                Percentage of total attendance ....
+    Sample Course	FName LName	100%	    1	        1
+                                    Total	1	        1
+
+    Note:
+    The numbers in this table may not add up to the total displayed.
+    Since people can attend for more than one course, the total attendance might not equal the total of the attendances of each course.
+
+    Current course reports are good. We also want to add that you can list the course, and a list of all students who came
+    (including the number of times that they came) - this could be a link from the "unique" in parens (that is at the bottom of the Report/Course)
+    - this would bring up a list of the course with the student names & number of times attended
+    #}
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>Active Courses for {{ sessionSemester.term }} {{ sessionSemester.year }}</h3>
+            {% if courseResults|length > 0 %}
+                <table class="large-12" id="courseTable">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Sec</th>
+                        <th>Prof</th>
+                        <th>Tot</th>
+                        <th>Unq</th>
+                        <th>Pct</th>
+                        <th>Report</th>
+                    </tr>
+                    </thead>
+                    {% for result in courseResults %}
+                        {% set course = result.course %}
+                        <tr>
+                            <td>{{ course.courseCode.dept ~ course.courseCode.courseNum }}</td>
+                            <td>{{ course.title }}</td>
+                            <td>{{ course.section }}</td>
+                            <td>
+                            {% if course.professors|length > 0 %}
+                                {% for professor in course.professors %}
+                                    {{ professor.firstName }} {{ professor.lastName }}<br />
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                            </td>
+                            <td>{{ result.attendance }}</td>
+                            <td>{{ result.unique }}</td>
+                            <td>{{ result.percentage }}%</td>
+                            <td><a href="{{ path('report_single_course', { 'id': course.id }) }}"><button class="tiny button">View</button></a></td>
+                        </tr>
+                    {% endfor %}
+
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_VIEWER') %}
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>{{ totalAttendance }}</th>
+                            <th>{{ uniqueAttendance }}</th>
+                        </tr>
+                    </tfoot>
+                    {% endif %}
+                </table>
+            {% else %}
+                <p>No {{ config_title }} courses for {{ sessionSemester }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/coursesort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

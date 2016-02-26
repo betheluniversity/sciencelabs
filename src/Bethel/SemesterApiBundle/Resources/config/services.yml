@@ -1,0 +1,7 @@
+parameters:
+#    bethel_semester_api.example.class: Bethel\SemesterApiBundle\Example
+
+services:
+#    bethel_semester_api.example:
+#        class: %bethel_semester_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

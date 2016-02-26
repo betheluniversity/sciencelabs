@@ -1,0 +1,38 @@
+{% extends 'BethelSessionViewBundle:Default:form_base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Add Student to Session</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="large-12 columns">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.student) }}
+                    {{ form_errors(form.student) }}
+                    {{ form_widget(form.student) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+    {% endblock %}

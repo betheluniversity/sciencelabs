@@ -1,0 +1,119 @@
+{% extends 'BethelEmailBundle:Default:base.html.twig' %}
+
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets
+        '@BethelFrontBundle/Resources/public/lib/chosen/chosen.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+        {% endstylesheets %}
+        <style type="text/css">
+            .chosen-container-multi .chosen-choices,
+            .chosen-container-multi .chosen-choices input,
+            .chosen-container-multi .chosen-container {
+                min-height:33px !important;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice {
+                height:29px;
+                line-height:20px;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+                top:8px;
+            }
+            .chosen-container-single .chosen-search input[type="text"],
+            .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+
+            }
+        </style>
+    {% endblock %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Send Email</p>
+
+                </div>
+            </div>
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="row">
+                {% form_theme emailForm with ['BethelFrontBundle:Form:field_errors.html.twig'] %}
+                {{ form_start(emailForm) }}
+                {{ form_errors(emailForm) }}
+                <div class="large-6 columns">
+                    {{ form_label(emailForm.role) }}
+                    {{ form_errors(emailForm.role) }}
+                    {{ form_widget(emailForm.role) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_label(emailForm.subject) }}
+                    {{ form_errors(emailForm.subject) }}
+                    {{ form_widget(emailForm.subject) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="javascript:void(0)" class="button tiny radius success" id="show-cc">CC ...</a>
+                    <a href="javascript:void(0)" class="button tiny radius success" id="show-bcc">BCC ...</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns cc-field">
+                    {{ form_label(emailForm.cc) }}
+                    {{ form_errors(emailForm.cc) }}
+                    {{ form_widget(emailForm.cc) }}
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="large-12 columns bcc-field">
+                    {{ form_label(emailForm.bcc) }}
+                    {{ form_errors(emailForm.bcc) }}
+                    {{ form_widget(emailForm.bcc) }}
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(emailForm.message) }}
+                    {{ form_errors(emailForm.message) }}
+                    {{ form_widget(emailForm.message) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_end(emailForm) }}
+                    {{ form_widget(emailForm.save) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/chosen/chosen.jquery.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function() {
+            $(".chosen-select").chosen();
+            $(".cc-field").hide();
+            $(".bcc-field").hide();
+
+            $("#show-cc").click(function() {
+                $(".cc-field").show();
+            });
+
+            $("#show-bcc").click(function() {
+                $(".bcc-field").show();
+            });
+        });
+    </script>
+{% endblock %}

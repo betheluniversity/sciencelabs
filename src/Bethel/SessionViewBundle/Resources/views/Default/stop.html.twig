@@ -1,0 +1,64 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block main %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+
+                    <p>Enter your final comments to close
+                        {% if session.name is defined %}
+                        {{ session.name }}
+                        {% endif %}
+                        session held on {{ session.date|date('m/d/y') }}.<br />Comments will be sent to the lab administrator.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="large-12 columns">
+                {{ form_label(form.comments) }}
+                {{ form_errors(form.comments) }}
+                {{ form_widget(form.comments) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                {{ form_end(form) }}
+                {{ form_widget(form.close) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <h4>Courses, Professors, and Professor Emails</h4>
+                <ul class="no-bullet">
+                    {% for course, profs in courseProfs %}
+                        <li>{{ course }}</li>
+                        <li>
+                            <ul>
+                                {% for prof in profs %}
+                                <li>{{ prof.firstName }} {{ prof.lastName }} (<a href="mailto:{{ prof.email }}">{{ prof.email }}</a>)</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
+    '@BethelFrontBundle/Resources/public/lib/pikaday/pikaday.js'
+    '@BethelSessionViewBundle/Resources/public/js/session.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

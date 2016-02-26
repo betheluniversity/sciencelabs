@@ -1,0 +1,26 @@
+bethel_schedule_all:
+    pattern:  schedules
+    defaults: { _controller: BethelScheduleBundle:Schedule:all, _format: ~ }
+    requirements:
+        _method: GET
+
+bethel_schedule_get:
+    pattern:  schedules/{id}.{_format}
+    defaults: { _controller: BethelScheduleBundle:Schedule:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"
+
+# API Routes
+bethel_api_schedule_all:
+    pattern:  api/schedules
+    defaults: { _controller: BethelScheduleBundle:Schedule:all, _format: ~ }
+    requirements:
+        _method: GET
+
+bethel_api_schedule_get:
+    pattern:  api/schedules/{id}.{_format}
+    defaults: { _controller: BethelScheduleBundle:Schedule:get, _format: ~ }
+    requirements:
+        _method: GET
+        id: "\d+"

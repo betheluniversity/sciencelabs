@@ -1,0 +1,103 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+    {% block semester_switch %}
+    {% endblock %}
+    {{ parent() }}
+
+    {#Name	            Course Code	    Professor#}
+    {#Sample Course	    SMC101	        FName LName#}
+
+    {#Students have attended for this course on the following dates:#}
+
+    {#Science Lab on Date	Number of People#}
+    {#Sunday, January 26	2#}
+    {#Total:	2 (2 unique)#}
+    {#This class represents 66.7% of the total attendance this semester.#}
+
+
+    <div class="row">
+        <div class="large-12 columns">
+            <div class="callout panel">
+                <p>Attendance for {{ sessionSemester }} <a href="{{ path('export_course_student', { 'id': course.id }) }}" style="margin:-3px 0 0 10px" class="button tiny right">CSV Student Export</a> <a href="{{ path('export_course_session', { 'id': course.id }) }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Session Export</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <h4>{{ course }} ({{ course.dept }}{{ course.courseNum }})</h4>
+            {% if course.professors|length > 0 %}
+                <h4>
+                    {% for professor in course.professors %}
+                        {{ professor.firstName }} {{ professor.lastName }}<br />
+                    {% endfor %}
+                </h4>
+            {% endif %}
+
+            <table id="sessionTable" class="large-7 columns">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>DOW</th>
+                    <th>Time</th>
+                    <th>Attendees</th>
+                </tr>
+                </thead>
+                {% for lab in labAttendance %}
+                    {% if lab.total != 0 %}
+                    <tr>
+                        <td>{{ lab.lab.date|date('n/d/Y') }}</td>
+                        <td>{{ lab.lab.date|date('D') }}</td>
+                        <td>{{ lab.lab.schedStartTime|date('g:ia') }} - {{ lab.lab.schedEndTime|date('g:ia') }}</td>
+                        <td><a href="{{ path('report_single_session', {'id': lab.lab.id}) }}">{{ lab.total }}</a></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <td colspan="3" class="text-right">{{ total }} ({{ totalUnique }} unique)</td>
+                </tr>
+                </tfoot>
+            </table>
+
+            <table id="studentTable" class="large-5 columns" style="float:left">
+                <thead>
+                <tr>
+                    <th>Last</th>
+                    <th>First</th>
+                    <th>Sessions</th>
+                    <th>Avg Time</th>
+                </tr>
+                </thead>
+            {% for unique in uniques %}
+                <tr>
+                    <td>
+                        <a href="{{ path('report_single_student', {'id': unique.student.id}) }}">
+                            {{ unique.student.lastName }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('report_single_student', {'id': unique.student.id}) }}">
+                            {{ unique.student.firstName }}
+                        </a>
+                    </td>
+                    <td>{{ unique.attendance }}</td>
+                    <td>{{ unique.avgMinutes }} min</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/singlecoursesort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

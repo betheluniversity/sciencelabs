@@ -1,0 +1,43 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: <DBNAME>
+    database_user: <DBUSER>
+    database_password: <DBPASS>
+    mailer_transport: smtp
+    mailer_host: smtp.gmail.com
+    mailer_port: <PORT>
+    mailer_user: <MAILER>
+    mailer_password: <PASSWORD>
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    router.request_context.host: example.org
+    router.request_context.scheme: https
+    router.request_context.base_url: my/path
+
+    session.name: <SESSIONNAME>
+    env: '<prod|test>'
+    test.username: '<USERNAME>'
+    test.role: '<ROLE>'
+
+    monolog.applog: <LOGDIR>
+
+    cas.login: https://auth.bethel.edu/cas/login
+    cas.logout: https://auth.bethel.edu/cas/logout
+    cas.validate: https://auth.bethel.edu/cas/serviceValidate
+
+    app.title: <APPTITLE>
+    app.pre_url: ''
+    app.terms: Spring|Summer|Fall|Interim
+    wsapi.baseurl: 'http://wsapi.xp.bethel.edu'
+    wsapi.username: 'wsapi-auth-user'
+    wsapi.password: <PASSWORD>
+    wsapi.secret: <SECRET>
+    wsapi.account_id: <ACCOUNTID>
+    bethel.apikey: <APIKEY>
+
+    # Turns off SSL verification in the SSO bundle
+    # only for use in testing
+    # be_simple.sso_auth.client.option.curlopt_ssl_verifypeer.value: FALSE

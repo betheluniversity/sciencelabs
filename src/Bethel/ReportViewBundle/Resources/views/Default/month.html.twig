@@ -1,0 +1,137 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+    {% block subnav_links %}
+        {{ parent() }}
+        <div class="clearfix"></div>
+
+        <dl class="secondary-nav right">
+            {% for i in semesterMonths %}
+                {% set date_string = (i) ~ "/1/" ~ sessionSemester.startDate|date("Y") %}
+                <dd class="{{ firstDay|date("n") == (i) ? 'active' }}">
+                    <a href="{{ path('report_month', { 'year': date_string|date("Y"), 'month': date_string|date("n")}) }}">{{ date_string|date("M") }}</a>
+                </dd>
+            {% endfor %}
+        </dl>
+    {% endblock %}
+    {% block main %}
+        {{ parent() }}
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="callout panel">
+                    <p>Attendance for {{ firstDay|date("F Y") }}
+                        <a href="{{ path('export_month_session', { year: firstDay|date("Y"), month: firstDay|date("n") }) }}" style="margin:-3px 0 0 10px" class="button tiny right">CSV Detail Export</a>
+                        <a href="{{ path('export_month_schedule', { year: firstDay|date("Y"), month: firstDay|date("n") }) }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Summary Export</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <h4>Schedule Statistics for Closed Sessions during {{ firstDay|date("F") }}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <table id="scheduleTable" class="large-12 columns">
+                <thead>
+                <tr>
+                    <th>Schedule Name</th>
+                    <th>DOW</th>
+                    <th>Schedule Time</th>
+                    <th>Total Attendance</th>
+                    <th>% Total</th>
+                </tr>
+                </thead>
+                {% for key, schedule in scheduleData %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ schedule.dow }}</td>
+                        <td>{{ schedule.startTime|date('g:ia') }} - {{ schedule.endTime|date('g:ia') }}</td>
+                        <td>{{ schedule.attendance }}</td>
+                        <td>
+                            {% if totalAttendance > 0 %}
+                                {% set percentTotal = (schedule.attendance/totalAttendance)*100 %}
+                                {{ percentTotal|round(1) ~ '%' }}
+                            {% else %}
+                                ???
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                    
+                <tfoot>
+                    <tr>
+                        <td>Unscheduled Sessions</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{otherMonthSessionsTotal}}</td>
+                        <td>
+                            {% if otherMonthSessionsTotal > 0 %}
+                                {% set percentTotal = (otherMonthSessionsTotal/(totalAttendance))*100 %}
+                                {{ percentTotal|round(1) ~ '%' }}
+                            {% else %}
+                                ???
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">Total</th>
+                        <td>{{ totalAttendance }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <h4>Session Statistics for {{ firstDay|date("F") }}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <table id="sessionTable" class="large-12 columns">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>DOW</th>
+                    <th>Scheduled Time</th>
+                    <th>Total Attendance</th>
+                    <th>Report</th>
+                </tr>
+                </thead>
+                {% for key, session in monthSessions %}
+                    {% if session.endTime %}
+                        <tr>
+                            <td>{{ session.name }}</td>
+                            <td>{{ session.date|date("m/d/Y") }}</a></td>
+                            <td>{{ session.date|date('D') }}</td>
+                            <td>{{ session.schedStartTime|date("g:ia") }} - {{ session.schedEndTime|date("g:ia") }}</td>
+                            <td>{{ realTotalArray[session.id] }}</td>
+                            <td><a class="button tiny" href="{{ path('report_single_session', { 'id': session.id }) }}">View</a></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th colspan="4">Total</th>
+                    <td>{{ totalAttendance }}</td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelReportViewBundle/Resources/public/js/monthsort.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

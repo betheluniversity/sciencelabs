@@ -1,0 +1,98 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+{% block subnav %}
+    <br />
+{% endblock %}
+
+
+
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }} class="clearfix">
+            {% for child in form %}
+                <div class="checkin-form">
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block main %}
+    {% form_theme form _self %}
+    <div class="row">
+        <div class="large-12 columns">
+
+            <div class="callout panel">
+                <p>Welcome, {{ user }}, please sign in.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="large-12 columns">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+
+        <div class="row">
+            <div class="large-7 columns">
+                {{ form_label(form.courses) }}
+                {{ form_errors(form.courses) }}
+                {{ form_widget(form.courses) }}
+            </div>
+            <div class="large-5 columns panel radius text-center">
+                <h4>{{ form.vars.value.timeIn|date("g:ia") }}</h4>
+            </div>
+
+        </div>
+        <div class="row">
+            <div id="otherCheck" class="large-1 columns">
+                {{ form_label(form.otherCourse) }}
+                {{ form_errors(form.otherCourse) }}
+                {{ form_widget(form.otherCourse) }}
+            </div>
+            <div id="otherInput" class="large-4 columns left" style="display: none;">
+                {{ form_label(form.otherCourseName) }}
+                {{ form_errors(form.otherCourseName) }}
+                {{ form_widget(form.otherCourseName) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                {# form_label(form.timeIn) #}
+                {{ form_errors(form.timeIn) }}
+                {{ form_widget(form.timeIn) }}
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+
+    <div class="row">
+        <div class="large-12 columns">
+            {{ form(form) }}
+        </div>
+        <a href="{{ cas_logout }}?gateway=true&service={{ url('session_open', {'hash': sessionHash})|e('url') }}">Return to the open session.</a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('#otherCheck input:checkbox').click(function() {
+                if($(this).is(':checked')) {
+                    $('#otherInput').show();
+                } else {
+                    $('#otherInput').hide();
+                }
+            });
+        });
+    </script>
+{% endblock %}

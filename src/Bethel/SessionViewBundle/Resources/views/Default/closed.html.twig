@@ -1,0 +1,98 @@
+{% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
+
+{% block topnav %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block main %}
+
+    {% block semester_switch %}
+        <div class="row">
+            {{ render(
+            controller(
+            'BethelReportViewBundle:Default:viewSemesterSwitch',
+            {'currentRoute': app.request.get('_route'), 'routeParameters': app.request.get('_route_params')|json_encode() }
+            )
+            ) }}
+        </div>
+    {% endblock %}
+
+    {% if closedSessions %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>Past Sessions for {{ activeSemester }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <table style="width:100%">
+                    <tr>
+                        <th class="text-left">Name</th>
+                        <th class="text-left">Date</th>
+                        <th class="text-left">Time</th>
+                        <th class="text-left">Room</th>
+                        <th class="text-left">Tutors</th>
+                        <th class="text-left"></th>
+                    </tr>
+        {% for session in sessionContainer %}
+                    <tr>
+                        <td>{{ session.session }}</td>
+                        <td>{{ session.session.date|date("m/d/Y") }}</td>
+                        <td>{{ session.session.startTime|date("g:ia") }} - {{ session.session.endTime|date("g:ia") }}</td>
+                        <td>{{ session.session.room }}</td>
+                        <td>
+                            {% if session.leadTutors|length > 0 or session.tutors|length > 0 %}
+                                <button class="tiny button radius success show-tutors">Show</button>
+                                <div style="display:none;margin-top:10px" class="text-left">
+                                    {% for tutorName in session.leadTutors %}
+                                        {{ tutorName }} <span class="label success radius">Lead</span><br />
+                                    {% endfor %}
+                                    {% for tutorName in session.tutors %}
+                                        {{ tutorName }}<br />
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <ul class="button-group radius" style="display: inline-block">
+                                {% if is_granted('ROLE_LEAD_TUTOR') %}
+                                    <li><a href="{{ path('session_edit', {'id': session.session.id}) }}" class="tiny button">Edit</a></li>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li><a href="{{ path('session_delete', {'id': session.session.id}) }}" class="tiny button alert">Delete</a></li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+        {% endfor %}
+            </table>
+        </div>
+        </div><!-- //.row -->
+    {% else %}
+        <div class="row">
+            <div class="large-12 columns">
+
+                <div class="callout panel">
+                    <p>No Past Sessions for {{ activeSemester }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@BethelSessionViewBundle/Resources/public/js/showhidetutors.js'
+    '@BethelSessionViewBundle/Resources/public/js/session_set_active_semester.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

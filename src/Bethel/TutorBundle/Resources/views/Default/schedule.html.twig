@@ -1,0 +1,42 @@
+{% extends 'BethelTutorBundle:Default:base.html.twig' %}
+
+{% block maincontent %}
+    <div class="row">
+
+        {% if documentation[app.request.get('_route')] is defined %}
+            <div id="doc-block" class="large-16 columns">
+                <div class="panel">
+                    {% block sidebar %}
+                        {% set routedocs = documentation[app.request.get('_route')] %}
+                        {% if routedocs['ROLE_ADMIN'] is defined and is_granted('ROLE_ADMIN') %}
+                            {% for item in routedocs['ROLE_ADMIN'] %}
+                                {{ item|raw }}
+                            {% endfor %}
+                        {% elseif routedocs['other'] is defined %}
+                            {% for item in routedocs['other'] %}
+                                {{ item|raw }}
+                            {% endfor %}
+                        {% else %}
+                            {% for item in routedocs %}
+                                {{ item|raw }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        {% endif %}
+
+
+    </div>
+    <div class="row">
+        <div class="large-16">
+            <div class="legend large-text-center">
+                <button id="show-sub-events" class="button tiny">Sub Requested</button>
+                <button id="show-no-sub-events" class="button tiny secondary">Scheduled</button>
+                <button id="show-unscheduled-events" class="button tiny alert">Unscheduled</button>
+            </div>
+            <br />
+            <div id="calendar"></div>
+        </div>
+    </div>
+{% endblock %}

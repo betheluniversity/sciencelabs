@@ -1,0 +1,5 @@
+Tutor should not be able to schedule him or herself for a session unless it has been opened by the tutor who is scheduled
+
+When a schedule is opened, an email will be sent to superadmins, admins and all tutors (future iteration will have subject specific tutors e.g. stats tutors in math lab).
+
+Once someone has accepted the session, an email will be sent to the original schedulee, admins and the new tutor.
