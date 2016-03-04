@@ -1,5 +1,5 @@
 Bethel University Lab Application
-=================================
+==================================
 
 Cookies **must** be enabled.
 
