@@ -164,11 +164,9 @@
     <tr>
         <td style="border-bottom: 1px solid #CCC;padding:2px 10px"><a href="{{ url('report_single_course', { 'id': course.id }) }}">{{ title }}</a></td>
         <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:left">
-            {% if course.professors|length > 0 %}
-                {% for professor in course.professors or is_admin %}
-                    {{ professor }}<br />
-                {% endfor %}
-            {% endif %}
+            {% for professor in course.professors %}
+                {{ professor }}<br />
+            {% endfor %}
         </td>
 
         <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ course.total }}</td>
@@ -179,16 +177,14 @@
         <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Course Total*</b></td>
         <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ courseTotal }}</td>
     </tr>
-    {% if profCourses is not defined or is_admin%}
-        <tr>
-            <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Other Students Total</b></td>
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ otherTotal }}</td>
-        </tr>
-        <tr>
-            <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Student Total</b></td>
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ attendees }}</td>
-        </tr>
-    {% endif %}
+    <tr>
+        <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Other Students Total</b></td>
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ otherTotal }}</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="border-bottom: 1px solid #CCC;padding:2px 10px"><b>Student Total</b></td>
+        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ attendees }}</td>
+    </tr>
 </table>
 <br />
 <span>*Students that sign in for multiple classes will be double counted in the class totals, but appear once in the student totals</span>
