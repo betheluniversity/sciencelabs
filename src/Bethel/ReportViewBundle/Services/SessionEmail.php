@@ -77,9 +77,10 @@ class SessionEmail {
             /** @var $courseRepository \Bethel\EntityBundle\Entity\CourseRepository */
             $courseRepository = $this->em->getRepository('BethelEntityBundle:Course');
             $courses = $courseRepository->getSessionCourses($this->session);
-            $otherSessions = $studentSessionRepository->getSessionOtherAttendance($this->session);
-            $otherTotal = count($otherSessions);
         }
+
+        $otherSessions = $studentSessionRepository->getSessionOtherAttendance($this->session);
+        $otherTotal = count($otherSessions);
 
         /** @var $course \Bethel\EntityBundle\Entity\Course */
         foreach($courses as $course) {
