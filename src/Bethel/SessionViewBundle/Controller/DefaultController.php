@@ -181,6 +181,8 @@ class DefaultController extends BaseController
         /** @var $sessionFormHandler \Bethel\EntityBundle\Form\Handler\SessionFormHandler */
         $sessionFormHandler = $this->get('session_form_handler');
 
+        $em->getFilters()->enable('softdeleteable');
+
         if($request->getMethod() == 'POST') {
             $result = $sessionFormHandler->process($form, $actionString);
 
@@ -209,7 +211,7 @@ class DefaultController extends BaseController
             }
         }
 
-        $em->getFilters()->enable('softdeleteable');
+
 
         return array(
             'user' => $this->getUser(),

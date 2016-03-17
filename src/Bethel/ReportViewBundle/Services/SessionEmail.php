@@ -79,8 +79,12 @@ class SessionEmail {
             $courses = $courseRepository->getSessionCourses($this->session);
         }
 
+        // Student signin grouped by courses
+
         $otherSessions = $studentSessionRepository->getSessionOtherAttendance($this->session);
         $otherTotal = count($otherSessions);
+
+        $studentSessions = $studentSessionRepository->getSessionAttendanceForCourses($courses, $this->session, true);
 
         /** @var $course \Bethel\EntityBundle\Entity\Course */
         foreach($courses as $course) {
@@ -90,6 +94,19 @@ class SessionEmail {
             }
             $courseKey .= ' (' . $course->getDept() . $course->getCourseNum() . ')';
             $courseAttendance[$courseKey] = $studentSessionRepository->getSessionCourseAttendance($course, $this->session, true);
+        }
+
+        // Student signin grouped by courses
+        /** @var $courseRepository \Bethel\EntityBundle\Entity\CourseRepository */
+        $courseRepository = $this->em->getRepository('BethelEntityBundle:Course');
+        $courses = $courseRepository->getSessionCourses($this->session);
+        /** @var $course \Bethel\EntityBundle\Entity\Course */
+        foreach($courses as $course) {
+            $courseKey = $course->getTitle();
+            if($course->getSection()) {
+                $courseKey .= ' (Section ' . $course->getSection() . ')';
+            }
+            $courseKey .= ' (' . $course->getDept() . $course->getCourseNum() . ')';
             $sessionCourseAttendanceTotal = $studentSessionRepository->getSessionCourseAttendanceTotal($course, $this->session);
 
             $courseAttendanceTotal[$courseKey] = array(
@@ -99,8 +116,6 @@ class SessionEmail {
             );
             $courseTotal += $sessionCourseAttendanceTotal;
         }
-
-        $studentSessions = $studentSessionRepository->getSessionAttendanceForCourses($courses, $this->session, true);
 
         $messageBody = $this->twig->render(
             'BethelReportViewBundle:Email:email.html.twig',

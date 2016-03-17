@@ -243,9 +243,8 @@ class DefaultController extends BaseController
             )));
         }
 
-        $semesterStartMonth = (int) $sessionSemester->getStartDate()->format('n');
-        $semesterEndMonth = (int) $sessionSemester->getEndDate()->format('n');
-
+        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
+        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
         $date->setDate($year,$month,1);
 
         // Checking to see if the month we're navigating to is within
