@@ -96,28 +96,29 @@
             </td>
         </tr>
     {% endfor %}
+
     {% for instance in otherSessions %}
-        <tr>
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.student.firstName }} {{ instance.student.lastName }}</td>
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.timeIn|date("g:ia") }}</td>
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
-                {% if instance.timeOut %}
-                    {{ instance.timeOut|date("g:ia") }}
-                {% else %}
-                    ???
-                {% endif %}
-            </td>
-            <td></td> {# empty column #}
-            <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
-                {% if instance.otherCourseName %}
-                    {% if instance.otherCourseName in profCourses or is_admin %}
-                        {{ instance.otherCourseName }}
+        {% if instance.otherCourseName in profCourses or is_admin %}
+            <tr>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.student.firstName }} {{ instance.student.lastName }}</td>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">{{ instance.timeIn|date("g:ia") }}</td>
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                    {% if instance.timeOut %}
+                        {{ instance.timeOut|date("g:ia") }}
+                    {% else %}
+                        ???
                     {% endif %}
-                {% else %}
-                    ???
-                {% endif %}
-            </td>
-        </tr>
+                </td>
+                <td></td> {# empty column #}
+                <td style="border-bottom: 1px solid #CCC;padding:2px 10px">
+                    {% if instance.otherCourseName %}
+                        {{ instance.otherCourseName }}
+                    {% else %}
+                        ???
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
     {% endfor %}
 </table>
 
