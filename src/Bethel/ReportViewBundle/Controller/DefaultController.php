@@ -325,8 +325,8 @@ class DefaultController extends BaseController
                 $scheduleData[$schedule->__toString()]['attendance'] += $sessionRepository->getSessionAttendeeTotal($monthSession);
                 $totalAttendance += $sessionRepository->getSessionAttendeeTotal($monthSession);
             } else {
-                $otherMonthSessionsTotal += sizeof($monthSession->getStudentSessions()) + $monthSession->getAnonStudents();
-                $totalAttendance += sizeof($monthSession->getStudentSessions()) + $monthSession->getAnonStudents();
+                $otherMonthSessionsTotal += $sessionRepository->getSessionAttendeeTotal($monthSession);
+                $totalAttendance += $sessionRepository->getSessionAttendeeTotal($monthSession);
             }
             $realTotalArray[$monthSession->getId()] = $sessionRepository->getSessionAttendeeTotal($monthSession);
             
@@ -553,7 +553,7 @@ class DefaultController extends BaseController
                 $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
                 $currentTotal = 0;
                 foreach($monthSessions as $monthSession) {
-                     $currentTotal += $sessionRepository->getSessionAttendeeTotal($monthSession);
+                    $currentTotal += $sessionRepository->getSessionAttendeeTotal($monthSession);
                 }
                 $monthly[(int)$month->format('n')] = $currentTotal;
             }
