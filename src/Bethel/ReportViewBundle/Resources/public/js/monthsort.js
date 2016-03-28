@@ -12,26 +12,19 @@ $(document).ready(function() {
         sPageButtonActive: 'success'
     });
 
-    var schedTable = $('#scheduleTable').dataTable({
-        "order": [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'desc'], [4, 'desc']],
+    var sessTable = $('#monthlySessionTable').dataTable({
+        "order": [[0, 'asc'], [1, 'asc'], [2, 'asc'], [3, 'asc'], [4, 'desc']],
         "bPaginate": false,
         "oLanguage": {
             "sSearch": "Search:"
         }
-    } );
+    });
 
-    var sessTable = $('#sessionTable').dataTable({
-        "columnDefs": [
-            {
-                "className": "text-center",
-                "orderable": false,
-                "targets": [5]
-            }
-        ],
-        "order": [[0, 'asc'], [1, 'asc'], [3, 'asc'], [4, 'desc']],
+    var schedTable = $('#scheduleTable').dataTable({
+        "order": [[1, 'asc'], [0, 'asc'], [2, 'asc'], [3, 'desc'], [4, 'desc']],
         "bPaginate": false,
         "oLanguage": {
             "sSearch": "Search:"
         }
-    } );
+    });
 });

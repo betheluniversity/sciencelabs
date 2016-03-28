@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row">
-            <table id="scheduleTable" class="large-12 columns">
+            <table id="scheduleTable" class="large-12 columns displayTable">
                 <thead>
                 <tr>
                     <th>Schedule Name</th>
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="row">
-            <table id="sessionTable" class="large-12 columns">
+            <table id="monthlySessionTable" class="large-12 columns displayTable">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -131,7 +131,7 @@
 
     {% javascripts
     '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
-    '@BethelReportViewBundle/Resources/public/js/monthsort.js' %}
+    '@BethelReportViewBundle/Resources/public/js/monthsort.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
