@@ -46,6 +46,7 @@
                     <th>% Total</th>
                 </tr>
                 </thead>
+                <tbody>
                 {% for key, schedule in scheduleData %}
                     <tr>
                         <td>{{ key }}</td>
@@ -62,6 +63,7 @@
                         </td>
                     </tr>
                 {% endfor %}
+                </tbody>
                     
                 <tfoot>
                     <tr>
@@ -103,6 +105,7 @@
                     <th>Report</th>
                 </tr>
                 </thead>
+                <tbody>
                 {% for key, session in monthSessions %}
                     {% if session.endTime %}
                         <tr>
@@ -115,6 +118,7 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
+                </tbody>
                 <tfoot>
                 <tr>
                     <th colspan="4">Total</th>

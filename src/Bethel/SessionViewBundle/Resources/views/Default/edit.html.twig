@@ -177,14 +177,17 @@
             </div>
 
             {% if studentSessions %}
-                <table style="width:100%">
-                    <tr>
-                        <th>Name</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Courses</th>
-                        <th></th>
-                    </tr>
+                <table id='editStudentSessionTable' style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Courses</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {% for studentSession in studentSessions %}
                         <tr>
                             <td>{{ studentSession.student.firstName }} {{ studentSession.student.lastName }}</td>
@@ -212,6 +215,7 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                     <tr>
                         <th colspan="4">Anonymous Students</th>
                         <td class="right">{{ session.anonStudents }}</td>
@@ -245,14 +249,17 @@
             </div>
 
             {% if tutorSessions %}
-                <table style="width:100%">
-                    <tr>
-                        <th>Name</th>
-                        <th>Time In</th>
-                        <th>Time Out</th>
-                        <th>Lead</th>
-                        <th></th>
-                    </tr>
+                <table id='editTutorSessionTable' style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Lead</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {% for tutorSession in tutorSessions %}
                         <tr>
                             <td>{{ tutorSession.tutor.firstName }} {{ tutorSession.tutor.lastName }}</td>
@@ -271,6 +278,7 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                 </table>
 
             {% else %}
@@ -293,6 +301,8 @@
     {{ parent() }}
 
     {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
+    '@BethelSessionViewBundle/Resources/public/js/editsessionsort.js'
     '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
     '@BethelFrontBundle/Resources/public/lib/pikaday/pikaday.js'
     '@BethelSessionViewBundle/Resources/public/js/session.js'
