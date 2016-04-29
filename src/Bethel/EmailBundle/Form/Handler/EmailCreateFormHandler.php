@@ -96,7 +96,8 @@ class EmailCreateFormHandler {
         $emailList = array();
         /** @var \Bethel\EntityBundle\Entity\User $user */
         foreach($users as $user) {
-            array_push($emailList, $user->getEmail());
+            if( strpos($user->getEmail(), '@') !== false )
+                array_push($emailList, $user->getEmail());
         }
         return $emailList;
     }
