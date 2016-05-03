@@ -74,8 +74,8 @@ class DefaultController extends BaseController
         /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
         $activeSemester = $this->getActiveSemester();
-        $session = $this->getSessionSemester();
-        $closedSessions = $sessionRepository->getClosedSessions($session, true);
+        $semester = $this->getSessionSemester();
+        $closedSessions = $sessionRepository->getClosedSessions($semester, true);
         $sessionContainer = array();
         $em->getFilters()->disable('softdeleteable');
 
@@ -103,7 +103,9 @@ class DefaultController extends BaseController
             'user' => $this->getUser(),
             'sessionContainer' => $sessionContainer,
             'closedSessions' => $closedSessions,
-            'activeSemester' => $activeSemester
+            'activeSemester' => $activeSemester,
+            'selectedSemester'  => $semester
+
         );
     }
 
