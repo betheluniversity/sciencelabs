@@ -83,6 +83,10 @@
                         option.value = keepValues[i];
                         option.text = keepText[i];
                         select.add(option);
+
+                        if( "{{ sessionSemester }}" == keepText[i] ) {
+                            document.getElementById("bethel_entitybundle_session_semester").selectedIndex = i;
+                        }
                     }
                 </script>
             </div>

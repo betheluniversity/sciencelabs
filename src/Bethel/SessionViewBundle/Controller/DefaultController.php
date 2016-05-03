@@ -199,7 +199,8 @@ class DefaultController extends BaseController
                     'tutorSessions' => $tutorSessions,
                     'session' => $session,
                     'message' => $message,
-                    'newSession' => $newSession
+                    'newSession' => $newSession,
+                    'sessionSemester' => $session->getSemester(),
                 );
             } else if($result['success'] == true) {
                 $this->get('session')->getFlashBag()->add(
@@ -220,7 +221,8 @@ class DefaultController extends BaseController
             'tutorSessions' => $tutorSessions,
             'session' => $session,
             'message' => $message,
-            'newSession' => $newSession
+            'newSession' => $newSession,
+            'sessionSemester' => $session->getSemester(),
         );
     }
 
