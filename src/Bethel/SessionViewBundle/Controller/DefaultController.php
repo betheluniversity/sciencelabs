@@ -210,7 +210,7 @@ class DefaultController extends BaseController
                     $result['message']
                 );
 
-                return $this->redirect($this->generateUrl('session'));
+                return $this->redirect($this->generateUrl('session_closed'));
             }
         }
 

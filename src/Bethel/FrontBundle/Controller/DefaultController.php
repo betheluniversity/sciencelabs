@@ -289,7 +289,7 @@ class DefaultController extends BaseController
                 break;
             case 'session_delete':
                 $repository = $em->getRepository('BethelEntityBundle:Session');
-                $redirectUrl = $this->generateUrl('session');
+                $redirectUrl = $this->generateUrl('session_closed');
                 break;
             default:
                 throw new HttpException(404, "Route not valid.");
