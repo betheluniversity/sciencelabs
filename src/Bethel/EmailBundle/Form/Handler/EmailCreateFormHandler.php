@@ -80,13 +80,13 @@ class EmailCreateFormHandler {
         $allUsers = array_unique($allUsers);
 
         foreach( $allUsers as $user){
-            $message = \Swift_Message::newInstance()
+            $mailMessage = \Swift_Message::newInstance()
                 ->setSubject('{' . $this->appTitle . '} ' . $subject)
                 ->setFrom('noreply@bethel.edu')
                 ->setTo($user)
                 ->setBody($message,'text/plain')
             ;
-            $this->mailer->send($message);
+            $this->mailer->send($mailMessage);
         }
 
         return $form;
