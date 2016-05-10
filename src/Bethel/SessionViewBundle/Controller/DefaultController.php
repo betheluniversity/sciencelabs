@@ -214,8 +214,6 @@ class DefaultController extends BaseController
             }
         }
 
-
-
         return array(
             'user' => $this->getUser(),
             'form' => $form,

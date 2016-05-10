@@ -76,18 +76,18 @@ class EmailCreateFormHandler {
         $ccUsers = $this->buildEmailList($emailData['cc']);
         $bccUsers = $this->buildEmailList($emailData['bcc']);
 
-        $bccUsers = array_merge($bccUsers,$roleRecipients);
-        $bccUsers = array_unique($bccUsers);
+        $allUsers = array_merge($bccUsers,$roleRecipients,$ccUsers);
+        $allUsers = array_unique($allUsers);
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject('{' . $this->appTitle . '} ' . $subject)
-            ->setFrom('noreply@bethel.edu')
-            ->setTo('webmaster@bethel.edu')
-            ->setCc($ccUsers)
-            ->setBcc($bccUsers)
-            ->setBody($message,'text/plain')
-        ;
-        $this->mailer->send($message);
+        foreach( $allUsers as $user){
+            $message = \Swift_Message::newInstance()
+                ->setSubject('{' . $this->appTitle . '} ' . $subject)
+                ->setFrom('noreply@bethel.edu')
+                ->setTo($user)
+                ->setBody($message,'text/plain')
+            ;
+            $this->mailer->send($message);
+        }
 
         return $form;
     }
