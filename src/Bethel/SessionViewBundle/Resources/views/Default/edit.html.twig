@@ -181,50 +181,104 @@
             </div>
 
             {% if studentSessions %}
-                <table id='editStudentSessionTable' style="width:100%">
-                    <thead>
+                <button id="view-student-attendance" onclick="
+                    if(this.innerHTML == 'View by Course') {
+                        this.innerHTML = 'View by Name';
+                        document.getElementById('view-by-name').style.display='none';
+                        document.getElementById('view-by-course').style.display='block';
+                    }
+                    else {
+                        this.innerHTML='View by Course';
+                        document.getElementById('view-by-name').style.display='block';
+                        document.getElementById('view-by-course').style.display='none';
+                    }
+                ">View by Course</button>
+
+                <div id="view-by-name">
+                    <table id='editStudentSessionTable' style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Courses</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for studentSession in studentSessions %}
+                            <tr>
+                                <td>{{ studentSession.student.firstName }} {{ studentSession.student.lastName }}</td>
+                                <td>{{ studentSession.timeIn ? studentSession.timeIn|date('g:ia') : '???' }}</td>
+                                <td>{{ studentSession.timeOut ? studentSession.timeOut|date('g:ia') : '???' }}</td>
+                                <td>
+                                    <ul>
+                                        {% for course in studentSession.courses %}
+                                            <li>{{ course.dept }}{{ course.courseNum }}</li>
+                                        {% endfor %}
+                                        {% if studentSession.otherCourse or studentSession.otherCourseName %}
+                                            <li>{{ studentSession.otherCourseName ~ ' '}}<span class="label radius">Other</span></li>
+                                        {% endif %}
+                                    </ul>
+                                </td>
+                                <td class="text-center">
+                                    <ul class="button-group radius" style="display:inline-block">
+                                        {% if is_granted('ROLE_LEAD_TUTOR') %}
+                                            <li><a href="{{ path('session_edit_attendance', {'id': studentSession.id}) }}" class="tiny button">Edit</a></li>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <li><a href="{{ path('attendance_delete', {'id': studentSession.id}) }}" class="tiny button alert">Delete</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
                         <tr>
-                            <th>Name</th>
-                            <th>Time In</th>
-                            <th>Time Out</th>
-                            <th>Courses</th>
-                            <th></th>
+                            <th colspan="4">Anonymous Students</th>
+                            <td class="right">{{ session.anonStudents }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    {% for studentSession in studentSessions %}
-                        <tr>
-                            <td>{{ studentSession.student.firstName }} {{ studentSession.student.lastName }}</td>
-                            <td>{{ studentSession.timeIn ? studentSession.timeIn|date('g:ia') : '???' }}</td>
-                            <td>{{ studentSession.timeOut ? studentSession.timeOut|date('g:ia') : '???' }}</td>
-                            <td>
-                                <ul>
-                                    {% for course in studentSession.courses %}
-                                        <li>{{ course.dept }}{{ course.courseNum }}</li>
-                                    {% endfor %}
-                                    {% if studentSession.otherCourse or studentSession.otherCourseName %}
-                                        <li>{{ studentSession.otherCourseName ~ ' '}}<span class="label radius">Other</span></li>
-                                    {% endif %}
-                                </ul>
-                            </td>
-                            <td class="text-center">
-                                <ul class="button-group radius" style="display:inline-block">
-                                    {% if is_granted('ROLE_LEAD_TUTOR') %}
-                                        <li><a href="{{ path('session_edit_attendance', {'id': studentSession.id}) }}" class="tiny button">Edit</a></li>
-                                    {% endif %}
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <li><a href="{{ path('attendance_delete', {'id': studentSession.id}) }}" class="tiny button alert">Delete</a></li>
-                                    {% endif %}
-                                </ul>
-                            </td>
-                        </tr>
+                    </table>
+                </div>
+
+                <div id="view-by-course" style="display:none">
+                    {% for courseName, courseType in sessionsByCourse %}
+                        <p><strong>{{ courseName }}</strong></p>
+                        <table style="width:100%" class="large-12 studentAttendanceByCourseTable">
+                            <thead><tr>
+                                <th>Name</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th></th>
+                            </tr></thead>
+                            {% for instance in courseType %}
+                                <tr>
+                                    <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
+
+                                    <td>{{ instance.timeIn|date("g:ia") }}</td>
+
+                                    <td>
+                                        {% if instance.timeOut %}
+                                            {{ instance.timeOut|date("g:ia") }}
+                                        {% else %}
+                                            ???
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <ul class="button-group radius" style="display:inline-block">
+                                            {% if is_granted('ROLE_LEAD_TUTOR') %}
+                                                <li><a href="{{ path('session_edit_attendance', {'id': instance.id}) }}" class="tiny button">Edit</a></li>
+                                            {% endif %}
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <li><a href="{{ path('attendance_delete', {'id': instance.id}) }}" class="tiny button alert">Delete</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     {% endfor %}
-                    </tbody>
-                    <tr>
-                        <th colspan="4">Anonymous Students</th>
-                        <td class="right">{{ session.anonStudents }}</td>
-                    </tr>
-                </table>
+                </div>
 
             {% else %}
                 <div class="row">
@@ -307,6 +361,7 @@
     {% javascripts
     '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
     '@BethelSessionViewBundle/Resources/public/js/editsessionsort.js'
+    '@BethelReportViewBundle/Resources/public/js/studentattendancebycoursesort.js'
     '@BethelFrontBundle/Resources/public/lib/moment/moment.js'
     '@BethelFrontBundle/Resources/public/lib/pikaday/pikaday.js'
     '@BethelSessionViewBundle/Resources/public/js/session.js'

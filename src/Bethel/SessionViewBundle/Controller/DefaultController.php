@@ -180,6 +180,17 @@ class DefaultController extends BaseController
             }
         }
 
+        // Create the Student Attendance by Course section
+        $sessionsByCourse = array();
+        foreach( $session->getStudentSessions() as $studentSession){
+            $courses = $studentSession->getCourses();
+            foreach( $courses as $course){
+                if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
+                    $sessionsByCourse[strval($course->getCourseCode())] = array();
+                array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
+            }
+        }
+
         /** @var $sessionFormHandler \Bethel\EntityBundle\Form\Handler\SessionFormHandler */
         $sessionFormHandler = $this->get('session_form_handler');
 
@@ -218,6 +229,7 @@ class DefaultController extends BaseController
             'user' => $this->getUser(),
             'form' => $form,
             'studentSessions' => $studentSessions,
+            'sessionsByCourse'    => $sessionsByCourse,
             'tutorSessions' => $tutorSessions,
             'session' => $session,
             'message' => $message,
