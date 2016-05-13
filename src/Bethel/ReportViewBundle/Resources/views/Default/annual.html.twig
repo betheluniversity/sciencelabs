@@ -14,11 +14,11 @@
                 <div class="callout panel">
                     <span>Attendance for {{ config_title }} <a href="{{ path('export_annual') }}" style="margin:-3px 0 0 0" class="button tiny right">CSV Export</a></span>
                     {% if config_title == 'Math Lab' %}
-                        <ul>
-                            <li>New Math Lab Application data from Fall 2014 on. </li>
-                            <li>Old Math Lab Application data from Feb. 2004 - Fall 2014.</li>
-                            <li>No session data prior to Feb. 2004.</li>
-                        </ul>
+                        <p>
+                            <br/><strong>Fall 2014 - Present:</strong> New Application Data Management (includes professor, course, student, and tutor information)
+                            <br/><strong>Spring 2004 - Spring 2014 *:</strong> Data from old sign in system (does not include professor or tutor information)
+                            <br/><strong>Fall 1992 - Fall 2003:</strong> Data transcribed from paper sign ins (only includes monthly totals)
+                        </p>
                     {% endif %}
                 </div>
             </div>
@@ -99,6 +99,10 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            {% if config_title == 'Math Lab' or config_title == 'Computer Science Lab' %}
+                <p>*Previously Math & CS Lab attendance totals were combined on the old Math Lab system. These attendance totals have now been split between the two systems.</p>
+            {% endif %}
         </div>
 
     {% endblock %}
