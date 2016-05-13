@@ -868,12 +868,24 @@ class DefaultController extends BaseController
             $profView = false;
         }
 
+        // Create the Student Attendance by Course section
+        $sessionsByCourse = array();
+        foreach( $session->getStudentSessions() as $studentSession){
+            $courses = $studentSession->getCourses();
+            foreach( $courses as $course){
+                if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
+                    $sessionsByCourse[strval($course->getCourseCode())] = array();
+                array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
+            }
+        }
+
         $arrayContents = array(
-            'user' => $this->getUser(),
-            'session' => $session,
-            'attendees' => $attendees,
-            'tutorAttendance' => $tutorAttendance,
-            'profView' => $profView
+            'user'                  => $this->getUser(),
+            'session'               => $session,
+            'sessionsByCourse'    => $sessionsByCourse,
+            'attendees'             => $attendees,
+            'tutorAttendance'       => $tutorAttendance,
+            'profView'              => $profView
             );
 
         $returnValue = $this->render('BethelReportViewBundle:Default:session.html.twig', $arrayContents);

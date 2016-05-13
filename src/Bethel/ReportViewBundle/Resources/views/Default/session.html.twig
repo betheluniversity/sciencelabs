@@ -119,9 +119,23 @@
                 <p>{{ session.comments|nl2br }}</p>
             </div>
         </div>
-        <div class="row">
+
+        <button id="view-student-attendance" onclick="
+            if(this.innerHTML == 'View by Course') {
+                this.innerHTML = 'View by Name';
+                document.getElementById('view-by-name').style.display='none';
+                document.getElementById('view-by-course').style.display='block';
+            }
+            else {
+                this.innerHTML='View by Course';
+                document.getElementById('view-by-name').style.display='block';
+                document.getElementById('view-by-course').style.display='none';
+            }
+        ">View by Course</button>
+
+        <div class="row" id="view-by-name">
             <div class="large-12 columns">
-                <h3>Student Attendance</h3>
+                <h3>Student Attendance by Name</h3>
                 <table style="width:100%" class="large-12 studentAttendanceTable">
                     <thead><tr>
                         <th>Name</th>
@@ -187,13 +201,63 @@
             </div>
         </div>
 
+        <div class="row" id="view-by-course">
+            <div class="large-12 columns">
+                <h3>Student Attendance by Course</h3>
+
+                {% for courseName, courseType in sessionsByCourse %}
+                    <p><strong>{{ courseName }}</strong></p>
+                    <table style="width:100%" class="large-12 studentAttendanceByCourseTable">
+                        <thead><tr>
+                            <th>Name</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Hours</th>
+                        </tr></thead>
+                    {% for instance in courseType %}
+                        {% set showStudent = false %}
+                        {% for course in instance.courses %}
+                            {% if course.professor == user %}
+                                {% set showStudent = true %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if not profView or (profView and showStudent) %}
+                            <tr>
+                                <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
+
+                                <td>{{ instance.timeIn|date("g:ia") }}</td>
+
+                                <td>
+                                    {% if instance.timeOut %}
+                                        {{ instance.timeOut|date("g:ia") }}
+                                    {% else %}
+                                        ???
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if instance.minutes >= 0 %}
+                                        {{ instance.minutes }} min
+                                    {% else %}
+                                        ???
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                {% endfor %}
+            </div>
+        </div>
+
     {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+
     {% javascripts
     '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
-    '@BethelReportViewBundle/Resources/public/js/studentattendancesort.js' %}
+    '@BethelReportViewBundle/Resources/public/js/studentattendancesort.js'
+    '@BethelReportViewBundle/Resources/public/js/studentattendancebycoursesort.js'%}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
