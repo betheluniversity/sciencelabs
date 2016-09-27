@@ -1058,6 +1058,8 @@ class DefaultController extends BaseController
                     'role' => 'ROLE_STUDENT'
                 ));
                 $user->addRole($studentRole);
+                $em->persist($user);
+                $em->flush();
             }
 
             $activeStudentSession = $em->getRepository('BethelEntityBundle:StudentSession')->findOneBy(
