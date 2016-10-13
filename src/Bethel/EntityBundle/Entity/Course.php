@@ -510,7 +510,12 @@ class Course
 
     public function getProfessors()
     {
-        return $this->professors;
+        // convert the list of professors to an actual array instead of a collection.
+        $listOfProfessors = array();
+        foreach( $this->professors as $professor){
+            array_push($listOfProfessors, $professor);
+        }
+        return $listOfProfessors;
     }
 
     public function addProfessor(User $professor)

@@ -875,13 +875,9 @@ class DefaultController extends BaseController
             $courses = $studentSession->getCourses();
             foreach( $courses as $course){
                 // quick gather a check to see if professor is teaching a course
-                $profList = array();
                 $professors = $course->getProfessors();
-                foreach( $professors as $professor) {
-                    array_push($profList, $professor);
-                }
 
-                if( !$profView or in_array($this->getUser(), $profList) ) {
+                if( !$profView or in_array($this->getUser(), $professors) ) {
                     if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
                         $sessionsByCourse[strval($course->getCourseCode())] = array();
                     array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
@@ -1340,7 +1336,7 @@ class DefaultController extends BaseController
         if($this->getUser()->hasRole('ROLE_PROFESSOR') && !$this->getUser()->hasRole('ROLE_ADMIN') && !$this->getUser()->hasRole('ROLE_VIEWER')) {
             $profView = true;
             foreach( $courses as $course){
-                if( $this->getUser() == $course->getProfessors() )
+                if( !in_array($this->getUser(), $course->getProfessors()) )
                     $display = false;
                 else
                     $display = true;
@@ -1436,7 +1432,8 @@ class DefaultController extends BaseController
             'studentOtherSessions' => $studentOtherSessions,
             'sessionSemester' => $sessionSemester,
             'profView'  =>  $profView,
-            'courses'    => $courses
+            'courses'    => $courses,
+            'professor' => $professor
         );
 
     }
