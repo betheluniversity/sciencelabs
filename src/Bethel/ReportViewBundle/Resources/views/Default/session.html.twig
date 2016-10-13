@@ -147,9 +147,11 @@
                     {% for instance in session.studentSessions %}
                         {% set showStudent = false %}
                         {% for course in instance.courses %}
-                            {% if course.professor == user %}
-                                {% set showStudent = true %}
-                            {% endif %}
+                            {% for prof in course.professors %}
+                                {% if prof == user %}
+                                    {% set showStudent = true %}
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
                         {% if not profView or (profView and showStudent) %}
                             <tr>
@@ -205,8 +207,8 @@
             <div class="large-12 columns">
                 <h3>Student Attendance by Course</h3>
 
-                {% for courseName, courseType in sessionsByCourse %}
-                    {% if not profView or course.professor == user %}
+                {% for courseName, studentSessions in sessionsByCourse %}
+                    {#{% if not profView or course.professor == user %}#}
                         <p><strong>{{ courseName }}</strong></p>
                         <table style="width:100%" class="large-12 studentAttendanceByCourseTable">
                             <thead><tr>
@@ -215,7 +217,7 @@
                                 <th>Time Out</th>
                                 <th>Hours</th>
                             </tr></thead>
-                        {% for instance in courseType %}
+                        {% for instance in studentSessions %}
                             <tr>
                                 <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
 
@@ -238,7 +240,7 @@
                             </tr>
                         {% endfor %}
                         </table>
-                    {% endif %}
+                    {#{% endif %}#}
                 {% endfor %}
             </div>
         </div>

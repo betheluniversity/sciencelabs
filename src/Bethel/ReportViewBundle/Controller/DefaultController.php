@@ -870,19 +870,29 @@ class DefaultController extends BaseController
 
         // Create the Student Attendance by Course section
         $sessionsByCourse = array();
+
         foreach( $session->getStudentSessions() as $studentSession){
             $courses = $studentSession->getCourses();
             foreach( $courses as $course){
-                if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
-                    $sessionsByCourse[strval($course->getCourseCode())] = array();
-                array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
+                // quick gather a check to see if professor is teaching a course
+                $profList = array();
+                $professors = $course->getProfessors();
+                foreach( $professors as $professor) {
+                    array_push($profList, $professor);
+                }
+
+                if( !$profView or in_array($this->getUser(), $profList) ) {
+                    if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
+                        $sessionsByCourse[strval($course->getCourseCode())] = array();
+                    array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
+                }
             }
         }
 
         $arrayContents = array(
             'user'                  => $this->getUser(),
             'session'               => $session,
-            'sessionsByCourse'    => $sessionsByCourse,
+            'sessionsByCourse'      => $sessionsByCourse,
             'attendees'             => $attendees,
             'tutorAttendance'       => $tutorAttendance,
             'profView'              => $profView
