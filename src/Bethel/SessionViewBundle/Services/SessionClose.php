@@ -69,7 +69,7 @@ class SessionClose {
             }
             return $session;
         }
-        return false;
+        return $session;
     }
 
     private function userHasRole(User $user, $roleString) {
