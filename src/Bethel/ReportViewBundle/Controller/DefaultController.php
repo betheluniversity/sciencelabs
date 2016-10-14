@@ -877,7 +877,7 @@ class DefaultController extends BaseController
                 // quick gather a check to see if professor is teaching a course
                 $professors = $course->getProfessors();
 
-                if( !$profView or in_array($this->getUser(), $professors) ) {
+                if( !$profView or $course->getProfessors()->contains($this->getUser()) ) {
                     if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
                         $sessionsByCourse[strval($course->getCourseCode())] = array();
                     array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
@@ -1336,7 +1336,7 @@ class DefaultController extends BaseController
         if($this->getUser()->hasRole('ROLE_PROFESSOR') && !$this->getUser()->hasRole('ROLE_ADMIN') && !$this->getUser()->hasRole('ROLE_VIEWER')) {
             $profView = true;
             foreach( $courses as $course){
-                if( !in_array($this->getUser(), $course->getProfessors()) )
+                if( !$course->getProfessors()->contains($this->getUser()) )
                     $display = false;
                 else
                     $display = true;
