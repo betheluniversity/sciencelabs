@@ -78,9 +78,9 @@
                     {% endif %}
 
                     {# Change this back to tutors #}
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <li class="padfix{{ routebase == 'tutor' ? ' ' ~ 'active' }}"><a href="{{ path('tutor_schedule') }}">Tutor Calendar</a></li>
-                    {% endif %}
+                    {#{% if is_granted('ROLE_ADMIN') %}#}
+                    {#<li class="padfix{{ routebase == 'tutor' ? ' ' ~ 'active' }}"><a href="{{ path('tutor_schedule') }}">Tutor Calendar</a></li>#}
+                    {#{% endif %}#}
                     {% if is_granted('ROLE_PROFESSOR') and not is_granted('ROLE_ADMIN') %}
                     {# professors navigate directly to course reports #}
                     <li class="padfix{{ routebase == 'report' ? ' ' ~ 'active' }}"><a href="{{ path('report_course') }}">Course Reports</a></li>
