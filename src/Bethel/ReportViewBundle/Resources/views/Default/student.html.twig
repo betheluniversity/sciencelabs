@@ -39,7 +39,7 @@
                                 <th>
                                     {% if is_granted('ROLE_PROFESSOR') and not is_granted('ROLE_ADMIN') %}
                                         Sessions Held for courses<br />
-                                        taught by {{ user }}
+                                        viewable by {{ user }}
                                     {% else %}
                                         Sessions Held for courses<br />
                                         user was enrolled in

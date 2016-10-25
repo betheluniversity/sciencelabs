@@ -123,15 +123,23 @@ class StudentSessionRepository extends EntityRepository
         if($professor) {
             $qb
                 ->innerJoin('ss.courses', 'c', 'WITH', 'c.semester = :semester')
-                ->innerJoin('c.professors', 'cp', 'WITH', 'cp.id = :professor')
-                ->setParameter('professor', $professor);
+                ->leftJoin('c.courseViewers', 'cv')
+                ->leftJoin('c.professors', 'cp', 'WITH', 'cp.id = :professor')
+                ->where('cv = :professor')
+                ->andWhere('ss.student = :student')
+                ->setParameter('professor', $professor)
+                // these last 4 are duplicated  in the else statement. this is needed due to the where becoming andWhere
+                ->where('ss.student = :student')
+                ->setParameter('student', $student)
+                ->setParameter('semester', $semester)
+                ->orderBy('s.date', $sort);
+        } else {
+            $qb
+                ->where('ss.student = :student')
+                ->setParameter('student', $student)
+                ->setParameter('semester', $semester)
+                ->orderBy('s.date', $sort);
         }
-
-        $qb
-            ->where('ss.student = :student')
-            ->setParameter('student', $student)
-            ->setParameter('semester', $semester)
-            ->orderBy('s.date', $sort);
 
         return $qb->getQuery()->getResult();
     }

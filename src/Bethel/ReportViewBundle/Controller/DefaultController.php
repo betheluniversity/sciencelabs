@@ -43,7 +43,7 @@ class DefaultController extends BaseController
         $reportCourses = array();
         $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
         foreach( $sessionCourses as $course){
-            if( $course->getProfessors()->contains($user) )
+            if( $course->getProfessors()->contains($user) || $course->isUserACourseViewer($this->getUser()))
                 array_push($reportCourses, $course);
         }
 
@@ -76,7 +76,7 @@ class DefaultController extends BaseController
             $reportCourses = array();
             $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
             foreach( $sessionCourses as $course){
-                if( $course->getProfessors()->contains($emailRecipient) )
+                if( $course->getProfessors()->contains($emailRecipient) || $course->isUserACourseViewer($this->getUser()))
                     array_push($reportCourses, $course);
             }
 
@@ -862,7 +862,7 @@ class DefaultController extends BaseController
         // Absent tutors
         $tutorAttendance['absent'] = $this->getTutorCheckinTimes(array_diff($scheduledTutors,$attendeeTutors), $session);
 
-        if($this->getUser()->hasRole('ROLE_PROFESSOR') && !$this->getUser()->hasRole('ROLE_ADMIN') && !$this->getUser()->hasRole('ROLE_VIEWER')) {
+        if(!$this->getUser()->hasRole('ROLE_ADMIN')) {
             $profView = true;
         } else {
             $profView = false;
@@ -870,28 +870,28 @@ class DefaultController extends BaseController
 
         // Create the Student Attendance by Course section
         $sessionsByCourse = array();
+        $coursesUserIsCourseViewer = array();
 
         foreach( $session->getStudentSessions() as $studentSession){
             $courses = $studentSession->getCourses();
             foreach( $courses as $course){
-                // quick gather a check to see if professor is teaching a course
-                $professors = $course->getProfessors();
-
-                if( !$profView or $course->getProfessors()->contains($this->getUser()) ) {
+                if( !$profView || $course->getProfessors()->contains($this->getUser()) || $course->isUserACourseViewer($this->getUser()) ) {
                     if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
                         $sessionsByCourse[strval($course->getCourseCode())] = array();
+                    array_push($coursesUserIsCourseViewer, $course);
                     array_push($sessionsByCourse[strval($course->getCourseCode())], $studentSession);
                 }
             }
         }
 
         $arrayContents = array(
-            'user'                  => $this->getUser(),
-            'session'               => $session,
-            'sessionsByCourse'      => $sessionsByCourse,
-            'attendees'             => $attendees,
-            'tutorAttendance'       => $tutorAttendance,
-            'profView'              => $profView
+            'user'                      => $this->getUser(),
+            'session'                   => $session,
+            'sessionsByCourse'          => $sessionsByCourse,
+            'attendees'                 => $attendees,
+            'tutorAttendance'           => $tutorAttendance,
+            'profView'                  => $profView,
+            'coursesUserIsCourseViewer' => $coursesUserIsCourseViewer
             );
 
         $returnValue = $this->render('BethelReportViewBundle:Default:session.html.twig', $arrayContents);
@@ -955,7 +955,7 @@ class DefaultController extends BaseController
             $profCurrentCourses = array();
             foreach($allCourses as $course) {
                 foreach($course->getProfessors() as $prof){
-                    if( $user == $prof){
+                    if( $user == $prof || $course->isUserACourseViewer($this->getUser())){
                         $profCurrentCourses[] = $course;
                     }
                 }
@@ -1336,7 +1336,7 @@ class DefaultController extends BaseController
         if($this->getUser()->hasRole('ROLE_PROFESSOR') && !$this->getUser()->hasRole('ROLE_ADMIN') && !$this->getUser()->hasRole('ROLE_VIEWER')) {
             $profView = true;
             foreach( $courses as $course){
-                if( !$course->getProfessors()->contains($this->getUser()) )
+                if( !$course->getProfessors()->contains($this->getUser()) && !$course->isUserACourseViewer($this->getUser()) )
                     $display = false;
                 else
                     $display = true;
@@ -1396,6 +1396,7 @@ class DefaultController extends BaseController
         }
 
         $semesterAttendance = $studentSessionRepository->getSemesterAttendance($student,$sessionSemester,'DESC',$professor);
+
 
         $timeSpent = 0;
         foreach($semesterAttendance as $attendance) {

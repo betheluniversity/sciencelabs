@@ -148,11 +148,26 @@ class Course
      */
     private $room;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="courseViewer")
+     * @ORM\JoinTable(
+     *  name="CourseViewer",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *  }
+     * )
+     */
+    private $courseViewers;
+
 
     public function __construct() {
         $this->studentSessions = new ArrayCollection();
         $this->students = new ArrayCollection();
         $this->professors = new ArrayCollection();
+        $this->courseViewers = new ArrayCollection();
     }
 
     public function __toString() {
@@ -571,5 +586,13 @@ class Course
         $this->room = $room;
 
         return $this;
+    }
+
+    public function getCourseViewers() {
+        return $this->courseViewers;
+    }
+
+    public function isUserACourseViewer(User $user) {
+        return $this->courseViewers->contains($user);
     }
 }

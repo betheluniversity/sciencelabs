@@ -54,7 +54,7 @@ class DefaultController extends BaseController
         }
 
         return array(
-            'user' => $user
+            'user' => $user,
         );
     }
 

@@ -161,7 +161,7 @@
                                         {% for course in instance.courses %}
                                             {% if not profView %}
                                                 <li><a href="{{ path('course_single', { 'id': course.id }) }}">{{ course.dept }}{{ course.courseNum }}</a></li>
-                                            {% elseif profView and course.professor == user %}
+                                            {% elseif profView and (course.professor == user or course in coursesUserIsCourseViewer ) %}
                                                 <li>{{ course.dept }}{{ course.courseNum }}</li>
                                             {% endif %}
                                         {% endfor %}
@@ -208,39 +208,37 @@
                 <h3>Student Attendance by Course</h3>
 
                 {% for courseName, studentSessions in sessionsByCourse %}
-                    {#{% if not profView or course.professor == user %}#}
-                        <p><strong>{{ courseName }}</strong></p>
-                        <table style="width:100%" class="large-12 studentAttendanceByCourseTable">
-                            <thead><tr>
-                                <th>Name</th>
-                                <th>Time In</th>
-                                <th>Time Out</th>
-                                <th>Hours</th>
-                            </tr></thead>
-                        {% for instance in studentSessions %}
-                            <tr>
-                                <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
+                    <p><strong>{{ courseName }}</strong></p>
+                    <table style="width:100%" class="large-12 studentAttendanceByCourseTable">
+                        <thead><tr>
+                            <th>Name</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Hours</th>
+                        </tr></thead>
+                    {% for instance in studentSessions %}
+                        <tr>
+                            <td><a href="{{ path('report_single_student', { 'id': instance.student.id }) }}">{{ instance.student.firstName }} {{ instance.student.lastName }}</a></td>
 
-                                <td>{{ instance.timeIn|date("g:ia") }}</td>
+                            <td>{{ instance.timeIn|date("g:ia") }}</td>
 
-                                <td>
-                                    {% if instance.timeOut %}
-                                        {{ instance.timeOut|date("g:ia") }}
-                                    {% else %}
-                                        ???
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if instance.minutes >= 0 %}
-                                        {{ instance.minutes }} min
-                                    {% else %}
-                                        ???
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                    {#{% endif %}#}
+                            <td>
+                                {% if instance.timeOut %}
+                                    {{ instance.timeOut|date("g:ia") }}
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if instance.minutes >= 0 %}
+                                    {{ instance.minutes }} min
+                                {% else %}
+                                    ???
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
                 {% endfor %}
             </div>
         </div>

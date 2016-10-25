@@ -113,6 +113,7 @@ class User implements UserInterface, \Serializable
      */
     protected $professorCourses;
 
+
     public function __construct()
     {
         $this->studentSessions = new ArrayCollection();

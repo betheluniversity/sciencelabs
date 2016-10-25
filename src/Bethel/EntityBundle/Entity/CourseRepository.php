@@ -114,4 +114,8 @@ class CourseRepository extends EntityRepository {
     public function getSemesterCourses(Semester $semester) {
         return $this->getSemesterCoursesQB($semester)->getQuery()->getResult();
     }
+
+    public function getCourseViewers() {
+
+    }
 }
