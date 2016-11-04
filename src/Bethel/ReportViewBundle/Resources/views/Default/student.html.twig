@@ -110,7 +110,8 @@
                 <table class="large-12" id="userTable">
                     <thead>
                     <tr>
-                        <th>Session</th>
+                        <th>Date</th>
+                        <th>Name</th>
                         <th>Courses</th>
                         <th>Time In</th>
                         <th>Time Out</th>
@@ -120,10 +121,13 @@
                     {% for attendance in semesterAttendance %}
                         <tr>
                             <td>
+                                {{ attendance.session.date|date("m/d/Y") }}
+                            </td>
+                            <td>
                                 {% if profView %}
-                                    {{ attendance.session }}
+                                    {{ attendance.session.name }}
                                 {% else %}
-                                    <a href="{{ path('report_single_session', { 'id': attendance.session.id }) }}">{{ attendance.session }}</a>
+                                    <a href="{{ path('report_single_session', { 'id': attendance.session.id }) }}">{{ attendance.session.name }}</a>
                                 {% endif %}
                                 
                             </td>
