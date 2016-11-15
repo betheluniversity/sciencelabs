@@ -9,6 +9,8 @@ use Bethel\EntityBundle\Form\CourseCodeType;
 use Bethel\EntityBundle\Form\ScheduleType;
 use Bethel\EntityBundle\Form\SemesterType;
 use Bethel\EntityBundle\Form\UserAdminType;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -73,22 +75,36 @@ class DefaultController extends BaseController
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
             // TODO: allow the user to edit roles based on his or her own role
             throw new AccessDeniedHttpException('You are not an administrator and may not edit other users.');
-        } elseif ($editUser && $user->getId() == $editUser->getId()) {
-            // the user may not administratively edit his or her own roles
-            $userEditUrl = $this->get('router')->generate('user_edit');
-            throw new AccessDeniedHttpException('<h2>You may not edit your own roles.</h2><p>If you need additional permissions, contact another administrator. To edit your own profile, click <a href="' . $userEditUrl . '">here</a>.</p>');
         }
+
+        if( $user != $editUser)
+            $showRoles = true;
+        else
+            $showRoles = false;
 
         $form = $this->createForm(new UserAdminType(), $editUser, array(
             'action' => $this->generateUrl('admin_user_edit', array(
                     'id' => $editUser->getId()
-                ))
+                )),
+            'show_roles' => $showRoles
         ));
 
-        if($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
+        // get data
+        $em = $this->getEntityManager();
+        $userRepository = $em->getRepository('BethelEntityBundle:User');
+        $courseData = $userRepository->getCourseViewerCourses($editUser);
 
-            if ($form->isValid()) {
+        // get courses they teach
+        $profCourses = $editUser->getProfessorCourses();
+
+        $form->get('courses')->setData($courseData);
+
+        if($request->getMethod() == 'POST') {
+            /** @var $formHandler \Bethel\EntityBundle\Form\Handler\UserAdminFormHandler */
+            $formHandler = $this->get('user_admin_form_handler');
+            $submissionResult = $formHandler->process($form);
+
+            if ($submissionResult['success']) {
                 $em = $this->getEntityManager();
                 $em->persist($editUser);
                 $em->flush();
@@ -97,7 +113,7 @@ class DefaultController extends BaseController
                     'success',
                     $editUser->__toString() . ' was successfully edited'
                 );
-            } else if($form->isSubmitted() && !$form->isValid()) {
+            } else {
                 $this->get('session')->getFlashBag()->add(
                     'warning',
                     'There was a problem with your changes'
@@ -110,7 +126,8 @@ class DefaultController extends BaseController
         return array(
             'user' => $this->getUser(),
             'editUser' => $editUser,
-            'form' => $form
+            'form' => $form,
+            'profCourses' => $profCourses
         );
     }
 

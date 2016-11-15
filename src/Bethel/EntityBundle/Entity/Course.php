@@ -592,6 +592,17 @@ class Course
         return $this->courseViewers;
     }
 
+    public function addCourseViewer(User $user) {
+        if (!$this->courseViewers->contains($user)) {
+            $this->courseViewers->add($user);
+
+            // updating the inverse side
+//            $professor->removeProfessorCourse($this);
+        }
+
+        return $this;
+    }
+
     public function isUserACourseViewer(User $user) {
         return $this->courseViewers->contains($user);
     }

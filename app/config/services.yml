@@ -85,6 +85,9 @@ services:
     semester_form_handler:
         class: Bethel\EntityBundle\Form\Handler\SemesterFormHandler
         arguments: ["@doctrine.orm.entity_manager","@request_stack","@session","@validator","@bethel.populate_course_codes"]
+    user_admin_form_handler:
+        class: Bethel\EntityBundle\Form\Handler\UserAdminFormHandler
+        arguments: ["@doctrine.orm.entity_manager","@request_stack"]
     bethel_entity.session_listener:
         class: Bethel\EntityBundle\EventListener\SessionListener
         tags:
