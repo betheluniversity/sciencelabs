@@ -75,33 +75,36 @@ class DefaultController extends BaseController
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
             // TODO: allow the user to edit roles based on his or her own role
             throw new AccessDeniedHttpException('You are not an administrator and may not edit other users.');
-        } elseif ($editUser && $user->getId() == $editUser->getId()) {
-            // the user may not administratively edit his or her own roles
-            $userEditUrl = $this->get('router')->generate('user_edit');
-            throw new AccessDeniedHttpException('<h2>You may not edit your own roles.</h2><p>If you need additional permissions, contact another administrator. To edit your own profile, click <a href="' . $userEditUrl . '">here</a>.</p>');
         }
+
+        if( $user != $editUser)
+            $showRoles = true;
+        else
+            $showRoles = false;
 
         $form = $this->createForm(new UserAdminType(), $editUser, array(
             'action' => $this->generateUrl('admin_user_edit', array(
                     'id' => $editUser->getId()
-                ))
+                )),
+            'show_roles' => $showRoles
         ));
 
         // get data
         $em = $this->getEntityManager();
         $userRepository = $em->getRepository('BethelEntityBundle:User');
-        $data = $userRepository->getCourseViewerCourses($editUser);
+        $courseData = $userRepository->getCourseViewerCourses($editUser);
 
         // get courses they teach
+        $profCourses = $editUser->getProfessorCourses();
 
-
-
-        $form->get('courses')->setData($data);
+        $form->get('courses')->setData($courseData);
 
         if($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
+            /** @var $formHandler \Bethel\EntityBundle\Form\Handler\UserAdminFormHandler */
+            $formHandler = $this->get('user_admin_form_handler');
+            $submissionResult = $formHandler->process($form);
 
-            if ($form->isValid()) {
+            if ($submissionResult['success']) {
                 $em = $this->getEntityManager();
                 $em->persist($editUser);
                 $em->flush();
@@ -110,7 +113,7 @@ class DefaultController extends BaseController
                     'success',
                     $editUser->__toString() . ' was successfully edited'
                 );
-            } else if($form->isSubmitted() && !$form->isValid()) {
+            } else {
                 $this->get('session')->getFlashBag()->add(
                     'warning',
                     'There was a problem with your changes'
@@ -123,7 +126,8 @@ class DefaultController extends BaseController
         return array(
             'user' => $this->getUser(),
             'editUser' => $editUser,
-            'form' => $form
+            'form' => $form,
+            'profCourses' => $profCourses
         );
     }
 

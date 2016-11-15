@@ -50,14 +50,15 @@
                 </div>
             </div>
 
-
-            <div class="row">
-                <div class="large-12 columns">
-                    {{ form_label(form.roles) }}
-                    {{ form_errors(form.roles) }}
-                    {{ form_widget(form.roles) }}
+            {% if editUser != user %}
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.roles) }}
+                        {{ form_errors(form.roles) }}
+                        {{ form_widget(form.roles) }}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             <div>
                 <a href="{{ path('admin_user_deactivate', { 'id': editUser.id }) }}" class="button radius alert">Deactivate</a>
@@ -67,4 +68,23 @@
             {{ form_end(form) }}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        // disable and update the text of the course viewers
+        $( document ).ready(function() {
+            $('#bethel_entitybundle_user_courses > option').each(function() {
+                {% for course in profCourses %}
+                if( "{{ course }}" == $(this).text()) {
+                    $(this).attr('disabled', 'disabled');
+                    $(this).text($(this).text() + " - {{ editUser }}'s course");
+                }
+                {% endfor %}
+            });
+        });
+    </script>
+
 {% endblock %}

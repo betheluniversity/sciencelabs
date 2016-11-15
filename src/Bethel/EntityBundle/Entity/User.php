@@ -547,4 +547,8 @@ class User implements UserInterface, \Serializable
     public function getCourseViewers() {
         return $this->courseViewers;
     }
+
+    public function removeAllCourseViewers() {
+        return $this->courseViewers->clear();
+    }
 }

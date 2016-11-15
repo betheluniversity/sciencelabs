@@ -14,6 +14,8 @@ class UserAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->show_roles = $options['show_roles'];
+
         $builder
             ->add('firstName')
             ->add('lastName')
@@ -36,20 +38,23 @@ class UserAdminType extends AbstractType
                     'required' => false,
                     'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose new user ...','style'=>'height:200px')
                 )
-            )
-            ->add('roles', 'entity', array(
-                'label' => 'Roles',
-                'query_builder' => function($repository) {
-                    // a dummy return. Need to fix later.
-                    return $repository->createQueryBuilder('r')
-                        ->where('r.role != :apirole')
-                        ->setParameter('apirole', 'test');
-                },
-                'class' => 'BethelEntityBundle:Role',
-                'expanded' => true,
-                'multiple' => true
-            ))
-            ->add('save','submit', array(
+            );
+            if ( $this->show_roles ) {
+                $builder
+                    ->add('roles', 'entity', array(
+                        'label' => 'Roles',
+                        'query_builder' => function ($repository) {
+                            // a dummy return. Need to fix later.
+                            return $repository->createQueryBuilder('r')
+                                ->where('r.role != :apirole')
+                                ->setParameter('apirole', 'test');
+                        },
+                        'class' => 'BethelEntityBundle:Role',
+                        'expanded' => true,
+                        'multiple' => true
+                    ));
+            }
+            $builder->add('save','submit', array(
                 'attr' => array('class'=>'button success radius right')
             ))
         ;
@@ -61,7 +66,8 @@ class UserAdminType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Bethel\EntityBundle\Entity\User'
+            'data_class' => 'Bethel\EntityBundle\Entity\User',
+            'show_roles' => null
         ));
     }
 
