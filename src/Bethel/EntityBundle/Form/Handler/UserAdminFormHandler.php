@@ -9,6 +9,7 @@ use Bethel\EntityBundle\Entity\TutorSession;
 use Bethel\EntityBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RequestStack;
 
