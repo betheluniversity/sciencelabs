@@ -22,6 +22,21 @@ class UserAdminType extends AbstractType
                 'disabled' => true
             ))
             ->add('email')
+            ->add('courses', 'entity', array(
+                    'label' => 'View Courses',
+                    'class' => 'BethelEntityBundle:Course',
+                    'multiple' => true,
+                    'expanded' => false,
+                    'query_builder' => function($repository) {
+                        return $repository->createQueryBuilder('c')
+                            ->leftJoin('c.semester', 's')
+                            ->where('s.active = 1');
+                    },
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose new user ...','style'=>'height:200px')
+                )
+            )
             ->add('roles', 'entity', array(
                 'label' => 'Roles',
                 'query_builder' => function($repository) {

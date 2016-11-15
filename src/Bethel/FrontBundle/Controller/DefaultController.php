@@ -9,6 +9,8 @@ use Bethel\EntityBundle\Form\CourseCodeType;
 use Bethel\EntityBundle\Form\ScheduleType;
 use Bethel\EntityBundle\Form\SemesterType;
 use Bethel\EntityBundle\Form\UserAdminType;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -84,6 +86,17 @@ class DefaultController extends BaseController
                     'id' => $editUser->getId()
                 ))
         ));
+
+        // get data
+        $em = $this->getEntityManager();
+        $userRepository = $em->getRepository('BethelEntityBundle:User');
+        $data = $userRepository->getCourseViewerCourses($editUser);
+
+        // get courses they teach
+
+
+
+        $form->get('courses')->setData($data);
 
         if($request->getMethod() == 'POST') {
             $form->handleRequest($request);

@@ -332,4 +332,16 @@ class UserRepository extends EntityRepository implements UserProviderInterface, 
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getCourseViewerCourses(User $user) {
+        $qb = $this->createQueryBuilder('u');
+        $qb
+            ->select('c')
+            ->from('Bethel\EntityBundle\Entity\Course', 'c')
+            ->innerJoin('c.courseViewers','cv')
+            ->where('cv.id = :user')
+            ->setParameter('user', $user);
+
+        return $qb->getQuery()->getResult();
+    }
 }

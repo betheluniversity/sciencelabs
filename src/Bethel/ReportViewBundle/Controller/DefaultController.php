@@ -7,6 +7,7 @@ use Bethel\EntityBundle\Entity\Session;
 use Bethel\EntityBundle\Entity\StudentSession;
 use Bethel\EntityBundle\Entity\User;
 use Bethel\EntityBundle\Form\SessionType;
+use Bethel\EntityBundle\Form\CourseViewersType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\NoResultException;
@@ -1746,5 +1747,4 @@ class DefaultController extends BaseController
 
         return $fullTitle;
     }
-
 }

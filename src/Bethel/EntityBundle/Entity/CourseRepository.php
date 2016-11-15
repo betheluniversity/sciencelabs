@@ -38,7 +38,6 @@ class CourseRepository extends EntityRepository {
      *
      * @param User $student
      * @param Semester $semester
-     * @param User $professor
      * @return array
      */
     public function getStudentCourses(User $student, Semester $semester) {
@@ -102,7 +101,9 @@ class CourseRepository extends EntityRepository {
      * @param Semester $semester
      * @return QueryBuilder
      */
-    public function getSemesterCoursesQB(Semester $semester) {
+    public function getSemesterCoursesQB(Semester $semester=null) {
+        if( $semester == null)
+            $semester = $this->getActiveSemester();
         $qb = $this->createQueryBuilder('c')
             ->where('c.semester = :semesterId')
             ->setParameter('semesterId', $semester->getId())
@@ -115,7 +116,11 @@ class CourseRepository extends EntityRepository {
         return $this->getSemesterCoursesQB($semester)->getQuery()->getResult();
     }
 
-    public function getCourseViewers() {
+    public function getActiveSemesterCourses() {
+        $semesterRepository = $this->em->getRepository('BethelEntityBundle:Semester');
+        /** @var \Bethel\EntityBundle\Entity\Semester $activeSemester */
+        $activeSemester = $semesterRepository->findOneBy(array('active'=>true));
 
+        return $this->getSemesterCoursesQB($activeSemester)->getQuery()->getResult();
     }
 }

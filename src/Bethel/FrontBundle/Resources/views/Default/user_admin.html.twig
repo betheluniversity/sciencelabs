@@ -9,6 +9,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="large-12 columns">
             {{ form_start(form) }}
@@ -39,6 +40,16 @@
                     {{ form_widget(form.username) }}
                 </div>
             </div>
+
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.courses) }}
+                    {{ form_errors(form.courses) }}
+                    {{ form_widget(form.courses) }}
+                </div>
+            </div>
+
 
             <div class="row">
                 <div class="large-12 columns">

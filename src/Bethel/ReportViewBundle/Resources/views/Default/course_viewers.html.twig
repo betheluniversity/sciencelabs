@@ -1,0 +1,52 @@
+{% extends 'BethelReportViewBundle:Default:base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="large-12 columns">
+            <table class="">
+                <thead>
+                <tr>
+                    <td>test1</td>
+                    <td>test2</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for person in course_viewers %}
+                        <td>
+                            <p>{{ person }}</p>
+                        </td>
+                    {% endfor %}
+                    <td><a class="button alert tiny">Delete</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="row">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="large-6 columns">
+                {{ form_label(form.findUsers) }}
+                {{ form_errors(form.findUsers) }}
+                {{ form_widget(form.findUsers) }}
+            </div>
+            {{ form_end(form) }}
+            {{ form_widget(form.save) }}
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+
+    {% javascripts
+    '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

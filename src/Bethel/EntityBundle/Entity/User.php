@@ -113,6 +113,20 @@ class User implements UserInterface, \Serializable
      */
     protected $professorCourses;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Course", inversedBy="courseViewer")
+     * @ORM\JoinTable(
+     *  name="CourseViewer",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     *  }
+     * )
+     */
+    private $courseViewers;
+
 
     public function __construct()
     {
@@ -124,6 +138,7 @@ class User implements UserInterface, \Serializable
         $this->professorCourses = new ArrayCollection();
         $this->isActive = true;
         $this->sendEmail = false;
+        $this->courseViewers = new ArrayCollection();
     }
 
     public function __toString() {
@@ -529,4 +544,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getCourseViewers() {
+        return $this->courseViewers;
+    }
 }
