@@ -37,10 +37,10 @@ twig:
               - "<li>Next, <b>check the users and their roles</b> for all tutors and lead tutors for the new term. Make any necessary changes by:</li>"
               - "<ol type=\"a\">"
               - "<li><b>Adding</b> a tutor to the list of users by clicking the \"Add User\" tab or</li>"
-              - "<li><b>Changing roles</b> by:</li>"
+              - "<li><b>Changing roles</b> and <b>course viewing abilities</b> by:</li>"
               - "<ol>"
               - "<li>Clicking on the <span class=\"label radius\">Edit</span> button next to the user's username</li>"
-              - "<li>Editing the roles of the user on the following page, and pressing <span class=\"label radius success\">Save</span><br /><b>Note:</b> For a tutor who is also a lead tutor, they may appear twice in the list of users - once as a tutor, and once as a lead tutor. If a tutor is no longer a lead tutor, or if they are now a lead tutor, you may edit their roles through the process above. If a user is listed as a lead, it is assumed that they can act as a tutor and a lead tutor, so the dual role listing for a lead is not necessary.</li>"
+              - "<li>Editing the roles and viewable courses of the user on the following page, and pressing <span class=\"label radius success\">Save</span><br /><b>Note:</b> For a tutor who is also a lead tutor, they may appear twice in the list of users - once as a tutor, and once as a lead tutor. If a tutor is no longer a lead tutor, or if they are now a lead tutor, you may edit their roles through the process above. If a user is listed as a lead, it is assumed that they can act as a tutor and a lead tutor, so the dual role listing for a lead is not necessary.</li>"
               - "</ol>"
               - "</ol>"
               - "<li>Once all tutors are set up correctly, go on to the next step by pressing the <span class=\"label radius secondary\">Step 3: Review Courses</span> tab located at the top of the page.</p>"
@@ -63,6 +63,7 @@ twig:
             admin_user_edit:
               - <p>To edit the user, make changes and press the <span class="label radius success">Save</span> button. To remove the user, press the <span class="label alert radius">Deactivate</span> button.</p>
               - <p>Deactivating a user will remove them from the current user list. However, this user's past activity will be maintained in all historical data reports.</p>
+              - <p>Professor's are always able to view their own courses. End of session emails and course reports will be available for any additonal viewable course listed.</p>
             #schedule_edit:
             #  - <p>Scheduling new sessions allows you to create multiple sessions at once.</p>
             #  - <p>Using this method, you can schedule a new session starting from the beginning of the semester, or from today if the semester has already started, until the end of the semester.</p>

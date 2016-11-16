@@ -209,13 +209,13 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @Route("/admin/transition/2", name="admin_transition_user_docs")
+     * @Route("/admin/transition/2", name="admin_transition_course_docs")
      * @Template("BethelFrontBundle:Default:transition_docs.html.twig")
      * @return array
      */
-    public function transitionUserDocs() {
+    public function transitionCourseDocs() {
         // Docs are located in app/config/twig.yml
-        $docTitle = "Step 2: Edit Users";
+        $docTitle = "Step 2: Review Courses";
         return array(
             'docTitle' => $docTitle,
             'user' => $this->getUser()
@@ -223,18 +223,19 @@ class DefaultController extends BaseController
     }
 
     /**
-     * @Route("/admin/transition/3", name="admin_transition_course_docs")
+     * @Route("/admin/transition/3", name="admin_transition_user_docs")
      * @Template("BethelFrontBundle:Default:transition_docs.html.twig")
      * @return array
      */
-    public function transitionCourseDocs() {
+    public function transitionUserDocs() {
         // Docs are located in app/config/twig.yml
-        $docTitle = "Step 3: Review Courses";
+        $docTitle = "Step 3: Edit Users";
         return array(
             'docTitle' => $docTitle,
             'user' => $this->getUser()
         );
     }
+
     /**
      * @Route("/admin/transition/4", name="admin_transition_schedule_docs")
      * @Template("BethelFrontBundle:Default:transition_docs.html.twig")

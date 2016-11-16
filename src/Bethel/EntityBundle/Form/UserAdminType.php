@@ -25,7 +25,7 @@ class UserAdminType extends AbstractType
             ))
             ->add('email')
             ->add('courses', 'entity', array(
-                    'label' => 'View Courses',
+                    'label' => 'Viewable Courses',
                     'class' => 'BethelEntityBundle:Course',
                     'multiple' => true,
                     'expanded' => false,
