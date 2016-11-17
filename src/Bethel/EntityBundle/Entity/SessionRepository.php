@@ -167,4 +167,22 @@ class SessionRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @param Semester $semester
+     * @return array
+     */
+    public function getDeletedSessions(Semester $semester) {
+        $em = $this->getEntityManager();
+        $em->getFilters()->enable('softdeleteable');
+        $qb = $this->createQueryBuilder('s')
+            ->orderBy('s.date')
+            ->where('s.deletedAt IS NOT NULL')
+            ->andWhere('s.semester = :semester')
+            ->setParameter('semester', $semester);
+
+        $em->getFilters()->disable('softdeleteable');
+
+        return $qb->getQuery()->getResult();
+    }
 }

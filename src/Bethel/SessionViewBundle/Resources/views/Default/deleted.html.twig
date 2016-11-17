@@ -1,12 +1,37 @@
 {% extends 'BethelSessionViewBundle:Default:base.html.twig' %}
 
+    {% block stylesheets %}
+        {{ parent() }}
+        {% stylesheets
+        '@BethelFrontBundle/Resources/public/lib/chosen/chosen.css' %}
+        <link href="{{ asset_url }}" rel="stylesheet" type="text/css" media="all">
+        {% endstylesheets %}
+        <style type="text/css">
+            .chosen-container-multi .chosen-choices,
+            .chosen-container-multi .chosen-choices input,
+            .chosen-container-multi .chosen-container {
+                min-height:33px !important;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice {
+                height:29px;
+                line-height:20px;
+            }
+            .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+                top:8px;
+            }
+            .chosen-container-single .chosen-search input[type="text"],
+            .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+
+            }
+        </style>
+    {% endblock %}
+
 {% block topnav %}
     {{ parent() }}
 {% endblock %}
 
 
 {% block main %}
-
     {% block semester_switch %}
         <div class="row">
             {{ render(
@@ -18,31 +43,30 @@
         </div>
     {% endblock %}
 
-    {% if closedSessions %}
-        <div class="row">
-            <div class="large-12 columns">
+    <div class="row">
+        <div class="large-12 columns">
 
-                <div class="callout panel">
-                    <p>Past Sessions for {{ selectedSemester }}</p>
-                </div>
+            <div class="callout panel">
+                <p>Deleted sessions for {{ selectedSemester }}</p>
             </div>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="large-12 columns">
-                <table id='closedSessionTable' style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Name</th>
-                            <th class="text-left">Date</th>
-                            <th class="text-left">Time</th>
-                            <th class="text-left">Room</th>
-                            <th class="text-left">Tutors</th>
-                            <th class="text-left"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        {% for session in sessionContainer %}
+    <div class="row">
+        <div class="large-12 columns">
+            <table id='closedSessionTable' style="width:100%">
+                <thead>
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Date</th>
+                    <th class="text-left">Time</th>
+                    <th class="text-left">Room</th>
+                    <th class="text-left">Tutors</th>
+                    <th class="text-left"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for session in sessionContainer %}
                     <tr>
                         <td>{{ session.session }}</td>
                         <td>{{ session.session.date|date("m/d/Y") }}</td>
@@ -65,40 +89,25 @@
                         </td>
                         <td class="text-center">
                             <ul class="button-group radius" style="display: inline-block">
-                                {% if is_granted('ROLE_LEAD_TUTOR') %}
-                                    <li><a href="{{ path('session_edit', {'id': session.session.id}) }}" class="tiny button">Edit</a></li>
-                                {% endif %}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <li><a href="{{ path('session_delete', {'id': session.session.id}) }}" class="tiny button alert">Delete</a></li>
+                                    <li><a href="{{ path('session_restore', {'id': session.session.id}) }}" class="tiny button">Restore</a></li>
                                 {% endif %}
                             </ul>
                         </td>
                     </tr>
-        {% endfor %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
-        </div><!-- //.row -->
-    {% else %}
-        <div class="row">
-            <div class="large-12 columns">
-
-                <div class="callout panel">
-                    <p>No Past Sessions for {{ selectedSemester }}</p>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+    </div><!-- //.row -->
 {% endblock %}
-
 
 {% block javascripts %}
     {{ parent() }}
+
     {% javascripts
     '@BethelFrontBundle/Resources/public/lib/datatables/jquery.dataTables.js'
-    '@BethelSessionViewBundle/Resources/public/js/closedsessionsort.js'
-    '@BethelSessionViewBundle/Resources/public/js/showhidetutors.js'
-    '@BethelSessionViewBundle/Resources/public/js/session_set_active_semester.js' %}
+    '@BethelSessionViewBundle/Resources/public/js/closedsessionsort.js' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

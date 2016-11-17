@@ -19,5 +19,6 @@
         <dd class="{{ app.request.get('_route') == 'session' ? 'active' }}"><a href="{{ path('session') }}">Available Sessions</a></dd>
         <dd class="{{ app.request.get('_route') == 'session_closed' ? 'active' }}"><a href="{{ path('session_closed') }}">Closed Sessions</a></dd>
         <dd class="{{ app.request.get('_route') == 'session_create' ? 'active' }}"><a href="{{ path('session_create') }}">Create a Session</a></dd>
+        <dd class="{{ app.request.get('_route') == 'session_deleted' ? 'active' }}"><a href="{{ path('session_deleted') }}">Restore a Deleted Session</a></dd>
     {% endif %}
 {% endblock %}
