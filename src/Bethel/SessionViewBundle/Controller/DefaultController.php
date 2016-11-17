@@ -1274,4 +1274,75 @@ class DefaultController extends BaseController
             return true;
         }
     }
+
+    /**
+     * @Route("/deleted", name="session_deleted")
+     * @Template("BethelSessionViewBundle:Default:deleted.html.twig")
+     */
+    public function deletedAction() {
+        $em = $this->getEntityManager();
+        $semester = $this->getSessionSemester();
+
+        /** @var $user \Bethel\EntityBundle\Entity\User */
+        $user = $this->getUser();
+        if( $this->userHasRole($user, 'ROLE_ADMIN') ) {
+            /** @var $sessions \Bethel\EntityBundle\Entity\Session */
+            $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
+            $sessions = $sessionRepository->getDeletedSessions($semester);
+
+            $sessionContainer = array();
+            /** @var \Bethel\EntityBundle\Entity\Session $closedSession */
+            foreach($sessions as $closedSession) {
+                $tutorSessions = $closedSession->getTutorSessions();
+                $tutors = array();
+                $leadTutors = array();
+                /** @var \Bethel\EntityBundle\Entity\TutorSession $tutorSession */
+                foreach($tutorSessions as $tutorSession) {
+                    if($tutorSession->getLead()) {
+                        if( $tutorSession->getTutor() )
+                            $leadTutors[] = $tutorSession->getTutor()->__toString();
+                    } else {
+                        if( $tutorSession->getTutor() )
+                            $tutors[] = $tutorSession->getTutor()->__toString();
+                    }
+                }
+                $sessionContainer[] = array(
+                    'tutors' => $tutors,
+                    'leadTutors' => $leadTutors,
+                    'session' => $closedSession
+                );
+            }
+
+            $returnValue = $this->render('BethelSessionViewBundle:Default:deleted.html.twig', array(
+                'user' => $this->getUser(),
+                'sessionContainer' => $sessionContainer,
+                'selectedSemester' => $semester
+            ));
+
+            return $returnValue;
+        }
+
+        return $this->redirect($this->generateUrl('session'));
+    }
+
+    /**
+     * @Route("/restore/{id}", name="session_restore", defaults={"id" = null})
+     */
+    public function restoreAction($id) {
+        $em = $this->getEntityManager();
+
+        $em->getFilters()->disable('softdeleteable');
+        $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
+
+        /** @var $session \Bethel\EntityBundle\Entity\Session */
+        $session = $sessionRepository->find(array('id' => $id));
+
+        $session->setDeletedAt(null);
+        $em->persist($session);
+        $em->flush();
+
+        $em->getFilters()->enable('softdeleteable');
+
+        return $this->redirect($this->generateUrl('session'));
+    }
 }
