@@ -70,7 +70,13 @@
                     <tr>
                         <td>{{ session.session }}</td>
                         <td>{{ session.session.date|date("m/d/Y") }}</td>
-                        <td>{{ session.session.startTime|date("g:ia") }} - {{ session.session.endTime|date("g:ia") }}</td>
+                        <td>
+                            {% if "now"|date("g:ia") == session.session.startTime|date("g:ia") and "now"|date("g:ia") == session.session.endTime|date("g:ia") %}
+                                ???
+                            {% else %}
+                                {{ session.session.startTime|date("g:ia") }} - {{ session.session.endTime|date("g:ia") }}
+                            {% endif %}
+                        </td>
                         <td>{{ session.session.room }}</td>
                         <td>
                             {% if session.leadTutors|length > 0 or session.tutors|length > 0 %}
