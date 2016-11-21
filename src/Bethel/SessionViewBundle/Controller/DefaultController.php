@@ -112,15 +112,19 @@ class DefaultController extends BaseController
     /**
      * @Route("/edit/{id}", name="session_edit", defaults={"id" = null})
      * @Route("/create", name="session_create", defaults={"id" = null})
-     * @ParamConverter("session", class="BethelEntityBundle:Session")
      * @Template("BethelSessionViewBundle:Default:edit.html.twig")
      * @param Request $request
      * @param null $session
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction(Request $request, $session = null) {
+    public function editAction($id, Request $request) {
         $em = $this->getEntityManager();
         $em->getFilters()->disable('softdeleteable');
+        $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
+
+        /** @var $session \Bethel\EntityBundle\Entity\Session */
+        $session = $sessionRepository->find(array('id' => $id));
+
         if(!$session) {
             $actionString = 'created';
             $session = new Session();
@@ -691,13 +695,15 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/view/{id}", name="session_view")
-     * @ParamConverter("session", class="BethelEntityBundle:Session")
      * @Template("BethelSessionViewBundle:Default:view.html.twig")
+     * @ParamConverter("session", class="BethelEntityBundle:Session")
      * @param Session $session
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function viewAction(Session $session, Request $request) {
+        $em = $this->getEntityManager();
+
         $studentSessions = new \ArrayObject($session->getStudentSessions());
         $iterator = $studentSessions->getIterator();
         // Sort alphabetically by last name

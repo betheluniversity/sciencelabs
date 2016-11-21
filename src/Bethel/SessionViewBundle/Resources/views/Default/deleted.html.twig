@@ -90,6 +90,7 @@
                         <td class="text-center">
                             <ul class="button-group radius" style="display: inline-block">
                                 {% if is_granted('ROLE_ADMIN') %}
+                                    <li><a href="{{ path('session_edit', {'id': session.session.id}) }}" class="tiny button">View/Edit Session</a></li>
                                     <li><a href="{{ path('session_restore', {'id': session.session.id}) }}" class="tiny button">Restore</a></li>
                                 {% endif %}
                             </ul>
