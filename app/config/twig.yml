@@ -108,7 +108,7 @@ twig:
               - <p>To delete all future instances of a schedule, click the <span class="label alert radius">Delete</span> button (past occurrences of the schedule will remain in the reports section).</p>
             schedule_edit:
               - <p>Edit schedule information in the given fields to reflect changes in the current schedule.</p>
-              - <p>To edit tutor information, click in the tutor box until a cursor appears.  To add a tutor, select a name from the list that appears, or start typing a tutor name to find it quickly, and then select the tutor.  If tutors need to be deleted, all tutors in the list, from the end of the list back to the tutor name, must be deleted.  Backspace over tutor names to delete, and then re-enter the correct tutors.</p>
+              - <p>To edit tutor information, click in the tutor box until a cursor appears.  To add a tutor, select a name from the list that appears, or start typing a tutor name to find it quickly, and then select the tutor.  If tutors need to be deleted, click on the "X" next to the tutor name.</p>
               - <p>For more information regarding schedules and sessions, see the documentation on the <span class="label secondary radius">Create New Schedule</span> tab.</p>
             schedule_create:
               - <p>To create a new schedule for the listed term, enter the schedule information in the given fields.</p>

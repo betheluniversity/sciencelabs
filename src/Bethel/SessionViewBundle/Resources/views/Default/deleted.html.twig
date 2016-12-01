@@ -59,6 +59,7 @@
                 <tr>
                     <th class="text-left">Name</th>
                     <th class="text-left">Date</th>
+                    <th class="text-left">Date Deleted</th>
                     <th class="text-left">Time</th>
                     <th class="text-left">Room</th>
                     <th class="text-left">Tutors</th>
@@ -68,8 +69,9 @@
                 <tbody>
                 {% for session in sessionContainer %}
                     <tr>
-                        <td>{{ session.session }}</td>
+                        <td>{{ session.session.name }}</td>
                         <td>{{ session.session.date|date("m/d/Y") }}</td>
+                        <td>{{ session.session.deletedAt|date("m/d/Y") }}</td>
                         <td>
                             {% if "now"|date("g:ia") == session.session.startTime|date("g:ia") and "now"|date("g:ia") == session.session.endTime|date("g:ia") %}
                                 ???

@@ -13,7 +13,7 @@
         <dd class="{{ app.request.get('_route') in ['report_session', 'report_single_session'] ? 'active' }}"><a href="{{ path('report_session') }}">Session</a></dd>
         <dd class="{{ app.request.get('_route') in ['report_course', 'report_single_course'] ? 'active' }}"><a href="{{ path('report_course') }}">Course</a></dd>
     {% endif %}
-    {% if is_granted('ROLE_PROFESSOR') %}
+    {% if is_granted('ROLE_PROFESSOR') and not is_granted('ROLE_ADMIN') %}
         <dd class="{{ app.request.get('_route') in ['report_student', 'report_single_student'] ? 'active' }}"><a href="{{ path('report_student') }}">Student</a></dd>
         <dd class="{{ app.request.get('_route') in ['report_course', 'report_single_course'] ? 'active' }}"><a href="{{ path('report_course') }}">Course</a></dd>
     {% endif %}
