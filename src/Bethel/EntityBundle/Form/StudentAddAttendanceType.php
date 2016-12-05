@@ -24,7 +24,6 @@ class StudentAddAttendanceType extends AbstractType
             ->add('student', 'entity', array(
                     'label' => 'Registered Students',
                     'class' => 'BethelEntityBundle:User',
-                    'style' => 'height:400px',
                     'multiple' => false,
                     'expanded' => false,
                     'required' => true,
@@ -37,7 +36,7 @@ class StudentAddAttendanceType extends AbstractType
                         );
                     },
                     'mapped' => true,
-                    'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose student ...')
+                    'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose student ...', 'style' => 'height:400px')
                 )
             )
             ->add('save','submit', array(
