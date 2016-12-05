@@ -96,6 +96,12 @@ class DefaultController extends BaseController
 
         // get courses they teach
         $profCourses = $editUser->getProfessorCourses();
+        $actualProfCourses = array();
+        $currentSemester = $this->getActiveSemester();
+        foreach( $profCourses as $course ) {
+            if( $course->getSemester() == $currentSemester )
+                array_push($actualProfCourses, $course);
+        }
 
         $form->get('courses')->setData($courseData);
 
@@ -127,7 +133,7 @@ class DefaultController extends BaseController
             'user' => $this->getUser(),
             'editUser' => $editUser,
             'form' => $form,
-            'profCourses' => $profCourses
+            'profCourses' => $actualProfCourses
         );
     }
 
