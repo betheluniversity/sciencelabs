@@ -52,8 +52,8 @@ class SessionClose {
 
                     $reportCourses = array();
                     $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
-                    foreach ($sessionCourses as $course) {
-                        if ($course->getProfessors()->contains($emailRecipient))
+                    foreach( $sessionCourses as $course){
+                        if( $course->getProfessors()->contains($emailRecipient) || in_array($course, $emailRecipient->getCourseViewersAsArray()))
                             array_push($reportCourses, $course);
                     }
 

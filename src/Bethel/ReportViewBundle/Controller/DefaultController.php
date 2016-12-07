@@ -44,7 +44,7 @@ class DefaultController extends BaseController
         $reportCourses = array();
         $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
         foreach( $sessionCourses as $course){
-            if( $course->getProfessors()->contains($user) || in_array($course, $emailRecipient->getCourseViewersAsArray()))
+            if( $course->getProfessors()->contains($user) || in_array($course, $user->getCourseViewersAsArray()))
                 array_push($reportCourses, $course);
         }
 
