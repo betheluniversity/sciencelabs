@@ -875,6 +875,7 @@ class DefaultController extends BaseController
         foreach( $session->getStudentSessions() as $studentSession){
             $courses = $studentSession->getCourses();
             foreach( $courses as $course){
+                // if not a prof OR course is profs OR prof is courseviewer
                 if( !$profView || $course->getProfessors()->contains($this->getUser()) || $course->isUserACourseViewer($this->getUser()) ) {
                     if( is_null($sessionsByCourse[strval($course->getCourseCode())]) )
                         $sessionsByCourse[strval($course->getCourseCode())] = array();

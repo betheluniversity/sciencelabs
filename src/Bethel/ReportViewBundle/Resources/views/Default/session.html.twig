@@ -148,7 +148,7 @@
                         {% set showStudent = false %}
                         {% for course in instance.courses %}
                             {% for prof in course.professors %}
-                                {% if prof == user %}
+                                {% if prof == user or course in coursesUserIsCourseViewer %}
                                     {% set showStudent = true %}
                                 {% endif %}
                             {% endfor %}
