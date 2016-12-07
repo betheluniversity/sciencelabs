@@ -44,7 +44,7 @@ class DefaultController extends BaseController
         $reportCourses = array();
         $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
         foreach( $sessionCourses as $course){
-            if( $course->getProfessors()->contains($user) || $course->isUserACourseViewer($this->getUser()))
+            if( $course->getProfessors()->contains($user) || in_array($course, $emailRecipient->getCourseViewersAsArray()))
                 array_push($reportCourses, $course);
         }
 
@@ -77,7 +77,7 @@ class DefaultController extends BaseController
             $reportCourses = array();
             $sessionCourses = $courseRepository->getAttendedSessionCourses($session);
             foreach( $sessionCourses as $course){
-                if( $course->getProfessors()->contains($emailRecipient) || $course->isUserACourseViewer($this->getUser()))
+                if( $course->getProfessors()->contains($emailRecipient) || in_array($course, $emailRecipient->getCourseViewersAsArray()))
                     array_push($reportCourses, $course);
             }
 
@@ -89,7 +89,6 @@ class DefaultController extends BaseController
                 $message = $sessionEmailer->sendEmail(false, false);
             }
         }
-
         return new Response("<html><body>" . $message['message'] . "</body></html>", 200);
     }
 

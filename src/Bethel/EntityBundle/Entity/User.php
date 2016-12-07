@@ -548,6 +548,13 @@ class User implements UserInterface, \Serializable
         return $this->courseViewers;
     }
 
+    public function getCourseViewersAsArray() {
+        $courseViewers = array();
+        foreach( $this->courseViewers as $course)
+            array_push($courseViewers, $course);
+        return $courseViewers;
+    }
+
     public function removeAllCourseViewers() {
         return $this->courseViewers->clear();
     }
