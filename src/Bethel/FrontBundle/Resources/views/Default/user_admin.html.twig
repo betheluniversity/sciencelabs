@@ -41,15 +41,6 @@
                 </div>
             </div>
 
-
-            <div class="row">
-                <div class="large-12 columns">
-                    {{ form_label(form.courses) }}
-                    {{ form_errors(form.courses) }}
-                    {{ form_widget(form.courses) }}
-                </div>
-            </div>
-
             {% if editUser != user %}
                 <div class="row">
                     <div class="large-12 columns">
@@ -59,6 +50,32 @@
                     </div>
                 </div>
             {% endif %}
+
+
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <label>User's Courses for Current Term</label>
+                    {% if profCourses|length > 0 %}
+                    <ul>
+                        {% for course in profCourses %}
+                            <li>{{ course }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                        <p>This user is not a professor of any of this lab's courses.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_label(form.courses) }}
+                    {{ form_errors(form.courses) }}
+                    {{ form_widget(form.courses) }}
+                </div>
+            </div>
 
             <div>
                 <a href="{{ path('admin_user_deactivate', { 'id': editUser.id }) }}" class="button radius alert">Deactivate</a>
@@ -74,13 +91,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
     <script>
-        // disable and update the text of the course viewers
+        // this is a hack, instead of using the sql. Remove the nodes that contain a prof's courses.
         $( document ).ready(function() {
-            $('#bethel_entitybundle_user_courses > option').each(function() {
+            $('#bethel_entitybundle_user_courses > div > label').each(function() {
                 {% for course in profCourses %}
                 if( "{{ course }}" == $(this).text()) {
-                    $(this).attr('disabled', 'disabled');
-                    $(this).text($(this).text() + " - {{ editUser }}'s course");
+                    $(this).parent().remove();
                 }
                 {% endfor %}
             });

@@ -23,22 +23,8 @@ class UserAdminType extends AbstractType
                 'attr' => array('readonly' => 'readonly'),
                 'disabled' => true
             ))
-            ->add('email')
-            ->add('courses', 'entity', array(
-                    'label' => 'Viewable Courses',
-                    'class' => 'BethelEntityBundle:Course',
-                    'multiple' => true,
-                    'expanded' => false,
-                    'query_builder' => function($repository) {
-                        return $repository->createQueryBuilder('c')
-                            ->leftJoin('c.semester', 's')
-                            ->where('s.active = 1');
-                    },
-                    'mapped' => false,
-                    'required' => false,
-                    'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose new user ...','style'=>'height:200px')
-                )
-            );
+            ->add('email');
+
             if ( $this->show_roles ) {
                 $builder
                     ->add('roles', 'entity', array(
@@ -54,9 +40,24 @@ class UserAdminType extends AbstractType
                         'multiple' => true
                     ));
             }
-            $builder->add('save','submit', array(
-                'attr' => array('class'=>'button success radius right')
+        $builder
+            ->add('courses', 'entity', array(
+                'label' => 'Additional Viewable Courses for the Current Term',
+                'class' => 'BethelEntityBundle:Course',
+                'multiple' => true,
+                'expanded' => true,
+                'query_builder' => function($repository) {
+                    return $repository->createQueryBuilder('c')
+                        ->leftJoin('c.semester', 's')
+                        ->where('s.active = 1');
+                },
+                'mapped' => false,
+                'required' => false,
+//                'attr' => array('class'=>'chosen-select','data-placeholder'=>'Choose new user ...','style'=>'height:200px')
             ))
+            ->add('save','submit', array(
+                    'attr' => array('class'=>'button success radius right')
+                ))
         ;
     }
 

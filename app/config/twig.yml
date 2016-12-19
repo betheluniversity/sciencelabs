@@ -63,6 +63,7 @@ twig:
             admin_user_edit:
               - <p>To edit the user, make changes and press the <span class="label radius success">Save</span> button. To remove the user, press the <span class="label alert radius">Deactivate</span> button.</p>
               - <p>Deactivating a user will remove them from the current user list. However, this user's past activity will be maintained in all historical data reports.</p>
+              - <p>You may only edit roles if you are an Administrator. You may not edit your own roles.</p>
               - <p>Professor's are always able to view their own courses.  Administrators can add viewing capability for a user for any course (this is added by selecting a course not currently viewable for a user and then choosing "Save").</p>
               - <p>Users receive end of session emails and can view course reports related to all listed viewable course for the user.<p>
             #schedule_edit:
