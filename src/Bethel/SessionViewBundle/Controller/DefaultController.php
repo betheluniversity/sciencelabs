@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -122,9 +123,12 @@ class DefaultController extends BaseController
         $em->getFilters()->disable('softdeleteable');
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
 
-        /** @var $session \Bethel\EntityBundle\Entity\Session */
-        $session = $sessionRepository->find(array('id' => $id));
-
+        if( $id) {
+            /** @var $session \Bethel\EntityBundle\Entity\Session */
+            $session = $sessionRepository->find(array('id' => $id));
+        } else {
+            $session = null;
+        }
         if(!$session) {
             $actionString = 'created';
             $session = new Session();
