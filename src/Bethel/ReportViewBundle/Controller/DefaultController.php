@@ -675,6 +675,63 @@ class DefaultController extends BaseController
             $yearData['2004']['monthly'][1] = 28;
             $yearData['2004']['fallTotal'] = 1226;
             $yearData['2004']['yearTotal'] = $yearData['2004']['yearTotal'] + 1226 + 28;
+        } elseif( $this->container->getParameter('app.title') == "Computer Science Lab" ) {
+            $yearData['2001'] = array(
+                'academicYear' => '2000-2001',
+                'monthly' => array(0, 53, 13, 40, 12, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 118,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 118
+            );
+            $yearData['2002'] = array(
+                'academicYear' => '2001-2002',
+                'monthly' => array(0, 6, 9, 49, 20, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 84,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 84
+            );
+            $yearData['2003'] = array(
+                'academicYear' => '2002-2003',
+                'monthly' => array(0, 12, 16, 33, 4, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 65,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 65
+            );
+            $yearData['2004'] = array(
+                'academicYear' => '2003-2004',
+                'monthly' => array(0, 22, 29, 43, 16, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 110,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 110
+            );
+            $yearData['2005'] = array(
+                'academicYear' => '2004-2005',
+                'monthly' => array(0, 25, 36, 46, 26, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 133,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 133
+            );
+            $yearData['2006'] = array(
+                'academicYear' => '2005-2006',
+                'monthly' => array(0, 22, 43, 49, 69, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 182,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 182
+            );
+            $yearData['2007'] = array(
+                'academicYear' => '2006-2007',
+                'monthly' => array(0, 17, 40, 48, 28, 0, 0, 0, 0, 0, 0, 0, 0),
+                'springTotal' => 133,
+                'fallTotal' => 0,
+                'summerTotal' => 0,
+                'yearTotal' => 133
+            );
         }
         ///////////////////////////////////////////////////////////////
 
