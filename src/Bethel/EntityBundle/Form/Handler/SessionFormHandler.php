@@ -63,7 +63,8 @@ class SessionFormHandler {
         /** @var \Doctrine\Common\Collections\ArrayCollection $courseCodes */
         $courseCodes = $form->get('coursecodes')->getData();
 
-        if(count($leadTutors) < 1) {
+        // only check for lead tutors if the session has not happened
+        if(count($leadTutors) < 1 && $session->getDate()->getTimestamp() > time() ) {
             return array(
                 'success' => false,
                 'message' => 'You must select a lead tutor',

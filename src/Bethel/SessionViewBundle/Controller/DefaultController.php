@@ -217,6 +217,7 @@ class DefaultController extends BaseController
                     'user' => $this->getUser(),
                     'form' => $result['form'],
                     'studentSessions' => $studentSessions,
+                    'sessionsByCourse'    => $sessionsByCourse,
                     'tutorSessions' => $tutorSessions,
                     'session' => $session,
                     'message' => $message,
