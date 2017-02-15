@@ -58,7 +58,7 @@
             <tr>
                 <td>{{ year.academicYear }}</td>
                 {# Hard coded nastiness. Remove links from old months #}
-                {% if (config_title == 'Math Lab' and key <= 2004) or (config_title == 'Computer Science Lab' and key <= 2006) %}
+                {% if (config_title == 'Math Lab' and key <= 2004) or (config_title == 'Computer Science Lab' and key <= 2007) %}
                     <td>{{ year.monthly[8] }}</td>
                     <td>{{ year.monthly[9] }}</td>
                     <td>{{ year.monthly[10] }}</td>
