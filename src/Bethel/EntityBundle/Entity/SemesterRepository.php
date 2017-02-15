@@ -45,4 +45,22 @@ class SemesterRepository extends EntityRepository {
         throw new NoResultException();
     }
 
+    /**
+     * Queries for a semester based on date
+     *
+     * @param \DateTime $date
+     * @return Semester
+     * @throws NoResultException
+     */
+    public function getSemesterByMonthAndYear($year, $month) {
+        // Todo: This method should be merged with the method above
+        $date = \DateTime::createFromFormat('n/Y', "$month/$year");
+
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.startDate <= :date')
+            ->andWhere('s.endDate >= :date')
+            ->setParameter('date', $date);
+
+        return $qb->getQuery()->getSingleResult();
+    }
 }

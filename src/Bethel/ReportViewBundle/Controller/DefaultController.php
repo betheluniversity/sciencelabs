@@ -229,9 +229,9 @@ class DefaultController extends BaseController
         $em = $this->getEntityManager();
         // by default, we'll show the current month
         $date = new \DateTime("now");
-        $sessionSemester = $this->getSessionSemester();
 
         if(!$year || !$month) {
+            $sessionSemester = $this->getSessionSemester();
             $year = $sessionSemester->getYear();
             $month = $sessionSemester->getStartDate();
             $month = date_format($month, "n");
@@ -241,7 +241,13 @@ class DefaultController extends BaseController
                 'year' => $year,
                 'month' => $month
             )));
+        } else {
+            $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
+            $set_semester = $semesterRepository->getSemesterByMonthAndYear($year, $month);
+            $this->setSessionSemester($set_semester);
+            $sessionSemester = $this->getSessionSemester();
         }
+
 
         $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
         $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
@@ -718,7 +724,7 @@ class DefaultController extends BaseController
             );
             $yearData['2006'] = array(
                 'academicYear' => '2005-2006',
-                'monthly' => array(0, 22, 43, 49, 69, 0, 0, 0, 0, 0, 0, 0, 0),
+                'monthly' => array(0, 22, 43, 49, 68, 0, 0, 0, 0, 0, 0, 0, 0),
                 'springTotal' => 182,
                 'fallTotal' => 0,
                 'summerTotal' => 0,
