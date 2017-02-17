@@ -249,63 +249,72 @@ class DefaultController extends BaseController
         }
 
 
-        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
-        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
-        $date->setDate($year,$month,1);
+        $firstDate = $sessionSemester->getStartDate()->format('m/d/Y');
+        $firstDateSplit = explode('/', $firstDate);
+        $firstDay = clone $date;
+        $firstDay->setDate($firstDateSplit[2],$firstDateSplit[0],$firstDateSplit[1]);
+        $firstDay->setTime(0,0,0);
+
+        $lastDate = $sessionSemester->getEndDate()->format('m/d/Y');
+        $lastDateSplit = explode('/', $lastDate);
+        $lastDay = clone $date;
+        $lastDay->setDate($lastDateSplit[2],$lastDateSplit[0],$lastDateSplit[1]);
+        $lastDay->setTime(0,0,0);
 
         // Checking to see if the month we're navigating to is within
         // session semester range. If not we'll redirect to the first
         // month of the current session semester.
-        if(
-            $year != $sessionSemester->getYear() ||
-            $semesterStartMonth > $month ||
-            $semesterEndMonth < $month
-        ) {
-            $referer = $request->headers->get('referer');
-            $referer = explode('/', $referer);
-            $referer = array_slice($referer, -1);
-            $referer = $referer[0];
-            if($referer != 'annual') {
-                return $this->redirect($this->generateUrl('report_month', array(
-                    'year' => $sessionSemester->getYear(),
-                    'month' => $semesterStartMonth
-                )));
-            } else {
-                // We need to change the session semester to reflect the date
-                $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
-                $queryDate = \DateTime::createFromFormat('n/j/Y', $month . '/1/' . $year);
-                try {
-                    $semester = $semesterRepository->getSemesterByMonth($queryDate);
-                } catch(NoResultException $e) {
-                    $this->get('session')->getFlashBag()->add(
-                        'warning',
-                        'There is no session data in the system for the month of ' . $queryDate->format('F Y')
-                    );
-                    return $this->redirect($this->generateUrl('report_annual'));
-                }
-
-                $this->setSessionSemester($semester);
-                $semesterStartMonth = (int) $semester->getStartDate()->format('n');
-                $semesterEndMonth = (int) $semester->getEndDate()->format('n');
-            }
-
-        }
+//        if(
+//            $year != $sessionSemester->getYear() ||
+//            $semesterStartMonth > $month ||
+//            $semesterEndMonth < $month
+//        ) {
+//            $referer = $request->headers->get('referer');
+//            $referer = explode('/', $referer);
+//            $referer = array_slice($referer, -1);
+//            $referer = $referer[0];
+//            if($referer != 'annual') {
+//                return $this->redirect($this->generateUrl('report_month', array(
+//                    'year' => $sessionSemester->getYear(),
+//                    'month' => $semesterStartMonth
+//                )));
+//            } else {
+//                // We need to change the session semester to reflect the date
+//                $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
+//                $queryDate = \DateTime::createFromFormat('n/j/Y', $month . '/1/' . $year);
+//                try {
+//                    $semester = $semesterRepository->getSemesterByMonth($queryDate);
+//                } catch(NoResultException $e) {
+//                    $this->get('session')->getFlashBag()->add(
+//                        'warning',
+//                        'There is no session data in the system for the month of ' . $queryDate->format('F Y')
+//                    );
+//                    return $this->redirect($this->generateUrl('report_annual'));
+//                }
+//
+//                $this->setSessionSemester($semester);
+//            }
+//
+//        }
 
         $semesterMonths = array();
+
+        $semesterStartMonth = (int) $sessionSemester->getStartDate()->format('n');
+        $semesterEndMonth = (int) $sessionSemester->getEndDate()->format('n');
 
         do {
             $semesterMonths[] = $semesterStartMonth;
             $semesterStartMonth++;
         } while ($semesterStartMonth <= $semesterEndMonth);
 
-        $firstDay = clone $date;
-        $firstDay->modify("first day of this month");
-
-        $firstDay->setTime(0,0,0);
-
-        $lastDay = clone $firstDay;
-        $lastDay
-            ->modify("last day of this month");
+//        $firstDay = clone $date;
+//        $firstDay->modify("first day of this month");
+//
+//        $firstDay->setTime(0,0,0);
+//
+//        $lastDay = clone $firstDay;
+//        $lastDay
+//            ->modify("last day of this month");
 
         /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
@@ -348,7 +357,7 @@ class DefaultController extends BaseController
             'semesterMonths' => $semesterMonths,
             'scheduleData' => $scheduleData,
             'otherMonthSessionsTotal' => $otherMonthSessionsTotal,
-            'realTotalArray' => $realTotalArray,
+            'realTotalArray' => $realTotalArray
             );
 
         // have a different return for csv
