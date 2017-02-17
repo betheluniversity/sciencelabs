@@ -236,7 +236,6 @@ class DefaultController extends BaseController
             $month = $sessionSemester->getStartDate();
             $month = date_format($month, "n");
 
-
             return $this->redirect($this->generateUrl('report_month', array(
                 'year' => $year,
                 'month' => $month
@@ -248,54 +247,17 @@ class DefaultController extends BaseController
             $sessionSemester = $this->getSessionSemester();
         }
 
-
-        $firstDate = $sessionSemester->getStartDate()->format('m/d/Y');
+        $firstDate = $sessionSemester->getStartDate()->format('Y/m/d');
         $firstDateSplit = explode('/', $firstDate);
         $firstDay = clone $date;
-        $firstDay->setDate($firstDateSplit[2],$firstDateSplit[0],$firstDateSplit[1]);
+        $firstDay->setDate($firstDateSplit[0],$firstDateSplit[1],$firstDateSplit[2]);
         $firstDay->setTime(0,0,0);
 
-        $lastDate = $sessionSemester->getEndDate()->format('m/d/Y');
+        $lastDate = $sessionSemester->getEndDate()->format('Y/m/d');
         $lastDateSplit = explode('/', $lastDate);
         $lastDay = clone $date;
-        $lastDay->setDate($lastDateSplit[2],$lastDateSplit[0],$lastDateSplit[1]);
+        $lastDay->setDate($lastDateSplit[0],$lastDateSplit[1],$lastDateSplit[2]);
         $lastDay->setTime(0,0,0);
-
-        // Checking to see if the month we're navigating to is within
-        // session semester range. If not we'll redirect to the first
-        // month of the current session semester.
-//        if(
-//            $year != $sessionSemester->getYear() ||
-//            $semesterStartMonth > $month ||
-//            $semesterEndMonth < $month
-//        ) {
-//            $referer = $request->headers->get('referer');
-//            $referer = explode('/', $referer);
-//            $referer = array_slice($referer, -1);
-//            $referer = $referer[0];
-//            if($referer != 'annual') {
-//                return $this->redirect($this->generateUrl('report_month', array(
-//                    'year' => $sessionSemester->getYear(),
-//                    'month' => $semesterStartMonth
-//                )));
-//            } else {
-//                // We need to change the session semester to reflect the date
-//                $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
-//                $queryDate = \DateTime::createFromFormat('n/j/Y', $month . '/1/' . $year);
-//                try {
-//                    $semester = $semesterRepository->getSemesterByMonth($queryDate);
-//                } catch(NoResultException $e) {
-//                    $this->get('session')->getFlashBag()->add(
-//                        'warning',
-//                        'There is no session data in the system for the month of ' . $queryDate->format('F Y')
-//                    );
-//                    return $this->redirect($this->generateUrl('report_annual'));
-//                }
-//
-//                $this->setSessionSemester($semester);
-//            }
-//
-//        }
 
         $semesterMonths = array();
 
@@ -307,15 +269,6 @@ class DefaultController extends BaseController
             $semesterStartMonth++;
         } while ($semesterStartMonth <= $semesterEndMonth);
 
-//        $firstDay = clone $date;
-//        $firstDay->modify("first day of this month");
-//
-//        $firstDay->setTime(0,0,0);
-//
-//        $lastDay = clone $firstDay;
-//        $lastDay
-//            ->modify("last day of this month");
-
         /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
         $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
@@ -325,8 +278,11 @@ class DefaultController extends BaseController
         $totalAttendance = 0;
         $realTotalArray = array();
         /** @var \Bethel\EntityBundle\Entity|Session $monthSession */
+
         foreach($monthSessions as $monthSession) {
+            $em->getFilters()->disable('softdeleteable');
             $schedule = $monthSession->getSchedule();
+            $em->getFilters()->enable('softdeleteable');
             if($schedule) {
                 if(!array_key_exists($schedule->__toString(), $scheduleData)) {
                     $scheduleData[$schedule->__toString()] = array(
@@ -344,7 +300,6 @@ class DefaultController extends BaseController
                 $totalAttendance += $sessionRepository->getSessionAttendeeTotal($monthSession);
             }
             $realTotalArray[$monthSession->getId()] = $sessionRepository->getSessionAttendeeTotal($monthSession);
-            
         }
 
         $arrayContents = array(
