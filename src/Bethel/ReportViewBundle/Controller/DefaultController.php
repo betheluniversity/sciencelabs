@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Bethel\FrontBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -247,23 +248,19 @@ class DefaultController extends BaseController
             $sessionSemester = $this->getSessionSemester();
         }
 
-        $firstDate = $sessionSemester->getStartDate()->format('Y/m/d');
-        $firstDateSplit = explode('/', $firstDate);
+        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
+        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
+        $date->setDate($year,$month,1);
+
         $firstDay = clone $date;
-        $firstDay->setDate($firstDateSplit[0],$firstDateSplit[1],$firstDateSplit[2]);
+        $firstDay->modify("first day of this month");
         $firstDay->setTime(0,0,0);
 
-        $lastDate = $sessionSemester->getEndDate()->format('Y/m/d');
-        $lastDateSplit = explode('/', $lastDate);
-        $lastDay = clone $date;
-        $lastDay->setDate($lastDateSplit[0],$lastDateSplit[1],$lastDateSplit[2]);
-        $lastDay->setTime(0,0,0);
+        $lastDay = clone $firstDay;
+        $lastDay
+            ->modify("last day of this month");
 
         $semesterMonths = array();
-
-        $semesterStartMonth = (int) $sessionSemester->getStartDate()->format('n');
-        $semesterEndMonth = (int) $sessionSemester->getEndDate()->format('n');
-
         do {
             $semesterMonths[] = $semesterStartMonth;
             $semesterStartMonth++;
@@ -277,14 +274,13 @@ class DefaultController extends BaseController
         $otherMonthSessionsTotal = 0;
         $totalAttendance = 0;
         $realTotalArray = array();
-        /** @var \Bethel\EntityBundle\Entity|Session $monthSession */
 
+        $em->getFilters()->disable('softdeleteable');
+        /** @var \Bethel\EntityBundle\Entity|Session $monthSession */
         foreach($monthSessions as $monthSession) {
-            $em->getFilters()->disable('softdeleteable');
             $schedule = $monthSession->getSchedule();
-            $em->getFilters()->enable('softdeleteable');
-            if($schedule) {
-                if(!array_key_exists($schedule->__toString(), $scheduleData)) {
+            if ($schedule) {
+                if (!array_key_exists($schedule->__toString(), $scheduleData)) {
                     $scheduleData[$schedule->__toString()] = array(
                         'attendance' => 0,
                         'dow' => $monthSession->getDate()->format('D'),
@@ -301,6 +297,7 @@ class DefaultController extends BaseController
             }
             $realTotalArray[$monthSession->getId()] = $sessionRepository->getSessionAttendeeTotal($monthSession);
         }
+        $em->getFilters()->enable('softdeleteable');
 
         $arrayContents = array(
             'user' => $this->getUser(),
