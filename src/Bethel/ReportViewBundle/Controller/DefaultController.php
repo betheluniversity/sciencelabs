@@ -227,10 +227,6 @@ class DefaultController extends BaseController
      * @internal param null $overrideSessionSemester
      */
     public function monthAction($year = null, $month = null, Request $request, $csv = false) {
-        $em = $this->getEntityManager();
-        // by default, we'll show the current month
-        $date = new \DateTime("now");
-
         if(!$year || !$month) {
             $sessionSemester = $this->getSessionSemester();
             $year = $sessionSemester->getYear();
@@ -241,15 +237,11 @@ class DefaultController extends BaseController
                 'year' => $year,
                 'month' => $month
             )));
-        } else {
-            $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
-            $set_semester = $semesterRepository->getSemesterByMonthAndYear($year, $month);
-            $this->setSessionSemester($set_semester);
-            $sessionSemester = $this->getSessionSemester();
         }
 
-        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
-        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
+        $em = $this->getEntityManager();
+        // by default, we'll show the current month
+        $date = new \DateTime("now");
         $date->setDate($year,$month,1);
 
         $firstDay = clone $date;
@@ -257,8 +249,17 @@ class DefaultController extends BaseController
         $firstDay->setTime(0,0,0);
 
         $lastDay = clone $firstDay;
-        $lastDay
-            ->modify("last day of this month");
+        $lastDay->modify("last day of this month");
+
+        /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
+        $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
+        $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
+
+        $sessionSemester = $monthSessions[0]->getSemester();
+        $this->setSessionSemester($sessionSemester);
+
+        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
+        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
 
         $semesterMonths = array();
         do {
@@ -266,9 +267,7 @@ class DefaultController extends BaseController
             $semesterStartMonth++;
         } while ($semesterStartMonth <= $semesterEndMonth);
 
-        /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
-        $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
-        $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
+
 
         $scheduleData = array();
         $otherMonthSessionsTotal = 0;

@@ -6,10 +6,16 @@
 
 {% block main %}
     {% macro createAnchorLink(key, year, month) %}
+        {% if month < 8 %}
+            {% set actual_year = key %}
+        {% else %}
+            {% set actual_year = key - 1 %}
+        {% endif %}
+
         {% if year[month] == '0' %}
             0
         {% else %}
-            <a href="{{ path('report_month', { "year": key - 1, "month": month }) }}">{{ year[month] }}</a>
+            <a href="{{ path('report_month', { "year": actual_year, "month": month }) }}">{{ year[month] }}</a>
         {% endif %}
     {% endmacro %}
 
