@@ -55,9 +55,9 @@ class DefaultController extends BaseController
             $user = $this->getUser();
         }
 
-        // gather all semesters, if they exist
+        // if there is no active semester, redirect the homepage to the create a new term screen
         $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
-        $semesterRepository->findAll();
+        $semesterRepository->findBy(array('active' => 1));
         if( sizeof($semesterRepository) == 0 )
             return $this->redirect($this->generateUrl('admin_transition'));
 
