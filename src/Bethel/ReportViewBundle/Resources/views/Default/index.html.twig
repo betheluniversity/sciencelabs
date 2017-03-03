@@ -96,6 +96,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     {% javascripts
     '../vendor/zurb/foundation/js/foundation/foundation.js'
