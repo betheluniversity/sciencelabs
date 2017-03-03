@@ -86,8 +86,7 @@ security:
         - { path: ^/report/session/+, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
         - { path: ^/report/course, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
         - { path: ^/report/viewsemester, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
-        # - { path: ^/report/session/*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
         - { path: ^/report/export/*, roles: [ROLE_PROFESSOR, ROLE_VIEWER, ROLE_ADMIN] }
-        - { path: ^/course/*, roles: [ROLE_VIEWER, ROLE_ADMIN] }
+        - { path: ^/course/*, roles: ROLE_ADMIN }
         - { path: ^/report/*, roles: [ROLE_ADMIN, ROLE_VIEWER] }
         - { path: ^/schedule/*, roles: ROLE_ADMIN }
