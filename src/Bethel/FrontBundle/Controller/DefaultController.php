@@ -38,8 +38,8 @@ class DefaultController extends BaseController
      * @Template("BethelFrontBundle:Default:index.html.twig")
      */
     public function indexAction() {
+        $em = $this->getEntityManager();
         if( $this->container->getParameter('env') && $this->container->getParameter('env') == 'test' ){
-            $em = $this->getEntityManager();
             $userRepository = $em->getRepository('BethelEntityBundle:User');
             $username = $this->container->getParameter('test.username');
             $user = $userRepository->findOneBy(array('username' => $username));
