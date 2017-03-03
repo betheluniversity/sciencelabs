@@ -55,8 +55,14 @@ class DefaultController extends BaseController
             $user = $this->getUser();
         }
 
+        // gather all semesters, if they exist
+        $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
+        $semesterRepository->findAll();
+        if( sizeof($semesterRepository) == 0 )
+            return $this->redirect($this->generateUrl('admin_transition'));
+
         return array(
-            'user' => $user,
+            'user' => $user
         );
     }
 
