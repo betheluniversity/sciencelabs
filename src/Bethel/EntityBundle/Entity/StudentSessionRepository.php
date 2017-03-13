@@ -370,7 +370,7 @@ class StudentSessionRepository extends EntityRepository
      */
     public function getSessionCourseAttendanceTotal(Course $course, Session $session) {
         $qb = $this->createQueryBuilder('ss')
-            ->select('count(ss)')
+            ->select('count(distinct ss.student)')
             ->innerJoin('ss.courses', 'c', 'WITH', 'c = :course')
             ->where('ss.session = :session')
             ->setParameter('course', $course)

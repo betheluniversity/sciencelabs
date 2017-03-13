@@ -162,16 +162,16 @@
         <th style="padding:2px 10px">Attendance</th>
     </tr>
     {% for title, course in courseAttendanceTotal %}
-    <tr>
-        <td style="border-bottom: 1px solid #CCC;padding:2px 10px"><a href="{{ url('report_single_course', { 'id': course.id }) }}">{{ title }}</a></td>
-        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:left">
-            {% for professor in course.professors %}
-                {{ professor }}<br />
-            {% endfor %}
-        </td>
+        <tr>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px"><a href="{{ url('report_single_course', { 'id': course.id }) }}">{{ title }}</a></td>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:left">
+                {% for professor in course.professors %}
+                    {{ professor }}<br />
+                {% endfor %}
+            </td>
 
-        <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ course.total }}</td>
-    </tr>
+            <td style="border-bottom: 1px solid #CCC;padding:2px 10px;text-align:right">{{ course.total }}</td>
+        </tr>
 
     {% endfor %}
     <tr>
