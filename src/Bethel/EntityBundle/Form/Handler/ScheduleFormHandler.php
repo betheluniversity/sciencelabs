@@ -64,6 +64,10 @@ class ScheduleFormHandler {
         /** @var \Doctrine\Common\Collections\ArrayCollection $courseCodes */
         $courseCodes = $form->get('coursecodes')->getData();
 
+        $scheduleRepository = $this->em->getRepository('BethelEntityBundle:Schedule');
+        /** @var $anotherScheduleWithSameName \Bethel\EntityBundle\Entity\Schedule */
+        $anotherScheduleWithSameName = $scheduleRepository->findBy(array('name' => $form->get('name')->getData()));
+
         if(count($leadTutors) < 1) {
             return array(
                 'success' => false,
@@ -74,6 +78,13 @@ class ScheduleFormHandler {
             return array(
                 'success' => false,
                 'message' => 'You must select at least one course code',
+                'form' => $form
+            );
+        }
+        elseif( sizeof($anotherScheduleWithSameName) > 0 ) {
+            return array(
+                'success' => false,
+                'message' => 'You must choose a unique title',
                 'form' => $form
             );
         }
