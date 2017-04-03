@@ -12,7 +12,7 @@ $(document).ready(function() {
         sPageButtonActive: 'success'
     });
 
-    var closedSessionTable = $('#closedSessionTable').dataTable({
+    var closedSessionTable = $('#sessionTable').dataTable({
         "order": [[1, 'asc'],[2, 'asc']],
         "bPaginate": false,
         "oLanguage": {
