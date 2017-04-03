@@ -81,14 +81,8 @@ class DefaultController extends BaseController
                 if( $course->getProfessors()->contains($emailRecipient) || in_array($course, $emailRecipient->getCourseViewersAsArray()))
                     array_push($reportCourses, $course);
             }
-
-
-            // We only want to send professors an email if they teach a course
-            // that at least one student attended for at this session
-            if($reportCourses) {
-                $sessionEmailer = $this->get('bethel.session_email')->create($session, $emailRecipient, $reportCourses);
-                $message = $sessionEmailer->sendEmail(false, false);
-            }
+            $sessionEmailer = $this->get('bethel.session_email')->create($session, $emailRecipient, $reportCourses);
+            $message = $sessionEmailer->sendEmail(false, false);
         }
         return new Response("<html><body>" . $message['message'] . "</body></html>", 200);
     }
