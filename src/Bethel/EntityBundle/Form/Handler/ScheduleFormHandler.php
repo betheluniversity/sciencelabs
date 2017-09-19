@@ -81,13 +81,6 @@ class ScheduleFormHandler {
                 'form' => $form
             );
         }
-        elseif( sizeof($anotherScheduleWithSameName) > 0 ) {
-            return array(
-                'success' => false,
-                'message' => 'You must choose a unique title',
-                'form' => $form
-            );
-        }
 
         $userRepository = $this->em->getRepository('BethelEntityBundle:User');
         if($schedule->getId()) {
