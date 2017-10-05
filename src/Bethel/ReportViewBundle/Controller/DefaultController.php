@@ -249,19 +249,19 @@ class DefaultController extends BaseController
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
         $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
 
-        $sessionSemester = $monthSessions[0]->getSemester();
-        $this->setSessionSemester($sessionSemester);
+        if( sizeof($monthSessions) > 0 ){
+            $sessionSemester = $monthSessions[0]->getSemester();
+            $this->setSessionSemester($sessionSemester);
 
-        $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
-        $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
+            $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');
+            $semesterEndMonth = (int)$sessionSemester->getEndDate()->format('n');
 
-        $semesterMonths = array();
-        do {
-            $semesterMonths[] = $semesterStartMonth;
-            $semesterStartMonth++;
-        } while ($semesterStartMonth <= $semesterEndMonth);
-
-
+            $semesterMonths = array();
+            do {
+                $semesterMonths[] = $semesterStartMonth;
+                $semesterStartMonth++;
+            } while ($semesterStartMonth <= $semesterEndMonth);
+        }
 
         $scheduleData = array();
         $otherMonthSessionsTotal = 0;
