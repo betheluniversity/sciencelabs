@@ -220,8 +220,12 @@ class DefaultController extends BaseController
      * @return array
      * @internal param null $overrideSessionSemester
      */
-    public function monthAction($year = null, $month = null, Request $request, $csv = false) {
-        if(!$year || !$month) {
+    public function monthAction($year = null, $month = null, Request $request, $csv = false)
+    {
+        $em = $this->getEntityManager();
+
+        // if no parameters are given, get the current semesters values and redirect
+        if (!$year || !$month) {
             $sessionSemester = $this->getSessionSemester();
             $year = $sessionSemester->getYear();
             $month = $sessionSemester->getStartDate();
@@ -233,24 +237,28 @@ class DefaultController extends BaseController
             )));
         }
 
-        $em = $this->getEntityManager();
         // by default, we'll show the current month
         $date = new \DateTime("now");
-        $date->setDate($year,$month,1);
+        $date->setDate($year, $month, 1);
+        $date->setTime(0, 0, 0);
 
         $firstDay = clone $date;
         $firstDay->modify("first day of this month");
-        $firstDay->setTime(0,0,0);
 
         $lastDay = clone $firstDay;
         $lastDay->modify("last day of this month");
 
         /** @var $sessionRepository \Bethel\EntityBundle\Entity\SessionRepository */
         $sessionRepository = $em->getRepository('BethelEntityBundle:Session');
-        $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay,$lastDay);
+        $monthSessions = $sessionRepository->getSessionsInDateRange($firstDay, $lastDay);
 
-        if( sizeof($monthSessions) > 0 ){
-            $sessionSemester = $monthSessions[0]->getSemester();
+        /** @var $semesterRepository \Bethel\EntityBundle\Entity\SemesterRepository */
+        $semesterRepository = $em->getRepository('BethelEntityBundle:Semester');
+        $sessionSemester = $semesterRepository->getSemesterByMonthAndYear($year, $month);
+
+        // session semester is an array
+        if( sizeof($sessionSemester) > 0) {
+            $sessionSemester = $sessionSemester[0];
             $this->setSessionSemester($sessionSemester);
 
             $semesterStartMonth = (int)$sessionSemester->getStartDate()->format('n');

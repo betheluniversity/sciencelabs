@@ -48,19 +48,34 @@ class SemesterRepository extends EntityRepository {
     /**
      * Queries for a semester based on date
      *
-     * @param \DateTime $date
-     * @return Semester
+     * @param $year
+     * @param $month
+     * @return Array(Semester)
      * @throws NoResultException
      */
     public function getSemesterByMonthAndYear($year, $month) {
-        // Todo: This method should be merged with the method above
-        $date = \DateTime::createFromFormat('n/Y', "$month/$year");
+        $date = new \DateTime("now");
+        $date->setDate($year,$month,1);
+        $date->setTime(0,0,0);
+
+        $firstDay = clone $date;
+        $firstDay->modify("first day of this month");
+
+        $middleDay = clone $date;
+        $middleDay->setDate($year,$month,15);
+
+        $lastDay = clone $firstDay;
+        $lastDay->modify("last day of this month");
 
         $qb = $this->createQueryBuilder('s')
-            ->where('s.startDate <= :date')
-            ->andWhere('s.endDate >= :date')
-            ->setParameter('date', $date);
+            ->where(':firstDay BETWEEN s.startDate AND s.endDate')
+            ->orWhere(':middleDay BETWEEN s.startDate AND s.endDate')
+            ->orWhere(':lastDay BETWEEN s.startDate AND s.endDate')
+            ->setParameter('firstDay', $firstDay->format('Y-m-d'))
+            ->setParameter('middleDay', $middleDay->format('Y-m-d'))
+            ->setParameter('lastDay', $lastDay->format('Y-m-d'));
 
-        return $qb->getQuery()->getSingleResult();
+        // returns an array of semesters
+        return $qb->getQuery()->getResult();
     }
 }
