@@ -27,3 +27,5 @@ composer.lock
 .hgrc
 .htaccess
 ~
+
+db_back/*.sql
