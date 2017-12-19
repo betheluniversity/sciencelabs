@@ -23,8 +23,8 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 eval $(parse_yaml $SCRIPTPATH/app/config/parameters.yml)
 
 DATEVAR=`date "+%m-%d-%Y_%H%M"`
-if [ ! -d "db_back" ]; then
-  mkdir db_back
+if [ ! -d "$parameters__app_root/db_back" ]; then
+  mkdir $parameters__app_root/db_back
 fi
-mysqldump -u $parameters__database_user --password=$parameters__database_password $parameters__database_name > db_back/db.sql.back_$DATEVAR
+mysqldump -u $parameters__database_user --password=$parameters__database_password $parameters__database_name > $parameters__app_root/db_back/db.sql.back_$DATEVAR
 find $parameters__app_root/db_back/db.sql.back* -mtime +13 -type f -exec rm {} \;
