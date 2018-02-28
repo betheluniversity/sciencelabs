@@ -43,8 +43,8 @@ class UserSearchFormHandler {
         /** @var $session \Bethel\EntityBundle\Entity\Session */
         $searchTerms = $form->getData();
 
-        $usernameResults = $this->wsapi->getUsername(urlencode("%" . $searchTerms['firstName'] . "%"), urlencode("%" . $searchTerms['lastName'] . "%"));
-
+        $encode_percent = urlencode('%');
+        $usernameResults = $this->wsapi->getUsername($encode_percent . $searchTerms['firstName'], $encode_percent . $searchTerms['lastName'] . $encode_percent);
         return $usernameResults;
     }
 }
