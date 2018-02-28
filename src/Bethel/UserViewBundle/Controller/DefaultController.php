@@ -142,11 +142,18 @@ class DefaultController extends BaseController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request, $username, $fname = null, $lname = null) {
+        $em = $this->getEntityManager();
         /** @var $userRepository \Bethel\EntityBundle\Entity\UserRepository */
         $userRepository = $this->getEntityManager()->getRepository('BethelEntityBundle:User');
+
+        $em->getFilters()->disable('softdeleteable');
         $existingUser = $userRepository->findOneBy(array('username' => $username));
+        $em->getFilters()->enable('softdeleteable');
 
         if($existingUser) {
+            $existingUser->setDeletedAt(null);
+            $em->persist($existingUser);
+            $em->flush();
             return array(
                 'user' => $this->getUser(),
                 'existingUser' => $existingUser
