@@ -44,7 +44,7 @@ class UserSearchFormHandler {
         $searchTerms = $form->getData();
 
         $encode_percent = urlencode('%');
-        $usernameResults = $this->wsapi->getUsername($encode_percent . $searchTerms['firstName'], $encode_percent . $searchTerms['lastName'] . $encode_percent);
+        $usernameResults = $this->wsapi->getUsername($encode_percent . $searchTerms['firstName'] . $encode_percent, $encode_percent . $searchTerms['lastName'] . $encode_percent);
         return $usernameResults;
     }
 }
