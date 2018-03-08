@@ -11,7 +11,11 @@ sensiodistribution
 .DS_Store/*
 (?i)\.mwb
 
-web/*
+
+web/bundles*
+web/css*
+web/img*
+web/js*
 app/bootstrap*
 app/bootstrap.php.cache
 app/cache/*
