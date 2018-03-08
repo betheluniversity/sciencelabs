@@ -32,8 +32,8 @@
     },
     "repositories": [
         {
-            "type": "hg",
-            "url":  "https://hg-web.bethel.edu/wsapi-bundle",
+            "type": "git",
+            "url":  "https://github.com/betheluniversity/wsapi-symfony",
             "vendor-alias": "bethel"
         },
         {
