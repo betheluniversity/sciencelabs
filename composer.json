@@ -32,7 +32,7 @@
     },
     "repositories": [
         {
-            "type": "git",
+            "type": "github",
             "url":  "https://github.com/betheluniversity/wsapi-symfony",
             "vendor-alias": "bethel"
         },
