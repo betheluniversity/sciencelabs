@@ -27,8 +27,7 @@
         "sensio/buzz-bundle": "dev-master",
         "besimple/sso-auth-bundle": "1.0.*@dev",
         "zurb/foundation": "5.4.4",
-        "friendsofsymfony/jsrouting-bundle": "dev-new-response",
-        "bethel/wsapi-bundle": "dev-default"
+        "friendsofsymfony/jsrouting-bundle": "dev-new-response"
     },
     "repositories": [
         {
