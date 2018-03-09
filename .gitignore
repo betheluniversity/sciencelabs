@@ -26,7 +26,6 @@ composer.phar
 
 bin/
 web/bundles/
-composer.lock
 .DS_Store
 .hgrc
 .htaccess
