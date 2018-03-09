@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Bethel\WSAPIBundle\Controller\WSAPIController;
 
 class UserCoursesCommand extends ContainerAwareCommand {
     protected function configure() {
@@ -41,9 +42,9 @@ class UserCoursesCommand extends ContainerAwareCommand {
     private function addCoursesForUser(User $user) {
         /** @var  \Doctrine\ORM\EntityManager $em */
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $wsapi = $this->getContainer()->get('wsapi');
+        $wsapi = $this->getContainer()->get('bethel.wsapi_controller');
         $populateCoursesService = $this->getContainer()->get('bethel.populate_courses');
-
+        // Connected to the WSAPIController
         $apiCourses = $wsapi->getCourses($user->getUsername());
         $courses = $populateCoursesService->populate($apiCourses);
 

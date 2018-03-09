@@ -83,7 +83,6 @@ class DefaultController extends BaseController
         foreach($schedules as $schedule) {
             $scheduleId = $schedule->getId();
             $semesterId = $semester->getId();
-            // print_r( $em->getRepository('BethelEntityBundle:Schedule')->getTutorSchedulesBySemesterAndSchedule($semesterId, $scheduleId) );
             $tutorSchedules = $schedule->getTutorSchedules();
             $tutors = array();
             $leadTutors = array();

@@ -76,6 +76,7 @@ class CreateCourseCodeCommand extends ContainerAwareCommand {
         $wsapi = $this->getContainer()->get('wsapi');
         $populateCoursesService = $this->getContainer()->get('bethel.populate_courses');
 
+        // Connected to the WSAPIController
         $apiCourses = $wsapi->getCourses($user->getUsername());
         $courses = $populateCoursesService->populate($apiCourses);
 

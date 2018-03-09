@@ -36,7 +36,6 @@ class AppKernel extends Kernel
             new Bethel\CourseViewBundle\BethelCourseViewBundle(),
             new Bethel\SemesterApiBundle\BethelSemesterApiBundle(),
             new Bethel\TutorBundle\BethelTutorBundle(),
-            new Bethel\WsapiBundle\BethelWsapiBundle(),
             new Bethel\EmailBundle\BethelEmailBundle(),
         );
 

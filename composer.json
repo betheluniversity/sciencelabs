@@ -32,11 +32,6 @@
     },
     "repositories": [
         {
-            "type": "github",
-            "url":  "https://github.com/betheluniversity/wsapi-symfony",
-            "vendor-alias": "bethel"
-        },
-        {
             "type": "package",
             "package": {
                 "name": "zurb/foundation",

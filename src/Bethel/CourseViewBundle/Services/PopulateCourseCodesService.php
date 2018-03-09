@@ -8,7 +8,7 @@ use Bethel\EntityBundle\Services\PopulateSemesterService;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Bethel\WsapiBundle\Wsapi\WsRestApi;
+use Bethel\WSAPIBundle\Controller\WSAPIController;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class PopulateCourseCodesService {
@@ -25,7 +25,7 @@ class PopulateCourseCodesService {
     public function __construct(
         EntityManager $em,
         Session $session,
-        WsRestApi $wsapi,
+        WSAPIController $wsapi,
         PopulateCourseService $populateCourseService,
         PopulateSemesterService $populateSemesterService,
         PopulateProfessorService $populateProfessorService
@@ -67,6 +67,7 @@ class PopulateCourseCodesService {
     private function validateAndPersistCourseCode(CourseCode $courseCode) {
         $courseSubject = $courseCode->getDept();
         $courseNumber = $courseCode->getCourseNum();
+        // Connected to the WSAPIController
         $apiCourseCode = $this->wsapi->getCourseCodeAndName($courseSubject, $courseNumber);
 
         if($apiCourseCode && count($apiCourseCode) == 1) {

@@ -316,7 +316,8 @@ class DefaultController extends BaseController
         $em = $this->getEntityManager();
 
         $username = $studentSession->getStudent()->getUsername();
-        $wsapi = $this->get('wsapi');
+        $wsapi = $this->get('bethel.wsapi_controller');
+        // Connected to the WSAPIController
         $apiCourses = $wsapi->getCourses($username);
 
         /** @var \Bethel\CourseViewBundle\Services\PopulateCoursesService $populateCoursesService */
@@ -385,8 +386,6 @@ class DefaultController extends BaseController
     public function editAttendanceAction(StudentSession $studentSession, Request $request) {
         $em = $this->getEntityManager();
 
-        $wsapi = $this->get('wsapi');
-
         $courseRepository = $em->getRepository("BethelEntityBundle:Course");
         $courses = $courseRepository->getStudentCourses($studentSession->getStudent(), $studentSession->getSession()->getSemester());
         $courses = new ArrayCollection($courses);
@@ -400,8 +399,6 @@ class DefaultController extends BaseController
 
         if ($form->isValid()) {
             $username = $studentSession->getStudent()->getUsername();
-
-            $wsapi = $this->get('wsapi');
 
             $courseRepository = $em->getRepository("BethelEntityBundle:Course");
             $courses = $courseRepository->getStudentCourses($studentSession->getStudent(), $this->getActiveSemester());
@@ -1116,7 +1113,8 @@ class DefaultController extends BaseController
                 $studentSession = new StudentSession();
 
                 $username = $user->getUsername();
-                $wsapi = $this->get('wsapi');
+                // Connected to the WSAPIController
+                $wsapi = $this->get('bethel.wsapi_controller');
                 $apiCourses = $wsapi->getCourses($username);
 
                 // TODO: don't call the API twice for each checkin

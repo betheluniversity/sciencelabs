@@ -3,17 +3,18 @@
 namespace Bethel\EntityBundle\EventListener;
 
 use Bethel\EntityBundle\Entity\User;
-use Bethel\WsapiBundle\Wsapi\WsRestApi;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Bethel\WSAPIBundle\Controller\WSAPIController;
 
 class UserListener {
     protected $wsapi;
 
-    public function __construct(WsRestApi $wsapi) {
+    public function __construct(WSAPIController $wsapi) {
         $this->wsapi = $wsapi;
     }
 
     public function prePersist(User $user, LifecycleEventArgs $args) {
+        // Connected to the WSAPIController
         $names = $this->wsapi->getNames($user->getUsername());
         $em = $args->getEntityManager();
         /** @var $user \Bethel\EntityBundle\Entity\User */

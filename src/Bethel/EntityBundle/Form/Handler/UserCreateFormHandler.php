@@ -3,7 +3,7 @@
 namespace Bethel\EntityBundle\Form\Handler;
 
 use Bethel\EntityBundle\Entity\TutorSession;
-use Bethel\WsapiBundle\Wsapi\WsRestApi;
+use Bethel\WSAPIBundle\Controller\WSAPIController;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,7 +13,7 @@ class UserCreateFormHandler {
     protected $requestStack;
     protected $wsapi;
 
-    public function __construct(EntityManager $em, RequestStack $requestStack, WsRestApi $wsapi) {
+    public function __construct(EntityManager $em, RequestStack $requestStack, WSAPIController $wsapi) {
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
         $this->wsapi = $wsapi;

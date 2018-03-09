@@ -8,11 +8,6 @@ services:
     bethel.entity_listener_resolver:
         class: Bethel\EntityBundle\EventListener\ListenerResolver
         arguments: [ "@service_container" ]
-    bethel.entity_listener.user:
-        class: Bethel\EntityBundle\EventListener\UserListener
-        arguments: [ "@wsapi" ]
-        tags:
-            -  { name: doctrine.entity_listener }
     bethel.user_metadata:
         class: Doctrine\ORM\Mapping\ClassMetadata
         arguments:
@@ -32,24 +27,27 @@ services:
     bethel.session_close:
         class: Bethel\SessionViewBundle\Services\SessionClose
         arguments: ["@doctrine.orm.entity_manager","@bethel.session_email"]
+    bethel.wsapi_controller:
+        class: Bethel\WSAPIBundle\Controller\WSAPIController
+        arguments: ["%wsapi.baseurl%", "%wsapi.secret%", "%wsapi.account_id%", "%wsapi.get_username_url%", "%wsapi.get_course_code_and_name_url%", "%wsapi.get_courses_by_course_code_url%", "%wsapi.get_courses_url%", "%wsapi.get_names_url%"]
     bethel.populate_semester:
         class: Bethel\EntityBundle\Services\PopulateSemesterService
         arguments: [ @doctrine.orm.entity_manager ]
     bethel.validate_course_code:
         class: Bethel\CourseViewBundle\Services\ValidateCourseCode
-        arguments: [ @doctrine.orm.entity_manager, @wsapi ]
+        arguments: [ @doctrine.orm.entity_manager, @bethel.wsapi_controller]
     bethel.create_or_update_course_code:
         class: Bethel\CourseViewBundle\Services\CreateOrUpdateCourseCode
         arguments: [ @doctrine.orm.entity_manager ]
     bethel.populate_course_codes:
         class: Bethel\CourseViewBundle\Services\PopulateCourseCodesService
-        arguments: [  @doctrine.orm.entity_manager, @session, @wsapi, @bethel.populate_course, @bethel.populate_semester, @bethel.populate_professor  ]
+        arguments: [  @doctrine.orm.entity_manager, @session, @bethel.wsapi_controller, @bethel.populate_course, @bethel.populate_semester, @bethel.populate_professor]
     bethel.populate_course:
         class: Bethel\CourseViewBundle\Services\PopulateCourseService
         arguments: [ @doctrine.orm.entity_manager ]
     bethel.populate_professor:
         class: Bethel\EntityBundle\Services\PopulateProfessorService
-        arguments: ["@doctrine.orm.entity_manager","@session","@wsapi"]
+        arguments: ["@doctrine.orm.entity_manager","@session", "@bethel.wsapi_controller"]
     bethel.populate_courses:
         class: Bethel\CourseViewBundle\Services\PopulateCoursesService
         arguments: [ @doctrine.orm.entity_manager, @bethel.populate_semester, @bethel.populate_professor, @bethel.populate_course ]
@@ -63,10 +61,10 @@ services:
         arguments: ["%app.terms%"]
     user_search_form_handler:
         class: Bethel\EntityBundle\Form\Handler\UserSearchFormHandler
-        arguments: ["@doctrine.orm.entity_manager","@request_stack","@wsapi"]
+        arguments: ["@doctrine.orm.entity_manager","@request_stack", "@bethel.wsapi_controller"]
     user_create_form_handler:
         class: Bethel\EntityBundle\Form\Handler\UserCreateFormHandler
-        arguments: ["@doctrine.orm.entity_manager","@request_stack","@wsapi"]
+        arguments: ["@doctrine.orm.entity_manager","@request_stack", "@bethel.wsapi_controller"]
     session_form_handler:
         class: Bethel\EntityBundle\Form\Handler\SessionFormHandler
         arguments: ["@doctrine.orm.entity_manager","@request_stack"]
@@ -92,6 +90,12 @@ services:
         class: Bethel\EntityBundle\EventListener\SessionListener
         tags:
             - { name: doctrine.event_listener, event: onFlush }
+    bethel_entity.user_listener:
+        class: Bethel\EntityBundle\EventListener\UserListener
+        arguments: ["@bethel.wsapi_controller"]
+        tags:
+            - { name: doctrine.orm.entity_listener }
+            - { name: doctrine.orm.entity_listener, entity_manager: custom }
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener
         tags:
