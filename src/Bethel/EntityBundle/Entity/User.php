@@ -113,17 +113,22 @@ class User implements UserInterface, \Serializable
      */
     protected $professorCourses;
 
+//    /**
+//     * @ORM\ManyToMany(targetEntity="Course", inversedBy="courseViewer")
+//     * @ORM\JoinTable(
+//     *  name="CourseViewer",
+//     *  joinColumns={
+//     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+//     *  },
+//     *  inverseJoinColumns={
+//     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+//     *  }
+//     * )
+//     */
+
     /**
-     * @ORM\ManyToMany(targetEntity="Course", inversedBy="courseViewer")
-     * @ORM\JoinTable(
-     *  name="CourseViewer",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
-     *  }
-     * )
+     * @ManyToMany(targetEntity="Course", inversedBy="user")
+     * @ORM\JoinTable(name="courseviewer", )
      */
     private $courseViewers;
 

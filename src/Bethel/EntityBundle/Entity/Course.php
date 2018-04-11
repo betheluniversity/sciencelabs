@@ -149,17 +149,22 @@ class Course
      */
     private $room;
 
+//    /**
+//     * @ORM\ManyToMany(targetEntity="User", inversedBy="courseViewer")
+//     * @ORM\JoinTable(
+//     *  name="CourseViewer",
+//     *  joinColumns={
+//     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+//     *  },
+//     *  inverseJoinColumns={
+//     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+//     *  }
+//     * )
+//     */
+
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="courseViewer")
-     * @ORM\JoinTable(
-     *  name="CourseViewer",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="course_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *  }
-     * )
+     * @ManyToMany(targetEntity="User", inversedBy="course")
+     * @ORM\JoinTable(name="courseviewer", )
      */
     private $courseViewers;
 

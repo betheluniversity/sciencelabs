@@ -11,8 +11,8 @@ security:
 
     providers:
         main:
-            entity: { class: Surgeworks\CoreBundle\Entity\User}
-#                class: Bethel\EntityBundle\Entity\User
+            entity:
+                class: Bethel\EntityBundle\Entity\User
 #        in_memory:
 #            memory:
 #                users:
