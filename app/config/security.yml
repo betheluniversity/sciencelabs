@@ -9,10 +9,10 @@ security:
         ROLE_ADMIN:       [ ROLE_LEAD_TUTOR, ROLE_ADMIN ]
         ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
 
-    providers:
-        main:
-            entity:
-                class: Bethel\EntityBundle\Entity\User
+#    providers:
+#        main:
+#            entity:
+#                class: Bethel\EntityBundle\Entity\User
 #        in_memory:
 #            memory:
 #                users:
