@@ -163,7 +163,7 @@ class Course
 //     */
 
     /**
-     * @ManyToMany(targetEntity="User", inversedBy="course")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="course")
      * @ORM\JoinTable(name="courseviewer", )
      */
     private $courseViewers;

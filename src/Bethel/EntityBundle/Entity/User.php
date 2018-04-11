@@ -127,7 +127,7 @@ class User implements UserInterface, \Serializable
 //     */
 
     /**
-     * @ManyToMany(targetEntity="Course", inversedBy="user")
+     * @ORM\ManyToMany(targetEntity="Course", inversedBy="user")
      * @ORM\JoinTable(name="courseviewer", )
      */
     private $courseViewers;
