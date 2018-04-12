@@ -8,7 +8,7 @@
     },
     "require": {
         "php": "5.6",
-        "symfony/symfony": "v2.6.0",
+        "symfony/symfony": "v2.7.0",
         "doctrine/orm": ">=2.4-dev,<2.5-dev",
         "doctrine/doctrine-bundle": "v1.3.0",
         "doctrine/doctrine-fixtures-bundle": "v2.2.1",
