@@ -1,73 +1,53 @@
-bethel_email:
-    resource: "@BethelEmailBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_tutor:
-    resource: "@BethelTutorBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 bethel_course_view:
-    resource: "@BethelCourseViewBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_report_view:
-    resource: "@BethelReportViewBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_user_view:
-    resource: "@BethelUserViewBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_schedule_view:
-    resource: "@BethelScheduleViewBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_session_view:
-    resource: "@BethelSessionViewBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_front:
-    resource: "@BethelFrontBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-bethel_entity:
-    resource: "@BethelEntityBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-# API Routes
-# There are two sets of routes in each of these config files
-# one prefixed by '/api', and protected by a separate firewall
-# they are otherwise identical
-bethel_schedule:
-    resource: "@BethelScheduleBundle/Resources/config/routing.yml"
-    type: rest
-
-bethel_session:
-    resource: "@BethelSessionBundle/Resources/config/routing.yml"
-    type: rest
-
-bethel_user:
-    resource: "@BethelUserBundle/Resources/config/routing.yml"
-    type: rest
-
-bethel_semester_api:
-    resource: "@BethelSemesterApiBundle/Resources/config/routing.yml"
-
-# created for BeSimpleSsoBundle
-login:
-    pattern: /login
-logout:
-    pattern: /logout
-
-# created for FOSJsRoutingBundle
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+  prefix: /
+  resource: "@BethelCourseViewBundle/Controller/"
+  type: annotation
+bethel_email: 
+  prefix: /
+  resource: "@BethelEmailBundle/Controller/"
+  type: annotation
+bethel_entity: 
+  prefix: /
+  resource: "@BethelEntityBundle/Controller/"
+  type: annotation
+bethel_front: 
+  prefix: /
+  resource: "@BethelFrontBundle/Controller/"
+  type: annotation
+bethel_report_view: 
+  prefix: /
+  resource: "@BethelReportViewBundle/Controller/"
+  type: annotation
+bethel_schedule: 
+  resource: "@BethelScheduleBundle/Resources/config/routing.yml"
+  type: rest
+bethel_schedule_view: 
+  prefix: /
+  resource: "@BethelScheduleViewBundle/Controller/"
+  type: annotation
+bethel_semester_api: 
+  resource: "@BethelSemesterApiBundle/Resources/config/routing.yml"
+bethel_session: 
+  resource: "@BethelSessionBundle/Resources/config/routing.yml"
+  type: rest
+bethel_session_view: 
+  prefix: /
+  resource: "@BethelSessionViewBundle/Controller/"
+  type: annotation
+bethel_tutor: 
+  prefix: /
+  resource: "@BethelTutorBundle/Controller/"
+  type: annotation
+bethel_user: 
+  resource: "@BethelUserBundle/Resources/config/routing.yml"
+  type: rest
+bethel_user_view: 
+  prefix: /
+  resource: "@BethelUserViewBundle/Controller/"
+  type: annotation
+fos_js_routing: 
+  resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+login: 
+  path: /login
+logout: 
+  path: /logout

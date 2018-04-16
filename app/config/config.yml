@@ -1,8 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: services.yml }
     - { resource: twig.yml }
+    - { resource: services.yml }
 
 framework:
     #esi:             ~
@@ -110,8 +110,8 @@ fos_rest:
 fos_js_routing:
     routes_to_expose: [ bethel_user_delete, bethel_user_get, bethel_schedule_get, bethel_semester_year_get, bethel_semester_active_get, bethel_semester_view_get, bethel_session_tutors_get, tutor_session ]
 
-sensio_framework_extra:
-    view:    { annotations: false }
+#sensio_framework_extra:
+#    view:    { annotations: false }
 
 be_simple_sso_auth:
     admin_sso:

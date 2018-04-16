@@ -1,27 +1,27 @@
 bethel_session_get:
-    pattern:  sessions/{id}.{_format}
-    defaults: { _controller: BethelSessionBundle:Session:get, _format: ~ }
+    path:  sessions/{id}.{_format}
+    defaults: { _controller: "BethelSessionBundle:Session:get", _format: ~ }
     requirements:
         _method: GET
-        id: "\d+"
+        id: \d+
 
 bethel_session_tutors_get:
-    pattern:  sessions/{start}/{end}/tutors
-    defaults: { _controller: BethelSessionBundle:Session:getTutorSchedules, _format: ~ }
+    path:  sessions/{start}/{end}/tutors
+    defaults: { _controller: "BethelSessionBundle:Session:getTutorSchedules", _format: ~ }
     requirements:
         _method: GET
 
 # API Routes
 
 bethel_api_session_get:
-    pattern:  api/sessions/{id}.{_format}
-    defaults: { _controller: BethelSessionBundle:Session:get, _format: ~ }
+    path:  api/sessions/{id}.{_format}
+    defaults: { _controller: "BethelSessionBundle:Session:get", _format: ~ }
     requirements:
         _method: GET
-        id: "\d+"
+        id: \d+
 
 bethel_api_session_tutors_get:
-    pattern:  api/sessions/{start}/{end}/tutors
-    defaults: { _controller: BethelSessionBundle:Session:getTutorSchedules, _format: ~ }
+    path:  api/sessions/{start}/{end}/tutors
+    defaults: { _controller: "BethelSessionBundle:Session:getTutorSchedules", _format: ~ }
     requirements:
         _method: GET

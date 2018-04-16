@@ -1,45 +1,45 @@
 bethel_user_all:
-    pattern:  users
-    defaults: { _controller: BethelUserBundle:User:all, _format: ~ }
+    path:  users
+    defaults: { _controller: "BethelUserBundle:User:all", _format: ~ }
     requirements:
         _method: GET
 
 bethel_user_get:
-    pattern:  users/{id}.{_format}
-    defaults: { _controller: BethelUserBundle:User:get, _format: ~ }
+    path:  users/{id}.{_format}
+    defaults: { _controller: "BethelUserBundle:User:get", _format: ~ }
     requirements:
         _method: GET
-        id: "\d+"
+        id: \d+
 
 bethel_user_delete:
-    pattern:  delete/users/{id}
-    defaults: { _controller: BethelUserBundle:User:remove, _format: ~ }
+    path:  delete/users/{id}
+    defaults: { _controller: "BethelUserBundle:User:remove", _format: ~ }
     requirements:
         _method: DELETE
 
 # API Routes
 bethel_api_user_all:
-    pattern:  api/users
-    defaults: { _controller: BethelUserBundle:User:all, _format: ~ }
+    path:  api/users
+    defaults: { _controller: "BethelUserBundle:User:all", _format: ~ }
     requirements:
         _method: GET
 
 bethel_api_user_get:
-    pattern:  api/users/{id}.{_format}
-    defaults: { _controller: BethelUserBundle:User:get, _format: ~ }
+    path:  api/users/{id}.{_format}
+    defaults: { _controller: "BethelUserBundle:User:get", _format: ~ }
     requirements:
         _method: GET
-        id: "\d+"
+        id: \d+
 
 #bethel_user_new:
-#    pattern:  users
-#    defaults: { _controller: BethelUserBundle:User:new, _format: ~ }
+#    path:  users
+#    defaults: { _controller: "BethelUserBundle:User:new", _format: ~ }
 #    requirements:
 #        _method: POST
 #
 #bethel_user_edit:
-#    pattern:  users/{id}
-#    defaults: { _controller: BethelUserBundle:User:edit, _format: ~ }
+#    path:  users/{id}
+#    defaults: { _controller: "BethelUserBundle:User:edit", _format: ~ }
 #    requirements:
 #        _method: PUT
 #
