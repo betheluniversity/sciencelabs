@@ -67,8 +67,10 @@ services:
       - "%bethel.apikey%"
     class: Bethel\EntityBundle\Entity\UserRepository
   bethel.user_metadata:
-    arguments:
-      name: Bethel\EntityBundle\Entity\User
+#    arguments:
+#      - "@Bethel/EntityBundle/Entity/User"
+    tags:
+       name: Bethel\EntityBundle\Entity\User
     class: Doctrine\ORM\Mapping\ClassMetadata
   bethel.validate_course_code:
     arguments:
