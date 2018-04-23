@@ -23,6 +23,7 @@ vendor/*
 app/config/parameters.yml
 composer.phar
 
+bin/
 web/bundles/
 .DS_Store
 .hgrc
