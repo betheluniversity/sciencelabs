@@ -404,10 +404,10 @@ class User implements UserInterface, \Serializable
     /**
      * Never use this to check if this user has access to anything!
      *
-     * Use the SecurityContext, or an implementation of AccessDecisionManager
+     * Use the Security, or an implementation of AccessDecisionManager
      * instead, e.g.
      *
-     *         $securityContext->isGranted('ROLE_USER');
+     *         $security->isGranted('ROLE_USER');
      *
      * @param string $role
      *

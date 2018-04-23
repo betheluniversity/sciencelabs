@@ -14,7 +14,7 @@ use Bethel\EntityBundle\Entity\Session;
 use Bethel\EntityBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
 
 class BaseController extends Controller {
 
@@ -211,7 +211,7 @@ class BaseController extends Controller {
      */
     public function getUser() {
         /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $sessionToken */
-        $sessionToken = $this->get('security.context')->getToken();
+        $sessionToken = $this->get('security.authorization_checker')->getToken();
         if($sessionToken) {
             /** @var \Bethel\EntityBundle\Entity\User $user */
             $user = $sessionToken->getUser();

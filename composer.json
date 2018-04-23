@@ -25,7 +25,7 @@
         "friendsofsymfony/rest-bundle": ">=2.3.1",
         "jms/serializer-bundle": "dev-master",
         "sensio/buzz-bundle": "dev-master",
-        "besimple/sso-auth-bundle": "1.0.x-dev",
+        "besimple/sso-auth-bundle": "@dev",
         "zurb/foundation": ">=5.4.4",
         "friendsofsymfony/jsrouting-bundle": ">=2.2.0",
 

@@ -116,7 +116,7 @@ be_simple_sso_auth:
     admin_sso:
         protocol:
             id: cas
-            version: 2
+            version: 3
         server:
             id: cas
             login_url: "%cas.login%"
