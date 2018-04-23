@@ -8,11 +8,12 @@
 
 namespace Bethel\SessionViewBundle\EventListener;
 
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
+
 
 class OpenSessionListener {
 
@@ -24,14 +25,13 @@ class OpenSessionListener {
         $this->logoutUrl = $logoutUrl;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event, Request $request)
     {
         if (!$event->isMasterRequest()) {
             // don't do anything if it's not the master request
             return;
         }
 
-        $request = $event->getRequest();
         $pathArray = explode('/', ltrim($request->getPathInfo(), '/'));
 
         if(!($pathArray[0] == 'session' && ($pathArray[1] == 'open' || $pathArray[1] == 'checkout')) && !$request->cookies->get($this->cookieName)) {
@@ -44,14 +44,13 @@ class OpenSessionListener {
 
     }
 
-    public function onKernelResponse(FilterResponseEvent $event) {
+    public function onKernelResponse(FilterResponseEvent $event, Request $request) {
 
         if(!$event->isMasterRequest()) {
             // don't do anything if it's not the master request
             return;
         }
 
-        $request = $event->getRequest();
         $response = $event->getResponse();
         $pathArray = explode('/', ltrim($request->getPathInfo(), '/'));
 

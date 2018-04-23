@@ -266,9 +266,8 @@ class DefaultController extends BaseController
     * @Route("/debug")
     * @Template("BethelFrontBundle:Default:debug.html.twig")
     */
-    public function debugAction() {
+    public function debugAction(Request $request) {
 
-        $request = $this->getRequest();
         $session = $request->getSession();
 
         if($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
