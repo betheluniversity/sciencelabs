@@ -906,7 +906,7 @@ class DefaultController extends BaseController
             // $currSession = $request->getSession()->all();
             // $loggedIn = $currSession ? true : false;
             $userSession = $this->get('session');
-            $security = $this->get('security.authorization_checker');
+            $security = $this->get('security.token_storage');
             $security->setToken(null);
             $userSession->invalidate();
 

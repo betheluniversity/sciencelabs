@@ -45,7 +45,7 @@ class DefaultController extends BaseController
             $user = $userRepository->findOneBy(array('username' => $username));
 
             $token = new UsernamePasswordToken($user, null, "cas_firewall", array($this->container->getParameter('test.role')) );
-            $this->get("security.context")->setToken($token); //now the user is logged in
+            $this->get("security.authorization_checker")->setToken($token); //now the user is logged in
 
             //now dispatch the login event
             $request = $this->get("request");
@@ -276,6 +276,9 @@ class DefaultController extends BaseController
             $error = $session->get(Security::AUTHENTICATION_ERROR);
             $session->remove(Security::AUTHENTICATION_ERROR);
         }
+
+        var_dump($this->getUser());
+        var_dump($session);
 
         var_dump($error);
 //        return array(

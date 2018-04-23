@@ -211,7 +211,7 @@ class BaseController extends Controller {
      */
     public function getUser() {
         /** @var \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $sessionToken */
-        $sessionToken = $this->get('security.authorization_checker')->getToken();
+        $sessionToken = $this->get('security.token_storage')->getToken();
         if($sessionToken) {
             /** @var \Bethel\EntityBundle\Entity\User $user */
             $user = $sessionToken->getUser();
