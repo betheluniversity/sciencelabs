@@ -29,8 +29,8 @@ security:
             pattern: ^/session/(open|checkout)/
             anonymous: ~
         debug_firewall:
-                    pattern: ^/(debug|login_failure)
-                    anonymous: ~
+            pattern: ^/(debug|login_failure)
+            anonymous: ~
         api_firewall:
             pattern: ^/api/*
             stateless: false
@@ -49,6 +49,8 @@ security:
                 create_users: true
                 created_users_roles: [ROLE_STUDENT]
                 failure_path: /login_failure
+                remote_user:
+                    provider: Bethel\EntityBundle\Entity\User
             logout:
                 path: /logout
                 target: /path
