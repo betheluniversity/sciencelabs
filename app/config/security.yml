@@ -37,22 +37,25 @@ security:
             simple_preauth:
                 authenticator: bethel.apikey_authenticator
         # this is the firewall created for the BeSimpleSsoAuthBundle
-        cas_firewall:
+#        cas_firewall:
+#            pattern: ^/
+#            security: true
+#            trusted_sso:
+#                manager: admin_sso
+#                login_action: false # BeSimpleSsoAuthBundle:TrustedSso:login
+#                logout_action: false # BeSimpleSsoAuthBundle:TrustedSso:logout
+#                login_path: /login
+#                check_path: /
+#                create_users: true
+#                created_users_roles: [ROLE_STUDENT]
+#                failure_path: /login_failure
+#            logout:
+#                path: /logout
+#                target: /path
+        l3_firewall:
             pattern: ^/
             security: true
-            trusted_sso:
-                manager: admin_sso
-                login_action: false # BeSimpleSsoAuthBundle:TrustedSso:login
-                logout_action: false # BeSimpleSsoAuthBundle:TrustedSso:logout
-                login_path: /login
-                check_path: /
-                create_users: true
-                created_users_roles: [ROLE_STUDENT]
-                failure_path: /login_failure
-            logout:
-                path: /logout
-                target: /path
-
+            cas: true # Activation du CAS
     access_control:
         - { path: ^/user/edit, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/user/.*, roles: ROLE_ADMIN }

@@ -112,13 +112,22 @@ fos_js_routing:
 #sensio_framework_extra:
 #    view:    { annotations: false }
 
-be_simple_sso_auth:
-    admin_sso:
-        protocol:
-            id: cas
-            version: 2
-        server:
-            id: cas
-            login_url: "%cas.login%"
-            logout_url: "%cas.logout%"
-            validation_url: "%cas.validate%"
+#be_simple_sso_auth:
+#    admin_sso:
+#        protocol:
+#            id: cas
+#            version: 2
+#        server:
+#            id: cas
+#            login_url: "%cas.login%"
+#            logout_url: "%cas.logout%"
+#            validation_url: "%cas.validate%"
+
+l3_cas:
+    host: "%cas.login%"               # Cas Server
+    path: ~                                             # App path if not in root (eg. cas.test.com/cas)
+    port: 443                                          # Server port
+    ca: false                                           # SSL Certificate
+    handleLogoutRequest: true                           # Single sign out activation (default: false)
+    casLogoutTarget: "%cas.logout%"    # Redirect path after logout
+    force: true                                         # Allows cas check mode and not force, user : __NO_USER__ if not connected (If force false, Single sign out cant work).

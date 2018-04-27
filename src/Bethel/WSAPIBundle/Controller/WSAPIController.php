@@ -7,6 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Buzz\Browser;
 
 
+// this is used to replace the old PHP WSAPI package.
+// Now we send requests to WSAPI directly, instead of through our PHP WSAPI package
 class WSAPIController extends Controller
 {
     private $base;
