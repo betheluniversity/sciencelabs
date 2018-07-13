@@ -385,13 +385,11 @@ class DefaultController extends BaseController
     public function editAttendanceAction(StudentSession $studentSession, Request $request) {
         $em = $this->getEntityManager();
         $em->getFilters()->disable('softdeleteable');
-
         $wsapi = $this->get('wsapi');
 
         $courseRepository = $em->getRepository("BethelEntityBundle:Course");
         $courses = $courseRepository->getStudentCourses($studentSession->getStudent(), $studentSession->getSession()->getSemester());
         $courses = new ArrayCollection($courses);
-
         $form = $this->createForm(new StudentAttendanceType(), $studentSession, array(
             'em' => $this->getEntityManager(),
             'studentCourses' => $courses
@@ -441,11 +439,11 @@ class DefaultController extends BaseController
                 'id' => $studentSession->getSession()->getId()
             )));
         }
-
         $em->getFilters()->enable('softdeleteable');
         return array(
             'user' => $this->getUser(),
-            'form' => $form
+            'form' => $form,
+            'studentSession' => $studentSession
         );
     }
 
