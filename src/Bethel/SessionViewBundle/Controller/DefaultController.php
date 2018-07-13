@@ -384,6 +384,7 @@ class DefaultController extends BaseController
      */
     public function editAttendanceAction(StudentSession $studentSession, Request $request) {
         $em = $this->getEntityManager();
+        $em->getFilters()->disable('softdeleteable');
 
         $wsapi = $this->get('wsapi');
 
@@ -414,6 +415,7 @@ class DefaultController extends BaseController
                 $studentSession->getStudent()->__toString() . ' attendance edited'
             );
 
+            $em->getFilters()->enable('softdeleteable');
             return $this->redirect($this->generateUrl('session_edit', array(
                 'id' => $studentSession->getSession()->getId()
             )));
@@ -434,11 +436,13 @@ class DefaultController extends BaseController
                 );
             }
 
+            $em->getFilters()->enable('softdeleteable');
             return $this->redirect($this->generateUrl('session_edit', array(
                 'id' => $studentSession->getSession()->getId()
             )));
         }
 
+        $em->getFilters()->enable('softdeleteable');
         return array(
             'user' => $this->getUser(),
             'form' => $form
@@ -645,6 +649,7 @@ class DefaultController extends BaseController
     public function attendanceDeleteAction($id) {
         // TODO: Authorization for destructive action
         $em = $this->getEntityManager();
+        $em->getFilters()->disable('softdeleteable');
         $studentSessionRepository = $em->getRepository("BethelEntityBundle:StudentSession");
         $studentSession = $studentSessionRepository->find($id);
 
@@ -657,12 +662,14 @@ class DefaultController extends BaseController
                 'success',
                 'Attendance for ' . $studentName . ' was deleted'
             );
+            $em->getFilters()->enable('softdeleteable');
             return $this->redirect($this->generateUrl('session_edit', array('id' => $sessionId)));
         } else {
             $this->get('session')->getFlashBag()->add(
                 'warning',
                 'Student attendance does not exist.'
             );
+            $em->getFilters()->enable('softdeleteable');
             return $this->redirect($this->generateUrl('session'));
         }
     }
