@@ -385,10 +385,14 @@ class DefaultController extends BaseController
     public function editAttendanceAction(StudentSession $studentSession, Request $request) {
         $em = $this->getEntityManager();
         $em->getFilters()->disable('softdeleteable');
+        $student = $studentSession->getStudent();
         $wsapi = $this->get('wsapi');
 
+        // todo: this should actually be fixed. For whatever reason, just calling these methods (and not using the variable) fixes the problem
+        $test = $studentSession->getStudent()->getFirstName();
+
         $courseRepository = $em->getRepository("BethelEntityBundle:Course");
-        $courses = $courseRepository->getStudentCourses($studentSession->getStudent(), $studentSession->getSession()->getSemester());
+        $courses = $courseRepository->getStudentCourses($student, $studentSession->getSession()->getSemester());
         $courses = new ArrayCollection($courses);
         $form = $this->createForm(new StudentAttendanceType(), $studentSession, array(
             'em' => $this->getEntityManager(),
@@ -403,7 +407,7 @@ class DefaultController extends BaseController
             $wsapi = $this->get('wsapi');
 
             $courseRepository = $em->getRepository("BethelEntityBundle:Course");
-            $courses = $courseRepository->getStudentCourses($studentSession->getStudent(), $this->getActiveSemester());
+            $courses = $courseRepository->getStudentCourses($student, $this->getActiveSemester());
             $courses = new ArrayCollection($courses);
             $em->persist($studentSession);
             $em->flush();
@@ -443,7 +447,8 @@ class DefaultController extends BaseController
         return array(
             'user' => $this->getUser(),
             'form' => $form,
-            'studentSession' => $studentSession
+            'studentSession' => $studentSession,
+            'student'       => $student
         );
     }
 
