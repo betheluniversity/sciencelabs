@@ -1681,13 +1681,13 @@ class DefaultController extends BaseController
 
             // Need to check if the month route gets changed
             $newURL = $this->generateUrl($form['referringUrl'], $routeParameters = json_decode($form['routeParameters'], true));
-            if(strpos($form['referringUrl'], '/report/month/') !== false) {
+            if(strpos($newURL, '/report/month/') !== false) {
                 $year = $semester->getYear();
                 $month = $semester->getStartDate();
                 $month = date_format($month, "n");
-                $urlArray = explode('/', $form['referringUrl']);
-                $urlArray = array_pop($urlArray);
-                $urlArray = array_pop($urlArray);
+                $urlArray = explode('/', $newURL);
+                array_pop($urlArray);
+                array_pop($urlArray);
                 array_push($urlArray, $year, $month);
                 $newURL = implode('/', $urlArray);
             }
