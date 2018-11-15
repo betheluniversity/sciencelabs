@@ -1679,12 +1679,26 @@ class DefaultController extends BaseController
             $semester = $em->getRepository('BethelEntityBundle:Semester')->findOneById($form['semester']);
             $semesterHandler->setSessionSemester($semester);
 
+            // Need to check if the month route gets changed
+            if(strpos($form['referringUrl'], '/report/month/') !== false) {
+                $year = $semester->getYear();
+                $month = $semester->getStartDate();
+                $month = date_format($month, "n");
+                $urlArray = explode('/', $form['referringUrl']);
+                $urlArray = array_pop($urlArray);
+                $urlArray = array_pop($urlArray);
+                array_push($urlArray, $year, $month);
+                $newURL = implode('/', $urlArray);
+            }else{
+                $newURL = $form['referringUrl'];
+            }
+
             $this->get('session')->getFlashBag()->add(
                 'success',
                 'Semester has been set to ' . $semester
             );
 
-            return $this->redirect($this->generateUrl($form['referringUrl'], $routeParameters = json_decode($form['routeParameters'], true)));
+            return $this->redirect($this->generateUrl($newURL, $routeParameters = json_decode($form['routeParameters'], true)));
         }
 
         $this->get('session')->getFlashBag()->add(
