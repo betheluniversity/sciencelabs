@@ -1680,6 +1680,7 @@ class DefaultController extends BaseController
             $semesterHandler->setSessionSemester($semester);
 
             // Need to check if the month route gets changed
+            $newURL = $this->generateUrl($form['referringUrl'], $routeParameters = json_decode($form['routeParameters'], true);
             if(strpos($form['referringUrl'], '/report/month/') !== false) {
                 $year = $semester->getYear();
                 $month = $semester->getStartDate();
@@ -1689,8 +1690,6 @@ class DefaultController extends BaseController
                 $urlArray = array_pop($urlArray);
                 array_push($urlArray, $year, $month);
                 $newURL = implode('/', $urlArray);
-            }else{
-                $newURL = $form['referringUrl'];
             }
 
             $this->get('session')->getFlashBag()->add(
@@ -1698,7 +1697,7 @@ class DefaultController extends BaseController
                 'Semester has been set to ' . $semester
             );
 
-            return $this->redirect($this->generateUrl($newURL, $routeParameters = json_decode($form['routeParameters'], true)));
+            return $this->redirect($newURL);
         }
 
         $this->get('session')->getFlashBag()->add(
